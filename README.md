@@ -19,6 +19,8 @@ Web tabanlı, kişisel fantastik evren odaklı TTRPG yönetim platformu. GM ve o
 
 ## Teknik Stack
 
+-- OUTDATED - GÜNCELLENECEKTİR
+
 | Katman | Teknoloji |
 |---|---|
 | Frontend + API | Next.js 14 (App Router) |
