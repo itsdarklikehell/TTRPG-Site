@@ -60,7 +60,7 @@ export default async function CharacterPage({ params }: { params: Promise<{ id: 
   return (
     <Sheet
       character={JSON.parse(JSON.stringify(character))}
-      campaign={{ id: a.campaign.id, name: a.campaign.name, deathSaveEnabled: a.campaign.deathSaveEnabled, levelCap: a.campaign.levelCap }}
+      campaign={{ id: a.campaign.id, name: a.campaign.name, deathSaveEnabled: a.campaign.deathSaveEnabled, levelCap: a.campaign.levelCap, startPerkPoints: a.campaign.startPerkPoints }}
       ownerName={owner?.displayName ?? ""}
       isGM={a.isGM}
       isOwner={a.isOwner}

@@ -13,3 +13,7 @@ export function notifyCampaign(campaignId: string, event: string, payload: unkno
 export function characterChanged(campaignId: string, characterId: string) {
   notifyCampaign(campaignId, "character:changed", { characterId });
 }
+/** Tek bir kullanıcının tüm açık bağlantılarına bildirim. */
+export function notifyUser(userId: string, event: string, payload: unknown) {
+  globalThis.__shzIO?.to(`user:${userId}`).emit(event, payload);
+}

@@ -1,6 +1,6 @@
 {
- "generatedAt": "2026-10-02T12:42:34.677Z",
- "hash": "9ff95caa2b56",
+ "generatedAt": "2026-10-02T20:46:51.445Z",
+ "hash": "390a8fb657b4",
  "docs": [
   {
    "key": "temel-kurallar",
@@ -2561,6 +2561,7 @@
    "kind": "positive",
    "points": 1,
    "exclusive": [],
+   "mods": [],
    "html": "<p>Hızlı hareket ederken daha az düşersin ve çarparsın ancak karanlıkta ve göremediğin alanlarda hızlı hareket edemezsin.</p>",
    "searchText": "careful runner hızlı hareket ederken daha az düşersin ve çarparsın ancak karanlıkta ve göremediğin alanlarda hızlı hareket edemezsin."
   },
@@ -2572,6 +2573,7 @@
    "exclusive": [
     "two-hander"
    ],
+   "mods": [],
    "html": "<p>Tek elle kullanılan yakın dövüş silah zarları kolaylaşırken Çift elli kullanılan yakın dövüş silah zarları zorlaşır.</p>",
    "searchText": "one-hander tek elle kullanılan yakın dövüş silah zarları kolaylaşırken çift elli kullanılan yakın dövüş silah zarları zorlaşır."
   },
@@ -2583,6 +2585,7 @@
    "exclusive": [
     "sunday-driver"
    ],
+   "mods": [],
    "html": "<p>Çok hızlı sürersin</p>",
    "searchText": "speed demon çok hızlı sürersin"
   },
@@ -2594,6 +2597,7 @@
    "exclusive": [
     "one-hander"
    ],
+   "mods": [],
    "html": "<p>Çift elle kullanılan yakın dövüş silah zarları kolaylaşırken Tek elli kullanılan yakın dövüş silah zarları zorlaşır.</p>",
    "searchText": "two-hander çift elle kullanılan yakın dövüş silah zarları kolaylaşırken tek elli kullanılan yakın dövüş silah zarları zorlaşır."
   },
@@ -2605,6 +2609,7 @@
    "exclusive": [
     "empfi"
    ],
+   "mods": [],
    "html": "<p>Miden kolayca rahatsızlanmaz. Gıda zehirlenmesi ihtimalin azalır.</p>",
    "searchText": "kench miden kolayca rahatsızlanmaz. gıda zehirlenmesi ihtimalin azalır."
   },
@@ -2614,6 +2619,7 @@
    "kind": "positive",
    "points": 3,
    "exclusive": [],
+   "mods": [],
    "html": "<p>Kısa bıçaklar kullanılırken atılan zarlar kolaylaşır.</p>",
    "searchText": "bladesmith kısa bıçaklar kullanılırken atılan zarlar kolaylaşır."
   },
@@ -2625,6 +2631,7 @@
    "exclusive": [
     "veteran-of-47"
    ],
+   "mods": [],
    "html": "<p>Damarlarında buz akar. Corruption 9 ile açılan Frenzy gerçekleşme zarlarını otomatik geçersin. Cower etkilenmez.</p>\n<p><em>NOT:</em> Adını Irkutsk Glacier Bastion'u yöneten Council of Iceblooded Veterans'tan alır.</p>",
    "searchText": "eisblut damarlarında buz akar. corruption 9 ile açılan frenzy gerçekleşme zarlarını otomatik geçersin. cower etkilenmez. not: adını irkutsk glacier bastion'u yöneten council of iceblooded veterans'tan alır."
   },
@@ -2634,6 +2641,7 @@
    "kind": "positive",
    "points": 3,
    "exclusive": [],
+   "mods": [],
    "html": "<p>Belge, mühür ve kimlik sahteciliğinde ustasın. Sahte evrak hazırlama zarlarında eşik bir kademe düşer. Sahte belgen incelenirken karşı tarafın Sicht zarlarında eşik bir kademe yükselir.</p>",
    "searchText": "fälscher belge, mühür ve kimlik sahteciliğinde ustasın. sahte evrak hazırlama zarlarında eşik bir kademe düşer. sahte belgen incelenirken karşı tarafın sicht zarlarında eşik bir kademe yükselir."
   },
@@ -2645,6 +2653,7 @@
    "exclusive": [
     "blutscheu"
    ],
+   "mods": [],
    "html": "<p>Sahra sıhhiyecisi gibi temiz çalışırsın. Uyguladığın sargılar kirlenmez: Sargılı (Temiz) durumu çamur, kan veya kir yüzünden Sargılı (Kirli) durumuna geçmez (suya ya da lağıma tamamen batma hariç).</p>",
    "searchText": "feldsanitäter sahra sıhhiyecisi gibi temiz çalışırsın. uyguladığın sargılar kirlenmez: sargılı (temiz) durumu çamur, kan veya kir yüzünden sargılı (kirli) durumuna geçmez (suya ya da lağıma tamamen batma hariç)."
   },
@@ -2654,6 +2663,7 @@
    "kind": "positive",
    "points": 3,
    "exclusive": [],
+   "mods": [],
    "html": "<p>Karanlıkta görme becerisini arttırır.</p>",
    "searchText": "katze karanlıkta görme becerisini arttırır."
   },
@@ -2663,6 +2673,7 @@
    "kind": "positive",
    "points": 3,
    "exclusive": [],
+   "mods": [],
    "html": "<p>Oyun başında bir bölge seç (ör. Sibirya, Kanada, Kuzey Almanya, Batı Avustralya). O bölgede yön bulma, kestirme yol ve yerel halkla iletişim zarlarında eşik bir kademe düşer.</p>",
    "searchText": "ortskundig oyun başında bir bölge seç (ör. sibirya, kanada, kuzey almanya, batı avustralya). o bölgede yön bulma, kestirme yol ve yerel halkla iletişim zarlarında eşik bir kademe düşer."
   },
@@ -2672,6 +2683,7 @@
    "kind": "positive",
    "points": 3,
    "exclusive": [],
+   "mods": [],
    "html": "<p>Karaborsada tanıdıkların var. Yasak veya kıt malları (Pervitin, mühimmat, augment parçası, ilaç) bulmak için atılan Rede zarlarında eşik bir kademe düşer; fiyatlar GM takdiriyle ucuzlar.</p>",
    "searchText": "schwarzmarkt karaborsada tanıdıkların var. yasak veya kıt malları (pervitin, mühimmat, augment parçası, ilaç) bulmak için atılan rede zarlarında eşik bir kademe düşer; fiyatlar gm takdiriyle ucuzlar."
   },
@@ -2683,6 +2695,7 @@
    "exclusive": [
     "monolingual"
    ],
+   "mods": [],
    "html": "<p>Karakter 3 dil bilerek oyuna başlar.</p>",
    "searchText": "trilingual karakter 3 dil bilerek oyuna başlar."
   },
@@ -2694,6 +2707,7 @@
    "exclusive": [
     "kurzsichtig"
    ],
+   "mods": [],
    "html": "<p>ADS time azalır. Kritik atış ihtimali artar.</p>",
    "searchText": "adlerauge ads time azalır. kritik atış ihtimali artar."
   },
@@ -2705,6 +2719,12 @@
    "exclusive": [
     "introvert"
    ],
+   "mods": [
+    {
+     "stat": "rede",
+     "value": 2
+    }
+   ],
    "html": "<p>Tanımadığın birisiyle iletişim kurma becerin gelişir. +2 Rede</p>",
    "searchText": "extrovert tanımadığın birisiyle iletişim kurma becerin gelişir. +2 rede"
   },
@@ -2714,6 +2734,7 @@
    "kind": "positive",
    "points": 4,
    "exclusive": [],
+   "mods": [],
    "html": "<p>Şanslı birisin. Seans başına 1 kez, attığın bir Nat1'i Inspiration harcamadan yeniden atabilirsin.</p>",
    "searchText": "glückspilz şanslı birisin. seans başına 1 kez, attığın bir nat1'i inspiration harcamadan yeniden atabilirsin."
   },
@@ -2723,6 +2744,7 @@
    "kind": "positive",
    "points": 4,
    "exclusive": [],
+   "mods": [],
    "html": "<p>Makineler ile uğraşılan mühendislik zarları kolaylaşır</p>",
    "searchText": "heimwerker makineler ile uğraşılan mühendislik zarları kolaylaşır"
   },
@@ -2735,6 +2757,7 @@
     "runenblind",
     "gottesfurchtig"
    ],
+   "mods": [],
    "html": "<p>Eski rünlerin dilini bilirsin. Siegel yeteneklerinde (Siegel der Leere, Siegel der Verdamm) atılan kara büyü zarlarında eşik bir kademe düşer.</p>",
    "searchText": "runenkundig eski rünlerin dilini bilirsin. siegel yeteneklerinde (siegel der leere, siegel der verdamm) atılan kara büyü zarlarında eşik bir kademe düşer."
   },
@@ -2744,6 +2767,7 @@
    "kind": "positive",
    "points": 4,
    "exclusive": [],
+   "mods": [],
    "html": "<p>Stres altında oyuncu daha hızlı hareket eder.</p>",
    "searchText": "schnell stres altında oyuncu daha hızlı hareket eder."
   },
@@ -2753,6 +2777,7 @@
    "kind": "positive",
    "points": 4,
    "exclusive": [],
+   "mods": [],
    "html": "<p>Elektronik ile uğraşılan mühendislik zarları kolaylaşır</p>",
    "searchText": "tesla elektronik ile uğraşılan mühendislik zarları kolaylaşır"
   },
@@ -2762,6 +2787,12 @@
    "kind": "positive",
    "points": 5,
    "exclusive": [],
+   "mods": [
+    {
+     "stat": "agil",
+     "value": 2
+    }
+   ],
    "html": "<p>Doğuştan hızlı koşma ve parkur becerin var.<br>+2 agil</p>",
    "searchText": "cheetah doğuştan hızlı koşma ve parkur becerin var. +2 agil"
   },
@@ -2771,6 +2802,7 @@
    "kind": "positive",
    "points": 5,
    "exclusive": [],
+   "mods": [],
    "html": "<p>+1 Inspiration Point</p>\n<p><em>NOT:</em> Bu trait, Kuyash tarafından yapılan bir diğer TTRPG evreni olan &quot;Umbra Caelis&quot;e atıftır.</p>",
    "searchText": "follower of dreamer +1 inspiration point not: bu trait, kuyash tarafından yapılan bir diğer ttrpg evreni olan umbra caelis e atıftır."
   },
@@ -2781,6 +2813,12 @@
    "points": 5,
    "exclusive": [
     "metallabstossung"
+   ],
+   "mods": [
+    {
+     "stat": "klang",
+     "value": 2
+    }
    ],
    "html": "<p>Bedenin metale kolay alışır. Oyuna +2 Klang ile başlarsın (başlangıçtaki +2 Klang'a ek olarak).</p>",
    "searchText": "metallverträglich bedenin metale kolay alışır. oyuna +2 klang ile başlarsın (başlangıçtaki +2 klang'a ek olarak)."
@@ -2793,6 +2831,7 @@
    "exclusive": [
     "laut"
    ],
+   "mods": [],
    "html": "<p>Gizli hareket etmen kolaylaşır</p>",
    "searchText": "ruthig gizli hareket etmen kolaylaşır"
   },
@@ -2804,6 +2843,7 @@
    "exclusive": [
     "scheu"
    ],
+   "mods": [],
    "html": "<p>Corruption daha zor artar</p>",
    "searchText": "beherzt corruption daha zor artar"
   },
@@ -2815,6 +2855,7 @@
    "exclusive": [
     "delicate"
    ],
+   "mods": [],
    "html": "<p>Rejenarasyon hızı yüksek miktarda artar</p>",
    "searchText": "tdt - teich der toten rejenarasyon hızı yüksek miktarda artar"
   },
@@ -2826,6 +2867,7 @@
    "exclusive": [
     "unthermo"
    ],
+   "mods": [],
    "html": "<p>Her duruma ve koşula adapte olabilirsin. Çevresel durum etkilerinden çok daha az etkilenirsin.</p>",
    "searchText": "adaptable her duruma ve koşula adapte olabilirsin. çevresel durum etkilerinden çok daha az etkilenirsin."
   },
@@ -2837,6 +2879,7 @@
    "exclusive": [
     "zargana"
    ],
+   "mods": [],
    "html": "<p>Aşırı ağır şeyleri kaldırabilirsin ve aşırı ağır silahları kullanırken daha az negatif etkiden etkilenirsin.</p>",
    "searchText": "ubermuscler aşırı ağır şeyleri kaldırabilirsin ve aşırı ağır silahları kullanırken daha az negatif etkiden etkilenirsin."
   },
@@ -2849,6 +2892,7 @@
     "zargana",
     "delicate"
    ],
+   "mods": [],
    "html": "<p>İnsanüstü bir vücuda sahipsin. Fiziksel aksiyon zarların kolaylaşır ve daha az hasar alırsın.</p>",
    "searchText": "ubermensch insanüstü bir vücuda sahipsin. fiziksel aksiyon zarların kolaylaşır ve daha az hasar alırsın."
   },
@@ -2862,6 +2906,7 @@
     "eisblut",
     "okkultphobie"
    ],
+   "mods": [],
    "html": "<p>II. Dünya Savaşında savaştın. Her türlü kaosa ve şoka hazırlıklısın. Psikolojik Durum etkilerinden etkilenmezsin.</p>",
    "searchText": "veteran of 47' ii. dünya savaşında savaştın. her türlü kaosa ve şoka hazırlıklısın. psikolojik durum etkilerinden etkilenmezsin."
   },
@@ -2873,6 +2918,7 @@
    "exclusive": [
     "speed-demon"
    ],
+   "mods": [],
    "html": "<p>Çok yavaş sürersin</p>",
    "searchText": "sunday driver çok yavaş sürersin"
   },
@@ -2884,6 +2930,7 @@
    "exclusive": [
     "recovered"
    ],
+   "mods": [],
    "html": "<p>Sigara bağımlılığıdır. Bağımlılık yükseldikçe +Corruption alınır.</p>",
    "searchText": "tiryaki sigara bağımlılığıdır. bağımlılık yükseldikçe +corruption alınır."
   },
@@ -2893,6 +2940,7 @@
    "kind": "negative",
    "points": 2,
    "exclusive": [],
+   "mods": [],
    "html": "<p>Okuma yazma bilmezsin. Yazılı belge, harita notu ve şifreli metinleri okuyamazsın. Aryan Cryptology yeteneğini alamazsın.</p>",
    "searchText": "analphabet okuma yazma bilmezsin. yazılı belge, harita notu ve şifreli metinleri okuyamazsın. aryan cryptology yeteneğini alamazsın."
   },
@@ -2904,6 +2952,7 @@
    "exclusive": [
     "recovered"
    ],
+   "mods": [],
    "html": "<p>Alkol bağımlılığıdır. Bağımlılık yükseldikçe +Corruption alınır.</p>",
    "searchText": "ayyaş alkol bağımlılığıdır. bağımlılık yükseldikçe +corruption alınır."
   },
@@ -2915,6 +2964,7 @@
    "exclusive": [
     "kench"
    ],
+   "mods": [],
    "html": "<p>Miden kolayca rahatsızlanır. Gıda zehirlenmesi ihtimalin artar.</p>",
    "searchText": "empfi miden kolayca rahatsızlanır. gıda zehirlenmesi ihtimalin artar."
   },
@@ -2926,6 +2976,7 @@
    "exclusive": [
     "adlerauge"
    ],
+   "mods": [],
    "html": "<p>Miyopsun. Gözlüğün yokken veya kırıldığında uzak mesafe Sicht ve Aim zarlarına -2. Gözlük, kafaya isabet eden bir yarada kırılabilir.</p>",
    "searchText": "kurzsichtig miyopsun. gözlüğün yokken veya kırıldığında uzak mesafe sicht ve aim zarlarına -2. gözlük, kafaya isabet eden bir yarada kırılabilir."
   },
@@ -2937,6 +2988,7 @@
    "exclusive": [
     "trilingual"
    ],
+   "mods": [],
    "html": "<p>Karakter tek dil bilerek oyuna başlar.</p>",
    "searchText": "monolingual karakter tek dil bilerek oyuna başlar."
   },
@@ -2946,6 +2998,7 @@
    "kind": "negative",
    "points": 2,
    "exclusive": [],
+   "mods": [],
    "html": "<p>Borçlusun. Oyuna Reichsmark olmadan başlarsın ve peşinde bir alacaklı vardır (GM'in hikâye kancası).</p>",
    "searchText": "verschuldet borçlusun. oyuna reichsmark olmadan başlarsın ve peşinde bir alacaklı vardır (gm'in hikâye kancası)."
   },
@@ -2957,6 +3010,7 @@
    "exclusive": [
     "feldsanitater"
    ],
+   "mods": [],
    "html": "<p>Kan görmeye dayanamazsın. Ağır Yaralı veya daha kötü bir yara gördüğünde Sanita zarı (Kolay) atarsın; başarısızlıkta sonraki aksiyonuna -2. İlk yardım ve tıbbi müdahale zarlarına -2.</p>",
    "searchText": "blutscheu kan görmeye dayanamazsın. ağır yaralı veya daha kötü bir yara gördüğünde sanita zarı (kolay) atarsın; başarısızlıkta sonraki aksiyonuna -2. ilk yardım ve tıbbi müdahale zarlarına -2."
   },
@@ -2968,6 +3022,7 @@
    "exclusive": [
     "pressured-pacifism"
    ],
+   "mods": [],
    "html": "<p>Bir onur yasana bağlısın. Teslim olmuş veya silahsız birine zarar veremezsin; verirsen +2 Corruption alırsın.</p>",
    "searchText": "ehrenkodex bir onur yasana bağlısın. teslim olmuş veya silahsız birine zarar veremezsin; verirsen +2 corruption alırsın."
   },
@@ -2977,6 +3032,7 @@
    "kind": "negative",
    "points": 3,
    "exclusive": [],
+   "mods": [],
    "html": "<p>Aranıyorsun. Oyun başında GM bir faksiyon seçer; o faksiyonun bölgelerinde tanınma riski taşırsın ve o faksiyonun mensuplarına karşı Rede zarlarına -2.</p>",
    "searchText": "gesucht aranıyorsun. oyun başında gm bir faksiyon seçer; o faksiyonun bölgelerinde tanınma riski taşırsın ve o faksiyonun mensuplarına karşı rede zarlarına -2."
   },
@@ -2986,6 +3042,7 @@
    "kind": "negative",
    "points": 3,
    "exclusive": [],
+   "mods": [],
    "html": "<p>Dar alanlara dayanamazsın. Sığınak, tünel, denizaltı veya araç içi gibi kapalı ve dar mekânlarda tüm zarlara -1.</p>",
    "searchText": "klaustrophob dar alanlara dayanamazsın. sığınak, tünel, denizaltı veya araç içi gibi kapalı ve dar mekânlarda tüm zarlara -1."
   },
@@ -2995,6 +3052,7 @@
    "kind": "negative",
    "points": 3,
    "exclusive": [],
+   "mods": [],
    "html": "<p>Sakarlaşırsın. Hatalı hareketler yapabilirsin.</p>",
    "searchText": "oaf sakarlaşırsın. hatalı hareketler yapabilirsin."
   },
@@ -3006,6 +3064,7 @@
    "exclusive": [
     "veteran-of-47"
    ],
+   "mods": [],
    "html": "<p>Okültten dehşete düşersin. Bir ritüel, diriltilmiş bir ölü veya kara büyü etkisi gördüğünde Sanita zarı (Orta) atarsın; başarısızlıkta 1 tur boyunca Cower durumuna girersin.</p>",
    "searchText": "okkultphobie okültten dehşete düşersin. bir ritüel, diriltilmiş bir ölü veya kara büyü etkisi gördüğünde sanita zarı (orta) atarsın; başarısızlıkta 1 tur boyunca cower durumuna girersin."
   },
@@ -3015,6 +3074,7 @@
    "kind": "negative",
    "points": 3,
    "exclusive": [],
+   "mods": [],
    "html": "<p>Uyuyamıyorsun. Uzun dinlenmeden sonra Sanita zarı (Orta) atarsın; başarısızlıkta bir sonraki uzun dinlenmeye kadar tüm zarlara -1.</p>",
    "searchText": "schlaflos uyuyamıyorsun. uzun dinlenmeden sonra sanita zarı (orta) atarsın; başarısızlıkta bir sonraki uzun dinlenmeye kadar tüm zarlara -1."
   },
@@ -3027,6 +3087,7 @@
     "runenkundig",
     "runenblind"
    ],
+   "mods": [],
    "html": "<p>Derin bir inancın var ve okült güçlerden korkarsın. Kara büyü zarlarına -3. Her kara büyü kullanımında yeteneğin bedeline ek olarak +1 Corruption alırsın.</p>",
    "searchText": "gottesfürchtig derin bir inancın var ve okült güçlerden korkarsın. kara büyü zarlarına -3. her kara büyü kullanımında yeteneğin bedeline ek olarak +1 corruption alırsın."
   },
@@ -3037,6 +3098,12 @@
    "points": 4,
    "exclusive": [
     "extrovert"
+   ],
+   "mods": [
+    {
+     "stat": "rede",
+     "value": -2
+    }
    ],
    "html": "<p>Tanımadığın birisiyle iletişim kurma becerin zayıftır. -2 Rede</p>",
    "searchText": "introvert tanımadığın birisiyle iletişim kurma becerin zayıftır. -2 rede"
@@ -3049,6 +3116,7 @@
    "exclusive": [
     "veteran-of-47"
    ],
+   "mods": [],
    "html": "<p>Savaş travması bedeninde kaldı. Yakınında patlama veya top sesi olduğunda Sanita zarı (Orta) atarsın; başarısızlıkta 1 tur boyunca Cower durumuna girersin (Corruption seviyesinden bağımsız).</p>",
    "searchText": "kriegszitterer savaş travması bedeninde kaldı. yakınında patlama veya top sesi olduğunda sanita zarı (orta) atarsın; başarısızlıkta 1 tur boyunca cower durumuna girersin (corruption seviyesinden bağımsız)."
   },
@@ -3060,6 +3128,7 @@
    "exclusive": [
     "ruthig"
    ],
+   "mods": [],
    "html": "<p>Gizli hareket etmen çok zorlaşır.</p>",
    "searchText": "laut gizli hareket etmen çok zorlaşır."
   },
@@ -3073,6 +3142,7 @@
     "ayyas",
     "such-tiger"
    ],
+   "mods": [],
    "html": "<p>Amfetamin/Metamfetamin kökenli maddeler, alkol ve tütün kullanamazsın. Kullanman durumunda doğrudan +Corruption alırsın.</p>",
    "searchText": "recovered amfetamin/metamfetamin kökenli maddeler, alkol ve tütün kullanamazsın. kullanman durumunda doğrudan +corruption alırsın."
   },
@@ -3085,6 +3155,7 @@
     "tdt-teich-der-toten",
     "ubermensch"
    ],
+   "mods": [],
    "html": "<p>Narinsin. Yara alman kolaylaşır ve yaraların zor kapanır.</p>",
    "searchText": "delicate narinsin. yara alman kolaylaşır ve yaraların zor kapanır."
   },
@@ -3095,6 +3166,12 @@
    "points": 5,
    "exclusive": [
     "metallvertraglich"
+   ],
+   "mods": [
+    {
+     "stat": "klang",
+     "value": -2
+    }
    ],
    "html": "<p>Bedenin metali reddeder. Oyuna -2 Klang ile başlarsın. Her augment takılışında Korp zarı (Orta) atarsın; başarısızlıkta augmentin takıldığı uzuv 1 kademe yara alır.</p>",
    "searchText": "metallabstoßung bedenin metali reddeder. oyuna -2 klang ile başlarsın. her augment takılışında korp zarı (orta) atarsın; başarısızlıkta augmentin takıldığı uzuv 1 kademe yara alır."
@@ -3108,6 +3185,7 @@
     "runenkundig",
     "gottesfurchtig"
    ],
+   "mods": [],
    "html": "<p>Rünler senin için anlamsız çizgilerden ibaret. Siegel yeteneklerini alamazsın; diğer kara büyü zarlarında eşik bir kademe yükselir.</p>",
    "searchText": "runenblind rünler senin için anlamsız çizgilerden ibaret. siegel yeteneklerini alamazsın; diğer kara büyü zarlarında eşik bir kademe yükselir."
   },
@@ -3119,6 +3197,7 @@
    "exclusive": [
     "recovered"
    ],
+   "mods": [],
    "html": "<p>Pervitin/Metamfetamin bağımlılığıdır. Bağımlılık yükseldikçe +Corruption alınır.</p>\n<p>Bağımlılık aktif değilken Krach statı Corruption/3 → aşağıya yuvarla şekilde artar.</p>\n<p>Bağımlılık aktif olduğunda Krach statı Corruption/3 → yukarı yuvarla şekilde azalır.</p>",
    "searchText": "süch'tiger' pervitin/metamfetamin bağımlılığıdır. bağımlılık yükseldikçe +corruption alınır. bağımlılık aktif değilken krach statı corruption/3 → aşağıya yuvarla şekilde artar. bağımlılık aktif olduğunda krach statı corruption/3 → yukarı yuvarla şekilde azalır."
   },
@@ -3130,6 +3209,7 @@
    "exclusive": [
     "adaptable"
    ],
+   "mods": [],
    "html": "<p>Sıcaklık değişikliklerinden çok etkilenirsin. Sıcak ve soğuk seni olumsuz etkiler</p>",
    "searchText": "unthermo sıcaklık değişikliklerinden çok etkilenirsin. sıcak ve soğuk seni olumsuz etkiler"
   },
@@ -3141,6 +3221,7 @@
    "exclusive": [
     "beherzt"
    ],
+   "mods": [],
    "html": "<p>Corruption daha kolay artar</p>",
    "searchText": "scheu corruption daha kolay artar"
   },
@@ -3150,6 +3231,7 @@
    "kind": "negative",
    "points": 7,
    "exclusive": [],
+   "mods": [],
    "html": "<p>Savaşta bir uzvunu kaybettin. Oyuna el, kol, ayak veya bacaklarından biri Kopuk olarak başlarsın (beden tablosuna işlenir). Kayıp uzuv bir augment ile değiştirilebilir.</p>",
    "searchText": "kriegsversehrt savaşta bir uzvunu kaybettin. oyuna el, kol, ayak veya bacaklarından biri kopuk olarak başlarsın (beden tablosuna işlenir). kayıp uzuv bir augment ile değiştirilebilir."
   },
@@ -3162,6 +3244,7 @@
     "ubermensch",
     "ubermuscler"
    ],
+   "mods": [],
    "html": "<p>Çok zayıf bir vücuda sahipsin. Fiziksel aksiyon zarların zorlaşır ve daha çok hasar alırsın.</p>",
    "searchText": "zargana çok zayıf bir vücuda sahipsin. fiziksel aksiyon zarların zorlaşır ve daha çok hasar alırsın."
   },
@@ -3171,6 +3254,16 @@
    "kind": "negative",
    "points": 13,
    "exclusive": [],
+   "mods": [
+    {
+     "stat": "rede",
+     "value": -2
+    },
+    {
+     "stat": "leis",
+     "value": -2
+    }
+   ],
    "html": "<p>Şizofrensin. Olmayan şeyleri görüyorsun ve onlar ile etkileşime girmeye çalışıyorsun.<br>-2 Rede, -2 Leis</p>",
    "searchText": "schizo şizofrensin. olmayan şeyleri görüyorsun ve onlar ile etkileşime girmeye çalışıyorsun. -2 rede, -2 leis"
   },
@@ -3182,6 +3275,7 @@
    "exclusive": [
     "ehrenkodex"
    ],
+   "mods": [],
    "html": "<p>Her başkasına zarar verdiğinde +Corruption alırsın. Öldürürsen +3 Corruption alırsın.</p>",
    "searchText": "pressured pacifism her başkasına zarar verdiğinde +corruption alırsın. öldürürsen +3 corruption alırsın."
   }

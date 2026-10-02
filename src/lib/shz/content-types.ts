@@ -58,6 +58,8 @@ export interface Perk {
   kind: "positive" | "negative";
   points: number;
   exclusive: string[];
+  /** Metinden okunan sabit stat etkileri (ör. "+2 Rede"). Koşullu etkiler burada yoktur. */
+  mods: { stat: StatKey; value: number }[];
   html: string;
   searchText: string;
 }

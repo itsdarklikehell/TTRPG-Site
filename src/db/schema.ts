@@ -185,6 +185,8 @@ export const characters = pgTable(
     secretNotes: text("secret_notes").notNull().default(""),
     /** Portre yüklüyse sürüm damgası (önbellek kırmak için). */
     portraitVersion: integer("portrait_version").notNull().default(0),
+    /** GM izni: oyuncu perklerini bir kez yeniden düzenleyebilir. */
+    perkEditAllowed: boolean("perk_edit_allowed").notNull().default(false),
     gmNotes: text("gm_notes").notNull().default(""),
     createdAt: created(),
     // milisaniye hassasiyeti: koşullu güncellemelerde (yarış koruması) JS Date ile birebir eşleşir
@@ -241,6 +243,10 @@ export interface RollDetail {
   note?: string;
   rerollOf?: string;
   requestId?: string;
+  /** Death Save ilerlemesi (zar kartında gösterilir). */
+  deathTrack?: { deaths: number; saves: number; final: "death" | "save" | null };
+  /** Zarı kimin istediği / hangi isteğe yanıt olduğu. */
+  requested?: boolean;
 }
 
 export const rolls = pgTable(

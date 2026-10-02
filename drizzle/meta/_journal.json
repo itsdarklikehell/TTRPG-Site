@@ -22,6 +22,13 @@
       "when": 1790956961218,
       "tag": "0002_member_mute",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1790974020430,
+      "tag": "0003_perk_edit",
+      "breakpoints": true
     }
   ]
 }

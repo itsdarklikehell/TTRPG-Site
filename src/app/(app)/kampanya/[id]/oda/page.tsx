@@ -18,7 +18,7 @@ export default async function RoomPage({ params }: { params: Promise<{ id: strin
   const { campaign, isGM } = access;
   const rows = await db.select().from(characters).where(eq(characters.campaignId, id)).orderBy(asc(characters.createdAt));
   const chars = rows
-    .filter((c) => c.status === "ACTIVE" || (c.userId === user.id && c.status !== "REJECTED"))
+    .filter((c) => c.status === "ACTIVE" || c.status === "DEAD" || (c.userId === user.id && c.status !== "REJECTED"))
     .map((c) => (isGM ? { view: "gm" as const, character: c } : c.userId === user.id ? { view: "owner" as const, character: ownerCharacter(c) } : { view: "public" as const, character: publicCharacter(c) }));
   const members = await db
     .select({ id: users.id, displayName: users.displayName, chatMuted: campaignMembers.chatMuted, rollMuted: campaignMembers.rollMuted })

@@ -87,21 +87,36 @@ export function corruptionKlangBonus(corruption: number) {
   return Math.max(0, corruption - 2);
 }
 
-/** Augment etkileri ve Corruption bonusu eklenmiş, sınırlandırılmış stat değerleri. */
-export function effectiveStats(c: Pick<CharLike, "stats" | "body" | "corruption">, data: Pick<RulesInput, "augments">) {
+/** Karakterin perklerinden gelen sabit stat etkileri. */
+export function perkMods(perkKeys: string[] | undefined, data: Partial<Pick<RulesInput, "perks">>) {
+  const out: { perk: Perk; stat: StatKey; value: number }[] = [];
+  if (!perkKeys?.length || !data.perks) return out;
+  for (const k of perkKeys) {
+    const p = data.perks.find((x) => x.key === k);
+    for (const m of p?.mods ?? []) out.push({ perk: p!, stat: m.stat, value: m.value });
+  }
+  return out;
+}
+
+/**
+ * Augment, perk ve Corruption etkileri eklenmiş stat değerleri.
+ * Olumsuz etkiler statı 0'ın altına da düşürebilir (yalnızca üst sınır uygulanır).
+ */
+export function effectiveStats(c: Pick<CharLike, "stats" | "body" | "corruption"> & { perks?: string[] }, data: Pick<RulesInput, "augments"> & Partial<Pick<RulesInput, "perks">>) {
   const out = {} as Record<StatKey, StatBreakdown>;
   const augs = installedAugments(c.body, data);
+  const pm = perkMods(c.perks, data);
   for (const k of STAT_KEYS) {
     const base = c.stats?.[k] ?? 0;
     const parts: { label: string; value: number }[] = [];
+    for (const m of pm) if (m.stat === k) parts.push({ label: m.perk.name, value: m.value });
     for (const { augment } of augs) for (const m of augment.mods) if (m.stat === k) parts.push({ label: augment.name, value: m.value });
     if (k === "klang") {
       const b = corruptionKlangBonus(c.corruption);
       if (b) parts.push({ label: "Corruption", value: b });
     }
     const raw = base + parts.reduce((s, p) => s + p.value, 0);
-    let value = Math.min(STAT_MAX, raw);
-    if (k !== "klang") value = Math.max(0, value);
+    const value = Math.min(STAT_MAX, raw);
     out[k] = { base, value, parts, capped: value !== raw };
   }
   return out;
@@ -328,7 +343,7 @@ export interface CheckParams {
 }
 
 /** d20 sonucu hariç tüm eklemeleri hesaplar. */
-export function checkModifiers(c: CharLike, p: CheckParams, data: Pick<RulesInput, "augments">) {
+export function checkModifiers(c: CharLike, p: CheckParams, data: Pick<RulesInput, "augments"> & Partial<Pick<RulesInput, "perks">>) {
   const parts: { label: string; value: number }[] = [];
   const eff = effectiveStats(c, data);
   if (p.stat) parts.push({ label: STAT_LABELS[p.stat], value: eff[p.stat].value });
@@ -363,4 +378,32 @@ export function outcomeLabel(o: string) {
       info: "",
     } as Record<string, string>
   )[o] ?? o;
+}
+
+// ------------------------------------------------------------------ GM iadesi
+/**
+ * GM iadesi: yaratılıştaki sabit değerlerin (başlangıç Klang, ağaç stat'ı + seviye başına +1,
+ * ağaç bonusu) üzerindeki tüm stat puanları serbest puana; tüm yetenek seviyeleri ve sonradan
+ * açılan ağaçlar yetenek puanına döner. Seviye değişmez.
+ */
+export function refundPlan(c: Pick<CharLike, "stats" | "trees" | "abilities" | "level">, data: Pick<RulesInput, "trees">) {
+  const tree = data.trees.find((t) => t.key === c.trees[0]);
+  const floor = emptyStats();
+  floor.klang = START_KLANG;
+  if (tree) {
+    floor[tree.stat] += START_TREE_STAT + c.level;
+    if (tree.startBonus.kind === "stat") floor[tree.startBonus.stat] += tree.startBonus.amount;
+  }
+  const stats = { ...c.stats } as Stats;
+  let statPoints = 0;
+  for (const k of STAT_KEYS) {
+    const extra = (c.stats[k] ?? 0) - floor[k];
+    if (extra > 0) {
+      statPoints += extra;
+      stats[k] = floor[k];
+    }
+  }
+  const abilityLevels = Object.values(c.abilities).reduce((a, b) => a + (b > 0 ? b : 0), 0);
+  const extraTrees = Math.max(0, c.trees.length - 1);
+  return { stats, statPoints, abilityPoints: abilityLevels + extraTrees, trees: c.trees.slice(0, 1), floor };
 }

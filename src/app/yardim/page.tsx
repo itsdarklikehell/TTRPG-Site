@@ -201,6 +201,13 @@ export default async function HelpPage() {
                 (öncül, stat, seviye, Corruption).
               </li>
               <li>Bir yeteneğin 3. seviyesi için karakter seviyesi en az 4 olmalı.</li>
+              <li>
+                Ağaç görünümünde <strong>Kök</strong> yetenek üstte, iki ana kol (A ve B) yan yana durur. Kartlar arasındaki çizgi öncül sırasını gösterir; kesik çizgili blok bir{" "}
+                <strong>yan daldır</strong> (A′, B′) ve üstündeki yetenekten ayrılır. Kartın üstündeki &quot;Öncül&quot; satırı kırmızıysa önce o yeteneği almalısın.
+              </li>
+              <li>İkinci ağacı açabilecek durumdaysan Yetenekler sekmesinde &quot;YENİ AĞAÇ AÇILABİLİR&quot; uyarısı ve &quot;Ağaç aç&quot; düğmesi çıkar.</li>
+              <li>Perklerin sabit stat etkileri (ör. +2 Rede, −2 Leis) statlarına otomatik yansır; statın altında hangi perk ya da augment&apos;ten geldiği yazar. Olumsuz etkiler statı 0&apos;ın altına da düşürebilir.</li>
+              <li>GM izin verirse perklerini bir kez yeniden düzenleyebilirsin (karakter kağıdında &quot;Perkleri düzenle&quot;).</li>
               <li>Bazı yetenekler başka bir yetenekle birlikte alındığında <strong>sinerji</strong> kazanır; aktif sinerjiler kartta yazar.</li>
             </ul>
           </Section>
@@ -215,7 +222,14 @@ export default async function HelpPage() {
               <li>GM bir oyuncuyu sohbette ya da zar atmada susturabilir. Sohbette susturulan oyuncu yine de GM&apos;e fısıldayabilir.</li>
               <li>Kampanyada karakterin yoksa odaya girince sana karakter oluşturmak isteyip istemediğin sorulur.</li>
               <li>Partideki bir karakterin portresine ya da adına tıklayınca karakteri odadan çıkmadan görürsün.</li>
-              <li>GM &quot;zar iste&quot; dediğinde akışın altında bir düğme çıkar; tek tıkla doğru zarı atarsın.</li>
+              <li>GM &quot;zar iste&quot; dediğinde akışın altında bir kart çıkar; tek tıkla doğru zarı atarsın. Eşik, düzenleyici ve stat&apos;ı GM belirler.</li>
+              <li>Zar attığında sonuç ekranın üstünde kısa bir bildirim olarak görünür ve sahne en alta kayar. Bildirime dokununca akışa gidersin.</li>
+              <li>Inspiration ile yeniden atmadan önce zarın ayrıntıları ve kalan Inspiration&apos;ın gösterilir; onaylayınca harcanır.</li>
+              <li>
+                <strong>Death Save</strong> ve <strong>Pervitin</strong> zarlarını yalnızca GM ister. Death Save kartı ölüm ve kurtuluş sayısını gösterir; üç ölümde karakter
+                &quot;Öldü&quot; olarak işaretlenir, GM diriltebilir.
+              </li>
+              <li>Sağ üstteki &quot;Karakterim&quot; düğmesi seni karakter kağıdına götürür; karakterin yoksa &quot;Karakter Oluştur&quot; yazar.</li>
               <li>Odadan başka bir sayfaya geçersen sağ alttaki &quot;Oyun odasına dön&quot; düğmesiyle geri dönersin.</li>
             </ul>
           </Section>
@@ -253,7 +267,22 @@ export default async function HelpPage() {
               </li>
               <li>
                 <strong>Oyun odasında:</strong> gizli zar atabilir, oyunculardan zar isteyebilir, parti kartlarından Corruption ve Inspiration&apos;ı hızlıca değiştirebilirsin.
-                &quot;Masada&quot; listesindeki simgelerle bir oyuncuyu sohbette ya da zar atmada susturabilirsin.
+                &quot;Masada&quot; listesindeki simgelerle bir oyuncuyu sohbette ya da zar atmada susturabilir ya da oyundan atabilirsin.
+              </li>
+              <li>
+                <strong>Zar paneli:</strong> &quot;Statsız&quot; ile stat eklenmeyen aksiyonlar atılır; &quot;Elle&quot; kutusuna istediğin eşiği yazabilirsin. Death Save ve Pervitin&apos;i
+                doğrudan atabilirsin; Pervitin&apos;e durum düzenleyicisi eklenir.
+              </li>
+              <li>
+                <strong>Zar iste:</strong> Normal zar, Death Save veya Pervitin isteyebilirsin; stat (ya da statsız), hazır ya da elle eşik, durum düzenleyicisi, kara büyü, oyuncunun
+                uzuv seçmesi ve sonucu gizleme seçenekleri var. Bekleyen istekleri akışın altından iptal edebilirsin.
+              </li>
+              <li>
+                <strong>Zar geçmişi:</strong> Tek bir zarı kartındaki çöp kutusuyla, tüm geçmişi Sahne sekmesindeki &quot;Zar geçmişi&quot; düğmesiyle silebilirsin.
+              </li>
+              <li>
+                <strong>İade ve izinler:</strong> GM düzenle ekranındaki &quot;Puanları iade et&quot; tüm dağıtılmış stat ve yetenek puanlarını oyuncuya geri verir. &quot;Oyuncu perklerini
+                düzenleyebilir&quot; kutusu tek seferlik perk düzenleme izni verir. Ölü karakteri parti kartından ya da karakter kağıdından diriltebilirsin.
               </li>
               <li>
                 <strong>Kurallar:</strong> Obsidian&apos;daki kuralları güncelledikten sonra <code className="rounded bg-surface2 px-1">npm run sync</code> çalıştırıp push etmen yeterli.
@@ -269,6 +298,7 @@ export default async function HelpPage() {
                 ["Bir yeteneği yanlışlıkla aldım.", "GM'ine söyle; GM düzenle ekranından geri alıp puanını iade edebilir."],
                 ["Karakterimi silmek istiyorum.", "Karakter kağıdında 'Karakteri sil' düğmesine bas ve onay için karakterin adını yaz. Silme geri alınamaz."],
                 ["Oyun odası 'Bağlanıyor…' yazıyor.", "Sayfayı yenile. Devam ederse oturumun kapanmış olabilir; yeniden giriş yap."],
+                ["Bir sayfada 'Bir şeyler ters gitti' yazdı.", "Site bu durumda sayfayı bir kez kendiliğinden yeniler. Sorun sürerse ekrandaki kodu GM'ine ilet."],
               ].map(([q, a]) => (
                 <div key={q}>
                   <dt className="font-medium text-ink">{q}</dt>

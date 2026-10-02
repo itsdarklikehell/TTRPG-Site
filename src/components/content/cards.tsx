@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { resolveContentLinks } from "@/lib/base";
+import { enrichContent } from "@/lib/base";
 import { STAT_LABELS, bodyPartLabel } from "@/lib/shz/constants";
 import type { Ability, Augment, Perk } from "@/lib/shz/content-types";
 import { Badge, cx } from "../ui";
@@ -7,7 +7,7 @@ import { PerkIcon } from "./icons";
 
 export function Html({ html, className }: { html: string; className?: string }) {
   if (!html) return null;
-  return <div className={cx("prose-shz", className)} dangerouslySetInnerHTML={{ __html: resolveContentLinks(html) }} />;
+  return <div className={cx("prose-shz", className)} dangerouslySetInnerHTML={{ __html: enrichContent(html) }} />;
 }
 
 const TYPE_TONE: Record<string, "accent" | "neutral" | "warn"> = { Aktif: "accent", Pasif: "neutral", Tepki: "warn" };
@@ -24,6 +24,7 @@ export function AbilityCard({
   compact,
   highlight,
   prereqName,
+  prereqMissing,
 }: {
   ability: Ability;
   level?: number;
@@ -31,54 +32,72 @@ export function AbilityCard({
   compact?: boolean;
   highlight?: "owned" | "available" | "locked";
   prereqName?: string | null;
+  /** Öncül henüz alınmadıysa kırmızı gösterilir. */
+  prereqMissing?: boolean;
 }) {
+  const req = !a.requirementText || /^yok$/i.test(a.requirementText) ? null : a.requirementText;
   return (
     <article
       id={a.key}
       className={cx(
         "card flex scroll-mt-24 flex-col p-4 transition",
         highlight === "owned" && "border-accent/60 bg-accent/[0.06]",
-        highlight === "available" && "border-ok/40",
+        highlight === "available" && "border-ok/50 shadow-[0_0_0_1px_rgb(var(--ok)/0.15)]",
         highlight === "locked" && "opacity-80",
       )}
     >
+      {prereqName && (
+        <p className={cx("-mt-1 mb-2 flex items-center gap-1.5 text-[11px] font-medium", prereqMissing ? "text-danger" : "text-warn")}>
+          <span aria-hidden>↳</span> Öncül: <span className="font-semibold">{prereqName}</span>
+          {prereqMissing && <span className="text-danger/80">(önce bunu al)</span>}
+        </p>
+      )}
       <div className="flex items-start justify-between gap-3">
-        <h3 className="font-serif text-[17px] leading-snug text-ink">{a.name}</h3>
+        <h3 className="font-serif text-lg leading-snug text-ink">{a.name}</h3>
         {level ? (
           <span className="shrink-0 rounded-md bg-accent px-2 py-0.5 font-mono text-xs font-semibold text-onAccent">
             Sv {level}/{a.maxLevel}
           </span>
+        ) : a.maxLevel > 1 ? (
+          <span className="shrink-0 rounded-md border border-line px-2 py-0.5 font-mono text-[11px] text-muted">{a.maxLevel} sv</span>
         ) : null}
       </div>
       <div className="mt-2 flex flex-wrap gap-1.5">
         <Badge tone={TYPE_TONE[a.type] ?? "neutral"}>{a.type}</Badge>
         <Badge>{branchLabel(a)}</Badge>
-        <Badge title="Gereksinim">{!a.requirementText || /^yok$/i.test(a.requirementText) ? "Gereksinim yok" : a.requirementText}</Badge>
-        {a.maxLevel > 1 && <Badge>{a.maxLevel} seviye</Badge>}
-        {prereqName && <Badge tone="warn">Öncül: {prereqName}</Badge>}
       </div>
+      <p className="mt-2 text-xs text-muted">
+        <span className="font-semibold uppercase tracking-wider">Gereksinim:</span>{" "}
+        {req ? <span className="prose-shz inline text-ink/90" dangerouslySetInnerHTML={{ __html: enrichContent(req) }} /> : <span className="text-ink/80">yok</span>}
+      </p>
+      {compact && a.levelEffects[0] && (
+        <div className="prose-shz mt-2 line-clamp-2 text-sm text-ink/80" dangerouslySetInnerHTML={{ __html: enrichContent(a.levelEffects[0].html) }} />
+      )}
       {!compact && (
-        <div className="mt-3 space-y-3 text-sm">
+        <div className="mt-3 space-y-3 text-[15px] leading-relaxed">
           {a.levelEffects.length > 0 && (
-            <ol className="space-y-1.5">
-              {a.levelEffects.map((l) => (
-                <li key={l.level} className={cx("grid grid-cols-[44px_1fr] gap-2 rounded-md px-2 py-1.5", level && l.level <= level ? "bg-accent/10" : "bg-surface2/60")}>
-                  <span className="font-mono text-xs text-accent">Sv {l.level}</span>
-                  <span className="prose-shz text-sm" dangerouslySetInnerHTML={{ __html: resolveContentLinks(l.html) }} />
-                </li>
-              ))}
+            <ol className="space-y-2">
+              {a.levelEffects.map((l) => {
+                const on = !!level && l.level <= level;
+                return (
+                  <li key={l.level} className={cx("grid grid-cols-[52px_1fr] gap-3 rounded-lg border px-3 py-2.5", on ? "border-accent/40 bg-accent/10" : "border-line bg-surface2/50")}>
+                    <span className={cx("grid h-7 place-items-center rounded-md font-mono text-xs font-semibold", on ? "bg-accent text-onAccent" : "bg-surface text-accent")}>Sv {l.level}</span>
+                    <span className="prose-shz" dangerouslySetInnerHTML={{ __html: enrichContent(l.html) }} />
+                  </li>
+                );
+              })}
             </ol>
           )}
           {a.sections.map((s) => (
             <div
               key={s.key}
               className={cx(
-                "rounded-md border-l-2 px-3 py-2",
-                s.key === "BEDEL" ? "border-danger/60 bg-danger/[0.06]" : s.key === "SİNERJİ" ? "border-accent/60 bg-accent/[0.06]" : "border-line bg-surface2/50",
+                "rounded-lg border-l-[3px] px-3 py-2.5",
+                s.key === "BEDEL" ? "border-danger/70 bg-danger/[0.07]" : s.key === "SİNERJİ" ? "border-accent/70 bg-accent/[0.07]" : "border-line bg-surface2/50",
               )}
             >
-              <p className="mb-1 text-[10px] font-semibold uppercase tracking-widest text-muted">{s.label}</p>
-              <Html html={s.html} className="text-sm" />
+              <p className={cx("mb-1 text-[11px] font-semibold uppercase tracking-widest", s.key === "BEDEL" ? "text-danger" : s.key === "SİNERJİ" ? "text-accent" : "text-muted")}>{s.label}</p>
+              <Html html={s.html} />
             </div>
           ))}
           {a.flavorHtml && <Html html={a.flavorHtml} className="border-t border-line pt-3 font-serif text-[13px] italic text-muted" />}

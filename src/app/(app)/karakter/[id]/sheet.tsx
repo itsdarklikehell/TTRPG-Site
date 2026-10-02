@@ -3,7 +3,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { BodyDiagram, WoundLegend } from "@/components/body-diagram";
+import { AbilityTree } from "@/components/content/ability-tree";
 import { AbilityCard, Html, PerkCard } from "@/components/content/cards";
+import { PerkPicker } from "@/components/content/perk-picker";
+import { HeartPulse, Skull, Sparkles } from "lucide-react";
 import { Modal, Tabs, useAction, useHashTab } from "@/components/interactive";
 import { CorruptionEffects } from "@/components/corruption";
 import { Portrait, PortraitEditor } from "@/components/portrait";
@@ -24,8 +27,8 @@ import {
   type BodyPartKey,
 } from "@/lib/shz/constants";
 import type { RulesData } from "@/lib/shz/content";
-import type { Ability, BranchCode } from "@/lib/shz/content-types";
-import { activeSynergies, canOpenTree, effectiveStats, installedAugments, learnState, normalizeBody, woundPenalty, type CharLike } from "@/lib/shz/rules";
+import type { Ability } from "@/lib/shz/content-types";
+import { activeSynergies, canOpenTree, effectiveStats, installedAugments, learnState, normalizeBody, perkBudget, refundPlan, woundPenalty, type CharLike } from "@/lib/shz/rules";
 
 type Ch = Omit<Character, "createdAt" | "updatedAt"> & { createdAt: string; updatedAt: string };
 interface Log {
@@ -48,7 +51,7 @@ export function Sheet({
   logs,
 }: {
   character: Ch;
-  campaign: { id: string; name: string; deathSaveEnabled: boolean; levelCap: number };
+  campaign: { id: string; name: string; deathSaveEnabled: boolean; levelCap: number; startPerkPoints: number };
   ownerName: string;
   isGM: boolean;
   isOwner: boolean;
@@ -59,6 +62,7 @@ export function Sheet({
   const { busy, run } = useAction();
   const [tab, setTab] = useHashTab<Tab>(TABS, "genel");
   const [gmOpen, setGmOpen] = useState(false);
+  const [perkOpen, setPerkOpen] = useState(false);
   const canAct = isGM || (isOwner && c.status === "ACTIVE");
   const ch: CharLike = c;
   const eff = useMemo(() => effectiveStats(ch, data), [ch, data]);
@@ -100,7 +104,7 @@ export function Sheet({
           </div>
         </div>
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex w-full flex-wrap gap-2 sm:w-auto">
           <Link href={`/kampanya/${campaign.id}/oda`} className="inline-flex h-10 items-center rounded-lg bg-accent px-4 text-sm font-semibold text-onAccent hover:bg-accent/90">
             Oyun odası
           </Link>
@@ -116,6 +120,28 @@ export function Sheet({
       {c.status === "PENDING" && (
         <div className="mb-6 rounded-lg border border-warn/40 bg-warn/10 px-4 py-3 text-sm">Karakter GM onayı bekliyor. Onaylanınca puan harcayabilir ve oyun odasında zar atabilirsin.</div>
       )}
+      {c.status === "DEAD" && (
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-danger/50 bg-danger/10 px-4 py-3 text-sm">
+          <span className="flex items-center gap-2">
+            <Skull className="h-5 w-5 text-danger" /> <strong>{c.name} öldü.</strong> Ölü karakterler zar atamaz ve puan harcayamaz.
+          </span>
+          {isGM && (
+            <Button size="sm" variant="outline" disabled={busy} onClick={() => act(() => api(`/api/characters/${c.id}/gm`, { method: "PATCH", body: { revive: true } }), `${c.name} diriltildi.`)}>
+              <HeartPulse className="h-4 w-4" /> Dirilt
+            </Button>
+          )}
+        </div>
+      )}
+      {c.perkEditAllowed && isOwner && c.status === "ACTIVE" && (
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-accent/50 bg-accent/10 px-4 py-3 text-sm">
+          <span className="flex items-center gap-2">
+            <Sparkles className="h-4 w-4 text-accent" /> GM perklerini yeniden düzenlemene izin verdi (tek seferlik).
+          </span>
+          <Button size="sm" variant="primary" onClick={() => setPerkOpen(true)}>
+            Perkleri düzenle
+          </Button>
+        </div>
+      )}
       {c.status === "REJECTED" && (
         <div className="mb-6 rounded-lg border border-danger/40 bg-danger/10 px-4 py-3 text-sm">
           GM bu karakteri reddetti{c.reviewNote ? `: ${c.reviewNote}` : "."} Kampanya sayfasından yeni bir karakter oluşturabilirsin.
@@ -123,7 +149,7 @@ export function Sheet({
       )}
 
       {/* Kaynak şeridi */}
-      <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-7">
+      <div className="mb-6 grid grid-cols-3 gap-2 sm:grid-cols-4 sm:gap-3 lg:grid-cols-7">
         <Resource label="Seviye" value={`${c.level}`} sub={`sınır ${campaign.levelCap}`} />
         <Resource label="Yetenek puanı" value={c.abilityPoints} tone={c.abilityPoints > 0 ? "accent" : undefined} />
         <Resource label="Serbest stat" value={c.freeStatPoints} tone={c.freeStatPoints > 0 ? "accent" : undefined} />
@@ -209,7 +235,14 @@ export function Sheet({
           </Card>
           <div className="space-y-6">
             <Card className="p-5">
-              <h2 className="mb-3 font-serif text-lg">Perkler</h2>
+              <div className="mb-3 flex items-center justify-between gap-2">
+                <h2 className="font-serif text-lg">Perkler</h2>
+                {(isGM || (isOwner && c.perkEditAllowed && c.status === "ACTIVE")) && (
+                  <Button size="sm" variant="outline" onClick={() => setPerkOpen(true)}>
+                    Düzenle
+                  </Button>
+                )}
+              </div>
               {c.perks.length === 0 ? (
                 <p className="text-sm text-muted">Perk yok.</p>
               ) : (
@@ -259,7 +292,8 @@ export function Sheet({
         </Card>
       )}
 
-      {isGM && <GMEditor open={gmOpen} onClose={() => setGmOpen(false)} c={c} data={data} act={act} />}
+      {isGM && <GMEditor key={`${c.updatedAt}:${gmOpen}`} open={gmOpen} onClose={() => setGmOpen(false)} c={c} data={data} act={act} />}
+      {(isGM || isOwner) && <PerkEditor key={`${c.updatedAt}:${perkOpen}`} open={perkOpen} onClose={() => setPerkOpen(false)} c={c} data={data} start={campaign.startPerkPoints} isGM={isGM} act={act} />}
     </div>
   );
 }
@@ -280,6 +314,24 @@ function Resource({ label, value, sub, tone }: { label: string; value: React.Rea
 }
 
 export function CorruptionBar({ value }: { value: number }) {
+  if (value === 0)
+    return (
+      <div className="mb-6">
+        <div
+          className="relative flex h-7 items-center justify-center overflow-hidden rounded-md border border-ok/40 bg-ok/[0.07]"
+          role="meter"
+          aria-valuemin={0}
+          aria-valuemax={CORRUPTION_MAX}
+          aria-valuenow={0}
+          aria-label="Corruption"
+        >
+          <span className="corr-clean-beam pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-transparent via-ok/25 to-transparent" aria-hidden />
+          <span lang="en" className="relative font-mono text-xs font-semibold tracking-[0.3em] text-ok">
+            CORRUPTION 0
+          </span>
+        </div>
+      </div>
+    );
   return (
     <div className="mb-6">
       <div className="flex gap-1" role="meter" aria-valuemin={0} aria-valuemax={CORRUPTION_MAX} aria-valuenow={value} aria-label="Corruption">
@@ -291,19 +343,31 @@ export function CorruptionBar({ value }: { value: number }) {
           />
         ))}
       </div>
-      {value > 0 && <CorruptionEffects value={value} className="mt-3" />}
+      <CorruptionEffects value={value} className="mt-3" />
     </div>
   );
 }
 
 // ------------------------------------------------------------------ yetenekler
-const COLUMN_ORDER: BranchCode[] = ["A", "A′", "B", "B′"];
-
 function AbilitiesTab({ c, data, canAct, busy, act }: { c: Ch; data: RulesData; canAct: boolean; busy: boolean; act: (fn: () => Promise<unknown>, ok?: string) => Promise<void> }) {
   const [showAll, setShowAll] = useState(false);
+  const [treeModal, setTreeModal] = useState(false);
   const closed = data.trees.filter((t) => !c.trees.includes(t.key));
+  const openable = canAct ? closed.filter((t) => canOpenTree(c, t.key, data).length === 0) : [];
+  const openTree = (key: string, name: string) => act(() => api(`/api/characters/${c.id}/open-tree`, { body: { tree: key } }), `${name} açıldı.`).then(() => setTreeModal(false));
   return (
     <div className="space-y-10">
+      {openable.length > 0 && (
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-ok/50 bg-ok/10 px-4 py-3">
+          <div>
+            <p className="font-mono text-xs font-semibold tracking-[0.2em] text-ok">YENİ AĞAÇ AÇILABİLİR</p>
+            <p className="text-sm text-ink/90">1 yetenek puanı harcayarak ikinci ekspertiz ağacını açabilirsin.</p>
+          </div>
+          <Button variant="primary" onClick={() => setTreeModal(true)}>
+            Ağaç aç
+          </Button>
+        </div>
+      )}
       {canAct && c.abilityPoints > 0 && (
         <div className="rounded-lg border border-accent/40 bg-accent/10 px-4 py-3 text-sm">
           <strong>{c.abilityPoints}</strong> yetenek puanın var. Yeşil kenarlı yetenekleri alabilirsin; kilitli olanların altında eksik şart yazar.
@@ -312,33 +376,16 @@ function AbilitiesTab({ c, data, canAct, busy, act }: { c: Ch; data: RulesData; 
       {c.trees.map((tk) => {
         const t = data.trees.find((x) => x.key === tk);
         if (!t) return null;
-        const abs = t.abilities.map((k) => data.abilities[k]);
-        const root = abs.filter((a) => a.branch === "Kök");
-        const cols = COLUMN_ORDER.map((code) => ({ code, list: abs.filter((a) => a.branch === code) })).filter((x) => x.list.length);
         return (
           <section key={tk}>
-            <div className="mb-4 flex flex-wrap items-center gap-3">
+            <div className="mb-5 flex flex-wrap items-center gap-3 border-b border-line pb-3">
               <h2 className="font-serif text-2xl">{t.name}</h2>
               <Badge tone="accent">{STAT_LABELS[t.stat]}</Badge>
-              <span className="text-sm text-muted">{abs.filter((a) => c.abilities[a.key]).length}/8 yetenek</span>
+              <span className="text-sm text-muted">
+                {t.abilities.filter((k) => c.abilities[k]).length}/{t.abilities.length} yetenek
+              </span>
             </div>
-            <div className="mb-4 grid gap-3 md:grid-cols-2">
-              {root.map((a) => (
-                <AbilityTile key={a.key} a={a} c={c} data={data} canAct={canAct} busy={busy} act={act} />
-              ))}
-            </div>
-            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-              {cols.map((col) => (
-                <div key={col.code} className="space-y-3">
-                  <p className="text-xs font-semibold uppercase tracking-widest text-muted">
-                    {col.code} · {col.list[0]?.branchName}
-                  </p>
-                  {col.list.map((a) => (
-                    <AbilityTile key={a.key} a={a} c={c} data={data} canAct={canAct} busy={busy} act={act} />
-                  ))}
-                </div>
-              ))}
-            </div>
+            <AbilityTree tree={t} abilities={data.abilities} owned={c.abilities} render={(a) => <AbilityTile key={a.key} a={a} c={c} data={data} canAct={canAct} busy={busy} act={act} />} />
           </section>
         );
       })}
@@ -350,34 +397,42 @@ function AbilitiesTab({ c, data, canAct, busy, act }: { c: Ch; data: RulesData; 
               {showAll ? "Gizle" : "Göster"}
             </button>
           </div>
-          {showAll && (
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {closed.map((t) => {
-                const problems = canOpenTree(c, t.key, data);
-                return (
-                  <Card key={t.key} className="p-4">
-                    <div className="flex items-center justify-between">
-                      <span className="font-serif text-lg">{t.name}</span>
-                      <Badge>{STAT_LABELS[t.stat]}</Badge>
-                    </div>
-                    <div className="mt-3 flex items-center justify-between gap-3">
-                      <Link href={`/kurallar/yetenekler/${t.key}`} className="text-xs text-muted hover:text-ink">
-                        Ağacı incele →
-                      </Link>
-                      {canAct && (
-                        <Button size="sm" variant="outline" disabled={busy || problems.length > 0} title={problems.join(" · ")} onClick={() => act(() => api(`/api/characters/${c.id}/open-tree`, { body: { tree: t.key } }), `${t.name} açıldı.`)}>
-                          1 puanla aç
-                        </Button>
-                      )}
-                    </div>
-                    {canAct && problems.length > 0 && <p className="mt-2 text-[11px] text-muted">{problems.join(" · ")}</p>}
-                  </Card>
-                );
-              })}
-            </div>
-          )}
+          {showAll && <TreeChoices c={c} data={data} trees={closed} canAct={canAct} busy={busy} onOpen={openTree} />}
         </section>
       )}
+      <Modal open={treeModal} onClose={() => setTreeModal(false)} title="Yeni ekspertiz ağacı aç" wide>
+        <p className="mb-4 text-sm text-muted">En fazla 2 ağaç açılabilir. Açmak 1 yetenek puanı harcar; ağacın yetenekleri için yine puan gerekir.</p>
+        <TreeChoices c={c} data={data} trees={closed} canAct={canAct} busy={busy} onOpen={openTree} />
+      </Modal>
+    </div>
+  );
+}
+
+function TreeChoices({ c, data, trees, canAct, busy, onOpen }: { c: Ch; data: RulesData; trees: RulesData["trees"]; canAct: boolean; busy: boolean; onOpen: (key: string, name: string) => void }) {
+  return (
+    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {trees.map((t) => {
+        const problems = canOpenTree(c, t.key, data);
+        return (
+          <Card key={t.key} className="p-4">
+            <div className="flex items-center justify-between">
+              <span className="font-serif text-lg">{t.name}</span>
+              <Badge>{STAT_LABELS[t.stat]}</Badge>
+            </div>
+            <div className="mt-3 flex items-center justify-between gap-3">
+              <Link href={`/kurallar/yetenekler/${t.key}`} target="_blank" className="text-xs text-muted hover:text-ink">
+                Ağacı incele ↗
+              </Link>
+              {canAct && (
+                <Button size="sm" variant={problems.length ? "outline" : "primary"} disabled={busy || problems.length > 0} title={problems.join(" · ")} onClick={() => onOpen(t.key, t.name)}>
+                  1 puanla aç
+                </Button>
+              )}
+            </div>
+            {canAct && problems.length > 0 && <p className="mt-2 text-[11px] text-muted">{problems.join(" · ")}</p>}
+          </Card>
+        );
+      })}
     </div>
   );
 }
@@ -395,13 +450,14 @@ function AbilityTile({ a, c, data, canAct, busy, act }: { a: Ability; c: Ch; dat
       compact={!open}
       highlight={canAct || lv ? highlight : undefined}
       prereqName={a.prerequisite ? data.abilities[a.prerequisite]?.name : null}
+      prereqMissing={!!a.prerequisite && !lv && !(c.abilities[a.prerequisite] > 0)}
       footer={
         <div className="space-y-2">
           {syn.length > 0 && <p className="text-[11px] text-accent">Sinerji aktif: {syn.map((k) => data.abilities[k]?.name).join(", ")}</p>}
-          {st.state === "locked" && canAct && <p className="text-[11px] text-muted">{st.problems.join(" · ")}</p>}
+          {st.state === "locked" && canAct && <p className="text-xs text-muted">{st.problems.join(" · ")}</p>}
           <div className="flex items-center justify-between gap-2">
-            <button type="button" className="text-xs text-muted hover:text-ink" onClick={() => setOpen(!open)}>
-              {open ? "Kısalt" : "Ayrıntı"}
+            <button type="button" className="rounded-md border border-line px-2.5 py-1 text-xs text-ink/80 hover:border-accent hover:text-ink" onClick={() => setOpen(!open)}>
+              {open ? "Kısalt" : "Ayrıntıları göster"}
             </button>
             {canAct && st.state === "available" && (
               <Button size="sm" variant="primary" disabled={busy} onClick={() => act(() => api(`/api/characters/${c.id}/learn`, { body: { ability: a.key } }), lv ? `${a.name} seviye ${st.nextLevel}` : `${a.name} açıldı.`)}>
@@ -486,8 +542,8 @@ function BodyTab({ c, data, isGM, act }: { c: Ch; data: RulesData; isGM: boolean
             </dl>
           )}
         </Card>
-        <Card className="overflow-hidden">
-          <table className="w-full text-sm">
+        <Card className="overflow-x-auto">
+          <table className="w-full min-w-[440px] text-sm">
             <thead className="border-b border-line bg-surface2/60 text-left text-xs uppercase tracking-wider text-muted">
               <tr>
                 <th className="px-4 py-2.5 font-medium">Uzuv</th>
@@ -552,10 +608,10 @@ function InventoryTab({ c, isGM, canEdit, act }: { c: Ch; isGM: boolean; canEdit
         <div className="space-y-2">
           {items.length === 0 && <p className="text-sm text-muted">Envanter boş.</p>}
           {items.map((it, i) => (
-            <div key={it.id} className="grid grid-cols-[1fr_64px_1fr_auto] gap-2">
+            <div key={it.id} className="grid grid-cols-[1fr_64px_auto] gap-2 sm:grid-cols-[1fr_64px_1fr_auto]">
               <input className="input" placeholder="Eşya" value={it.name} disabled={!canEdit} maxLength={80} onChange={(e) => setItems(items.map((x, j) => (j === i ? { ...x, name: e.target.value } : x)))} />
               <input className="input" type="number" min={0} max={9999} value={it.qty} disabled={!canEdit} onChange={(e) => setItems(items.map((x, j) => (j === i ? { ...x, qty: Number(e.target.value) } : x)))} />
-              <input className="input" placeholder="Not" value={it.note} disabled={!canEdit} maxLength={200} onChange={(e) => setItems(items.map((x, j) => (j === i ? { ...x, note: e.target.value } : x)))} />
+              <input className="input order-last col-span-3 sm:order-none sm:col-span-1" placeholder="Not" value={it.note} disabled={!canEdit} maxLength={200} onChange={(e) => setItems(items.map((x, j) => (j === i ? { ...x, note: e.target.value } : x)))} />
               {canEdit && (
                 <button type="button" className="px-2 text-muted hover:text-danger" aria-label="Sil" onClick={() => setItems(items.filter((_, j) => j !== i))}>
                   ✕
@@ -611,8 +667,10 @@ function GMEditor({ open, onClose, c, data, act }: { open: boolean; onClose: () 
     status: c.status,
     stats: { ...c.stats },
     deathAvailable: c.deathSave.available,
+    perkEditAllowed: c.perkEditAllowed,
     reason: "",
   });
+  const [refund, setRefund] = useState(false);
   const num = (k: "level" | "abilityPoints" | "freeStatPoints" | "corruption" | "inspiration", min: number, max: number) => (
     <Field lang={k === "corruption" || k === "inspiration" ? "en" : undefined} label={{ level: "Seviye", abilityPoints: "Yetenek puanı", freeStatPoints: "Serbest stat", corruption: "Corruption", inspiration: "Inspiration" }[k]}>
       <input type="number" className="input" min={min} max={max} value={v[k]} onChange={(e) => setV({ ...v, [k]: Number(e.target.value) })} />
@@ -647,6 +705,10 @@ function GMEditor({ open, onClose, c, data, act }: { open: boolean; onClose: () 
             <input type="checkbox" checked={v.deathAvailable} onChange={(e) => setV({ ...v, deathAvailable: e.target.checked })} className="h-4 w-4 accent-[rgb(186,168,240)]" />
             Death Save hakkı var
           </label>
+          <label className="mt-6 flex items-center gap-2 text-sm" title="Oyuncu perklerini bir kez yeniden seçebilir">
+            <input type="checkbox" checked={v.perkEditAllowed} onChange={(e) => setV({ ...v, perkEditAllowed: e.target.checked })} className="h-4 w-4 accent-[rgb(186,168,240)]" />
+            Oyuncu perklerini düzenleyebilir
+          </label>
         </div>
         <div>
           <span className="label">Ham statlar (augment ve corruption hariç)</span>
@@ -679,15 +741,15 @@ function GMEditor({ open, onClose, c, data, act }: { open: boolean; onClose: () 
                   api(`/api/characters/${c.id}/gm`, {
                     method: "PATCH",
                     body: {
-                      level: v.level,
-                      abilityPoints: v.abilityPoints,
-                      freeStatPoints: v.freeStatPoints,
-                      corruption: v.corruption,
-                      corruptionLocked: v.corruptionLocked,
-                      inspiration: v.inspiration,
-                      status: v.status,
-                      stats: v.stats,
-                      deathSave: { available: v.deathAvailable, resets: c.deathSave.resets },
+                      ...(v.level !== c.level && { level: v.level }),
+                      ...(v.abilityPoints !== c.abilityPoints && { abilityPoints: v.abilityPoints }),
+                      ...(v.freeStatPoints !== c.freeStatPoints && { freeStatPoints: v.freeStatPoints }),
+                      ...((v.corruption !== c.corruption || v.corruptionLocked !== c.corruptionLocked) && { corruption: v.corruption, corruptionLocked: v.corruptionLocked }),
+                      ...(v.inspiration !== c.inspiration && { inspiration: v.inspiration }),
+                      ...(v.status !== c.status && { status: v.status }),
+                      ...(STAT_KEYS.some((k) => v.stats[k] !== c.stats[k]) && { stats: v.stats }),
+                      ...(v.deathAvailable !== c.deathSave.available && { deathSave: { available: v.deathAvailable, resets: c.deathSave.resets } }),
+                      ...(v.perkEditAllowed !== c.perkEditAllowed && { perkEditAllowed: v.perkEditAllowed }),
                       reason: v.reason || undefined,
                     },
                   }),
@@ -699,6 +761,13 @@ function GMEditor({ open, onClose, c, data, act }: { open: boolean; onClose: () 
             Kaydet
           </Button>
         </div>
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-warn/40 bg-warn/[0.07] p-3 text-sm">
+          <span>Tüm stat ve yetenek puanlarını oyuncuya iade et; oyuncu yeniden dağıtsın.</span>
+          <Button size="sm" variant="outline" onClick={() => setRefund(true)}>
+            Puanları iade et…
+          </Button>
+        </div>
+        <RefundModal open={refund} onClose={() => setRefund(false)} c={c} data={data} act={act} />
         <details className="rounded-lg border border-line p-3 text-sm">
           <summary className="cursor-pointer text-muted">Yetenek / ağaç / perk düzeltmesi</summary>
           <GMLists c={c} data={data} act={act} />
@@ -767,6 +836,84 @@ function GMLists({ c, data, act }: { c: Ch; data: RulesData; act: (fn: () => Pro
         Listeleri kaydet
       </Button>
     </div>
+  );
+}
+
+function RefundModal({ open, onClose, c, data, act }: { open: boolean; onClose: () => void; c: Ch; data: RulesData; act: (fn: () => Promise<unknown>, ok?: string) => Promise<void> }) {
+  const plan = refundPlan(c, data);
+  const [stats, setStats] = useState(true);
+  const [abilities, setAbilities] = useState(true);
+  return (
+    <Modal open={open} onClose={onClose} title="Puanları iade et">
+      <div className="space-y-4 text-sm">
+        <p className="text-muted">Seviye değişmez. Başlangıç değerleri (Klang {2}, ağaç stat&apos;ı ve seviye artışları, ağaç bonusu) korunur; geri kalan her şey puana döner.</p>
+        <label className="flex items-start gap-3 rounded-lg border border-line p-3">
+          <input type="checkbox" checked={stats} onChange={(e) => setStats(e.target.checked)} className="mt-0.5 h-4 w-4 accent-[rgb(186,168,240)]" />
+          <span>
+            <strong className="text-ink">{plan.statPoints} stat puanı</strong> serbest puana dönsün
+            <span className="mt-1 block text-xs text-muted">
+              {STAT_KEYS.filter((k) => c.stats[k] !== plan.stats[k])
+                .map((k) => `${STAT_LABELS[k]} ${c.stats[k]} → ${plan.stats[k]}`)
+                .join(" · ") || "Dağıtılmış puan yok."}
+            </span>
+          </span>
+        </label>
+        <label className="flex items-start gap-3 rounded-lg border border-line p-3">
+          <input type="checkbox" checked={abilities} onChange={(e) => setAbilities(e.target.checked)} className="mt-0.5 h-4 w-4 accent-[rgb(186,168,240)]" />
+          <span>
+            <strong className="text-ink">{plan.abilityPoints} yetenek puanı</strong> geri dönsün
+            <span className="mt-1 block text-xs text-muted">Tüm yetenekler sıfırlanır{c.trees.length > 1 ? ", ikinci ağaç kapanır" : ""}. Başlangıç ağacı kalır.</span>
+          </span>
+        </label>
+        <div className="flex justify-end gap-2">
+          <Button onClick={onClose}>Vazgeç</Button>
+          <Button
+            variant="danger"
+            disabled={(!stats || !plan.statPoints) && (!abilities || !plan.abilityPoints)}
+            onClick={async () => {
+              await act(() => api(`/api/characters/${c.id}/gm`, { method: "PATCH", body: { refund: { stats, abilities } } }), "Puanlar iade edildi.");
+              onClose();
+            }}
+          >
+            İade et
+          </Button>
+        </div>
+      </div>
+    </Modal>
+  );
+}
+
+function PerkEditor({ open, onClose, c, data, start, isGM, act }: { open: boolean; onClose: () => void; c: Ch; data: RulesData; start: number; isGM: boolean; act: (fn: () => Promise<unknown>, ok?: string) => Promise<void> }) {
+  const [perks, setPerks] = useState<string[]>(c.perks);
+  const before = perkBudget(c.perks, start, data);
+  const budget = perkBudget(perks, start, data);
+  const delta = budget.convertible - before.convertible;
+  const changed = JSON.stringify([...perks].sort()) !== JSON.stringify([...c.perks].sort());
+  return (
+    <Modal open={open} onClose={onClose} title="Perkleri düzenle" wide>
+      <div className="space-y-4">
+        {!isGM && <p className="text-sm text-muted">GM izni tek seferliktir: kaydedince izin kapanır.</p>}
+        <PerkPicker perks={data.perks} selected={perks} onToggle={(k) => setPerks((p) => (p.includes(k) ? p.filter((x) => x !== k) : [...p, k]))} budget={budget} />
+        <div className="sticky bottom-0 flex flex-wrap items-center justify-between gap-3 border-t border-line bg-surface pt-3 text-sm">
+          <span className={cx(delta < 0 ? "text-danger" : delta > 0 ? "text-ok" : "text-muted")}>
+            {delta > 0 ? `+${delta} serbest stat puanı kazanırsın.` : delta < 0 ? `Bu seçim ${-delta} stat puanını geri alır${isGM ? " (GM olarak kaydedebilirsin)." : "; kaydedilemez."}` : "Stat puanı değişmez."}
+          </span>
+          <span className="flex gap-2">
+            <Button onClick={onClose}>Vazgeç</Button>
+            <Button
+              variant="primary"
+              disabled={!changed || budget.problems.length > 0 || (delta < 0 && !isGM)}
+              onClick={async () => {
+                await act(() => api(`/api/characters/${c.id}/perks`, { body: { perks } }), "Perkler güncellendi.");
+                onClose();
+              }}
+            >
+              Kaydet
+            </Button>
+          </span>
+        </div>
+      </div>
+    </Modal>
   );
 }
 

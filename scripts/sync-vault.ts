@@ -513,6 +513,23 @@ for (const a of Object.values(abilities)) {
     warn(`${a.name}: öncülü başka bir ağaçta (${abilities[a.prerequisite]?.name})`);
 }
 
+/**
+ * Perk metnindeki sabit stat etkileri: "+2 Rede", "-2 Leis", "Oyuna +2 Klang ile başlarsın".
+ * "zarlarına -2" gibi koşullu etkiler (sayı stat adından sonra gelir) ve "+2 Klang'a" gibi
+ * ek açıklamalar alınmaz.
+ */
+function perkModsFrom(text: string): Perk["mods"] {
+  const out: Perk["mods"] = [];
+  for (const m of text.matchAll(/(^|[\s(.,;:])([+\-−])\s?(\d+)\s+([A-Za-zÇĞİÖŞÜçğıöşü]+)(?=$|[\s.,;:)])/g)) {
+    const st = statFromLabel(m[4]);
+    if (!st) continue;
+    const after = text.slice((m.index ?? 0) + m[0].length, (m.index ?? 0) + m[0].length + 10);
+    if (/^\s*zar/i.test(after)) continue;
+    out.push({ stat: st, value: (m[2] === "+" ? 1 : -1) * Number(m[3]) });
+  }
+  return out;
+}
+
 const perks: Perk[] = rawPerks.map((p) => {
   const exm = /^\*\*MUTUALLY EXCLUSIVE WITH\*\*\s*(.*)$/m.exec(p.text);
   const exclusive: string[] = [];
@@ -525,7 +542,7 @@ const perks: Perk[] = rawPerks.map((p) => {
     }
   const body = p.text.replace(/^\*\*MUTUALLY EXCLUSIVE WITH\*\*.*$/m, "").trim();
   const html = md(body);
-  return { key: p.key, name: p.name, kind: p.kind, points: p.points, exclusive, html, searchText: plain(p.name + " " + html) };
+  return { key: p.key, name: p.name, kind: p.kind, points: p.points, exclusive, mods: perkModsFrom(plain(html)), html, searchText: plain(p.name + " " + html) };
 });
 // dışlama simetrik olsun
 for (const p of perks)

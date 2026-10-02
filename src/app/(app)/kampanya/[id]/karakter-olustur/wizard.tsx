@@ -7,9 +7,9 @@ import { TreeIcon } from "@/components/content/icons";
 import { useAction } from "@/components/interactive";
 import { Badge, Button, Card, Field, cx } from "@/components/ui";
 import { api } from "@/lib/client";
-import { AGE_MAX, AGE_MIN, START_FREE_STATS, STAT_HINTS, STAT_KEYS, STAT_LABELS, STAT_MAX, bodyPartLabel } from "@/lib/shz/constants";
+import { AGE_MAX, AGE_MIN, START_FREE_STATS, STAT_HINTS, STAT_KEYS, STAT_LABELS, STAT_MAX, bodyPartLabel, type StatKey } from "@/lib/shz/constants";
 import type { RulesData } from "@/lib/shz/content";
-import { buildCreation, learnState, type Stats } from "@/lib/shz/rules";
+import { buildCreation, learnState, perkMods, type Stats } from "@/lib/shz/rules";
 
 const STEPS = ["Kimlik", "Ekspertiz", "Perkler", "Statlar", "İlk yetenek", "Özet"] as const;
 
@@ -46,6 +46,11 @@ export function Wizard({ campaignId, startPerkPoints, data }: { campaignId: stri
   const used = Object.values(points).reduce((a, b) => a + (b ?? 0), 0);
   const treeCap = budget.convertible;
   const perkName = useMemo(() => new Map(data.perks.map((p) => [p.key, p.name])), [data.perks]);
+  const perkStat = useMemo(() => {
+    const o: Partial<Record<StatKey, number>> = {};
+    for (const m of perkMods(perks, data)) o[m.stat] = (o[m.stat] ?? 0) + m.value;
+    return o;
+  }, [perks, data]);
 
   const idOk = id.name.trim().length >= 2 && id.nationality.trim().length >= 2 && id.alignment.trim().length >= 2 && id.age >= AGE_MIN && id.age <= AGE_MAX;
   const stepOk = [idOk, !!T && (T.startBonus.kind !== "augment" || !!aug), budget.problems.length === 0, used === totalPoints && (!T || (points[T.stat] ?? 0) <= treeCap), true, result.ok && idOk];
@@ -336,7 +341,15 @@ export function Wizard({ campaignId, startPerkPoints, data }: { campaignId: stri
                         +
                       </button>
                     </div>
-                    <span className="w-10 text-right font-mono text-lg text-ink">{result.stats[k]}</span>
+                    <span className="w-14 text-right">
+                      <span className={cx("font-mono text-lg", result.stats[k] + (perkStat[k] ?? 0) < 0 ? "text-danger" : "text-ink")}>{result.stats[k] + (perkStat[k] ?? 0)}</span>
+                      {perkStat[k] ? (
+                        <span className={cx("block text-[10px]", perkStat[k]! > 0 ? "text-ok" : "text-danger")}>
+                          perk {perkStat[k]! > 0 ? "+" : ""}
+                          {perkStat[k]}
+                        </span>
+                      ) : null}
+                    </span>
                   </div>
                 );
               })}

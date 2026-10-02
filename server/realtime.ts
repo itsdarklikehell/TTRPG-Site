@@ -8,17 +8,7 @@ import { and, desc, eq, inArray, or } from "drizzle-orm";
 import type { Server, Socket } from "socket.io";
 import { z } from "zod";
 import { db } from "../src/db";
-import {
-  campaignMembers,
-  campaigns,
-  characterLogs,
-  characters,
-  messages,
-  rolls,
-  users,
-  type Character,
-  type RollDetail,
-} from "../src/db/schema";
+import { campaignMembers, campaigns, characterLogs, characters, messages, rolls, users, type Character, type RollDetail } from "../src/db/schema";
 import { SESSION_COOKIE, readCookie, userFromToken, type SessionUser } from "../src/lib/auth/core";
 import { BODY_PART_KEYS, CORRUPTION_PERVITIN_IMMUNE, STAT_KEYS, STAT_LABELS, thresholdByKey } from "../src/lib/shz/constants";
 import { rulesData } from "../src/lib/shz/content";
@@ -42,8 +32,15 @@ const room = (cid: string) => `c:${cid}`;
 const gmRoom = (cid: string) => `g:${cid}`;
 const userRoom = (cid: string, uid: string) => `u:${cid}:${uid}`;
 
-const zId = z.string().min(1).max(64).regex(/^[A-Za-z0-9_-]+$/);
-const zThreshold = z.enum(["cok-kolay", "kolay", "orta", "zor", "cok-zor", "uber"]).nullable();
+const zId = z
+  .string()
+  .min(1)
+  .max(64)
+  .regex(/^[A-Za-z0-9_-]+$/);
+const zThKey = z.enum(["cok-kolay", "kolay", "orta", "zor", "cok-zor", "uber"]);
+const zThreshold = zThKey.nullable();
+/** GM'in elle girdiği eşik (hazır kademelerin yerine geçer). */
+const zManual = z.number().int().min(1).max(60).nullable().optional();
 const schemas = {
   join: z.object({ campaignId: zId }),
   chat: z.object({
@@ -58,6 +55,7 @@ const schemas = {
     characterId: zId.nullable(),
     stat: z.enum(STAT_KEYS).nullable(),
     threshold: zThreshold,
+    thresholdValue: zManual,
     part: z.enum(BODY_PART_KEYS as [string, ...string[]]).nullable(),
     modifier: z.number().int().min(-20).max(20),
     blackMagic: z.boolean(),
@@ -67,17 +65,75 @@ const schemas = {
   }),
   reroll: z.object({ campaignId: zId, rollId: zId }),
   deleteMessage: z.object({ campaignId: zId, messageId: zId }),
+  deleteRoll: z.object({ campaignId: zId, rollId: zId }),
+  clearRolls: z.object({ campaignId: zId }),
   request: z.object({
     campaignId: zId,
     characterIds: z.array(zId).min(1).max(20),
-    stat: z.enum(STAT_KEYS),
+    kind: z.enum(["check", "death", "pervitin"]).default("check"),
+    stat: z.enum(STAT_KEYS).nullable(),
     threshold: zThreshold,
+    thresholdValue: zManual,
+    modifier: z.number().int().min(-20).max(20).default(0),
     label: z.string().trim().max(80),
     blackMagic: z.boolean(),
+    hidden: z.boolean().default(false),
+    playerPart: z.boolean().default(false),
   }),
-  death: z.object({ campaignId: zId, characterId: zId }),
-  pervitin: z.object({ campaignId: zId, characterId: zId, threshold: z.enum(["cok-kolay", "kolay", "orta", "zor", "cok-zor", "uber"]) }),
+  cancelRequest: z.object({ campaignId: zId, requestId: z.string().max(64) }),
+  death: z.object({
+    campaignId: zId,
+    characterId: zId,
+    requestId: z.string().max(64).optional(),
+  }),
+  pervitin: z.object({
+    campaignId: zId,
+    characterId: zId,
+    threshold: zThKey.nullable().optional(),
+    thresholdValue: zManual,
+    modifier: z.number().int().min(-20).max(20).optional(),
+    requestId: z.string().max(64).optional(),
+  }),
 };
+
+interface PendingRequest {
+  id: string;
+  campaignId: string;
+  kind: "check" | "death" | "pervitin";
+  characters: { id: string; name: string; userId: string }[];
+  remaining: string[];
+  stat: (typeof STAT_KEYS)[number] | null;
+  threshold: string | null;
+  thresholdValue: number | null;
+  thresholdLabel: string | null;
+  modifier: number;
+  label: string;
+  blackMagic: boolean;
+  hidden: boolean;
+  playerPart: boolean;
+  createdAt: string;
+}
+/** Bekleyen GM zar istekleri (bellekte; sunucu yeniden başlarsa düşer). */
+const pending: Map<string, Map<string, PendingRequest>> = ((globalThis as { __shzPending?: Map<string, Map<string, PendingRequest>> }).__shzPending ??= new Map());
+function campaignRequests(cid: string) {
+  let m = pending.get(cid);
+  if (!m) pending.set(cid, (m = new Map()));
+  return m;
+}
+const publicRequest = (r: PendingRequest) => {
+  const { remaining, ...rest } = r;
+  return {
+    ...rest,
+    characters: r.characters.filter((c) => remaining.includes(c.id)),
+  };
+};
+
+/** Hazır eşik kademesi ya da (yalnızca GM için) elle girilen eşik. */
+function resolveThreshold(key: string | null | undefined, manual: number | null | undefined, allowManual: boolean) {
+  if (allowManual && manual != null) return { value: manual, label: `Eşik ${manual}` };
+  const t = key ? thresholdByKey(key) : null;
+  return t ? { value: t.value, label: t.label } : null;
+}
 
 // ---------------------------------------------------------------- yardımcılar
 const presence = new Map<string, Map<string, number>>();
@@ -153,7 +209,10 @@ async function revalidate(s: S): Promise<boolean> {
   }
   s.data.user = u;
   for (const [cid] of s.data.campaigns) {
-    const c = await db.query.campaigns.findFirst({ where: eq(campaigns.id, cid), columns: { gmId: true } });
+    const c = await db.query.campaigns.findFirst({
+      where: eq(campaigns.id, cid),
+      columns: { gmId: true },
+    });
     const isGM = c?.gmId === u.id;
     const member =
       isGM ||
@@ -187,7 +246,9 @@ function joined(s: S, cid: string) {
 }
 
 async function loadChar(cid: string, characterId: string) {
-  const c = await db.query.characters.findFirst({ where: and(eq(characters.id, characterId), eq(characters.campaignId, cid)) });
+  const c = await db.query.characters.findFirst({
+    where: and(eq(characters.id, characterId), eq(characters.campaignId, cid)),
+  });
   if (!c) fail("Karakter bulunamadı.");
   return c as Character;
 }
@@ -204,9 +265,43 @@ async function emitRoll(io: Server, cid: string, r: typeof rolls.$inferSelect, u
   } else io.to(room(cid)).emit("roll", v);
 }
 
+async function systemMessage(io: Server, cid: string, user: SessionUser, content: string) {
+  const [m] = await db.insert(messages).values({ campaignId: cid, userId: user.id, channel: "SYSTEM", content }).returning();
+  io.to(room(cid)).emit("message", {
+    ...m,
+    userName: user.displayName,
+    characterName: null,
+  });
+}
+
+/** Death Save / Pervitin: oyuncular yalnızca GM isteğiyle atar; GM her zaman atabilir. */
+function takeRequest(cid: string, requestId: string | undefined, kind: PendingRequest["kind"], characterId: string, isGM: boolean) {
+  const req = requestId ? (campaignRequests(cid).get(requestId) ?? null) : null;
+  if (requestId && (!req || req.kind !== kind || !req.remaining.includes(characterId))) fail("Bu zar isteği artık geçerli değil.");
+  if (!req && !isGM) fail(kind === "death" ? "Death Save zarını yalnızca GM isteyebilir." : "Pervitin zarını yalnızca GM isteyebilir.");
+  return { req, release: req ? claim(req, characterId) : () => {} };
+}
+
+let settleRequest: (cid: string, req: PendingRequest) => void = () => {};
+
+/** İsteği bu karakter için hemen "kullanıldı" say (eşzamanlı ikinci yanıtı engeller). */
+function claim(req: PendingRequest, characterId: string) {
+  req.remaining = req.remaining.filter((x) => x !== characterId);
+  return () => {
+    if (!req.remaining.includes(characterId)) req.remaining.push(characterId);
+  };
+}
+
 // ---------------------------------------------------------------- işleyiciler
 export function attachRealtime(io: Server) {
   globalThis.__shzIO = io;
+  settleRequest = (cid, req) => {
+    if (campaignRequests(cid).get(req.id) !== req) return; // bu sırada iptal edildi
+    if (!req.remaining.length) {
+      campaignRequests(cid).delete(req.id);
+      io.to(room(cid)).emit("roll:request:done", { id: req.id });
+    } else io.to(room(cid)).emit("roll:request", publicRequest(req));
+  };
 
   io.use(async (socket, next) => {
     try {
@@ -216,7 +311,12 @@ export function attachRealtime(io: Server) {
       const token = readCookie(socket.handshake.headers.cookie, SESSION_COOKIE);
       const user = await userFromToken(token);
       if (!user) return next(new Error("auth"));
-      (socket as S).data = { user, token: token!, checkedAt: Date.now(), campaigns: new Map() };
+      (socket as S).data = {
+        user,
+        token: token!,
+        checkedAt: Date.now(),
+        campaigns: new Map(),
+      };
       next();
     } catch (e) {
       console.error("[socket auth]", e);
@@ -230,7 +330,9 @@ export function attachRealtime(io: Server) {
     void s.join(`user:${s.data.user.id}`);
     const handlers = {
       join: guard(schemas.join, async function join(s, { campaignId }) {
-        const c = await db.query.campaigns.findFirst({ where: eq(campaigns.id, campaignId) });
+        const c = await db.query.campaigns.findFirst({
+          where: eq(campaigns.id, campaignId),
+        });
         if (!c) fail("Kampanya bulunamadı.");
         const isGM = c!.gmId === s.data.user.id;
         if (!isGM) {
@@ -242,24 +344,30 @@ export function attachRealtime(io: Server) {
         if (!s.data.campaigns.has(campaignId)) {
           s.data.campaigns.set(campaignId, isGM);
           await s.join([room(campaignId), userRoom(campaignId, s.data.user.id), ...(isGM ? [gmRoom(campaignId)] : [])]);
-          io.to(room(campaignId)).emit("presence", { campaignId, online: setPresence(campaignId, s.data.user.id, 1) });
+          io.to(room(campaignId)).emit("presence", {
+            campaignId,
+            online: setPresence(campaignId, s.data.user.id, 1),
+          });
         }
         const uid = s.data.user.id;
         const msgRows = await db
-          .select({ m: messages, userName: users.displayName, charName: characters.name })
+          .select({
+            m: messages,
+            userName: users.displayName,
+            charName: characters.name,
+          })
           .from(messages)
           .leftJoin(users, eq(users.id, messages.userId))
           .leftJoin(characters, eq(characters.id, messages.characterId))
-          .where(
-            and(
-              eq(messages.campaignId, campaignId),
-              isGM ? undefined : or(inArray(messages.channel, ["IC", "OOC", "SYSTEM"]), eq(messages.userId, uid), eq(messages.recipientId, uid)),
-            ),
-          )
+          .where(and(eq(messages.campaignId, campaignId), isGM ? undefined : or(inArray(messages.channel, ["IC", "OOC", "SYSTEM"]), eq(messages.userId, uid), eq(messages.recipientId, uid))))
           .orderBy(desc(messages.createdAt))
           .limit(150);
         const rollRows = await db
-          .select({ r: rolls, userName: users.displayName, charName: characters.name })
+          .select({
+            r: rolls,
+            userName: users.displayName,
+            charName: characters.name,
+          })
           .from(rolls)
           .leftJoin(users, eq(users.id, rolls.userId))
           .leftJoin(characters, eq(characters.id, rolls.characterId))
@@ -268,8 +376,13 @@ export function attachRealtime(io: Server) {
           .limit(100);
         return {
           isGM,
+          requests: [...campaignRequests(campaignId).values()].map(publicRequest),
           online: [...(presence.get(campaignId)?.keys() ?? [])],
-          messages: msgRows.reverse().map((x) => ({ ...x.m, userName: x.userName, characterName: x.charName })),
+          messages: msgRows.reverse().map((x) => ({
+            ...x.m,
+            userName: x.userName,
+            characterName: x.charName,
+          })),
           rolls: rollRows.reverse().map((x) => rollView(x.r, x.userName, x.charName)),
         };
       }),
@@ -290,7 +403,9 @@ export function attachRealtime(io: Server) {
             charName = c.name;
           }
           let recipientId: string | null = null;
-          const camp = await db.query.campaigns.findFirst({ where: eq(campaigns.id, p.campaignId) });
+          const camp = await db.query.campaigns.findFirst({
+            where: eq(campaigns.id, p.campaignId),
+          });
           if (p.channel === "WHISPER") {
             if (isGM) {
               if (!p.recipientId) fail("Kime fısıldayacağını seç.");
@@ -303,9 +418,20 @@ export function attachRealtime(io: Server) {
           }
           const [m] = await db
             .insert(messages)
-            .values({ campaignId: p.campaignId, userId: uid, characterId, recipientId, channel: p.channel, content: p.text })
+            .values({
+              campaignId: p.campaignId,
+              userId: uid,
+              characterId,
+              recipientId,
+              channel: p.channel,
+              content: p.text,
+            })
             .returning();
-          const view = { ...m, userName: s.data.user.displayName, characterName: charName };
+          const view = {
+            ...m,
+            userName: s.data.user.displayName,
+            characterName: charName,
+          };
           if (p.channel === "WHISPER") {
             io.to(userRoom(p.campaignId, recipientId!)).emit("message", view);
             io.to(userRoom(p.campaignId, uid)).emit("message", view);
@@ -319,7 +445,9 @@ export function attachRealtime(io: Server) {
         schemas.deleteMessage,
         async function deleteMessage(s, p) {
           const isGM = joined(s, p.campaignId);
-          const m = await db.query.messages.findFirst({ where: and(eq(messages.id, p.messageId), eq(messages.campaignId, p.campaignId)) });
+          const m = await db.query.messages.findFirst({
+            where: and(eq(messages.id, p.messageId), eq(messages.campaignId, p.campaignId)),
+          });
           if (!m) fail("Mesaj bulunamadı.");
           if (!isGM && m!.userId !== s.data.user.id) fail("Yalnızca kendi mesajını silebilirsin.");
           await db.delete(messages).where(eq(messages.id, m!.id));
@@ -332,59 +460,92 @@ export function attachRealtime(io: Server) {
         const isGM = joined(s, p.campaignId);
         await assertNotMuted(s, p.campaignId, isGM, "roll");
         const data = rulesData();
-        const th = p.threshold ? thresholdByKey(p.threshold) : null;
-        const d20 = randomInt(1, 21);
-        let parts: { label: string; value: number }[] = [];
-        let charName: string | null = null;
-        if (p.characterId) {
-          const c = await loadChar(p.campaignId, p.characterId);
-          if (!isGM && (c.userId !== s.data.user.id || c.status !== "ACTIVE")) fail("Bu karakter için zar atamazsın.");
-          parts = checkModifiers(asCharLike(c), { stat: p.stat, part: p.part as never, modifier: p.modifier, blackMagic: p.blackMagic }, data);
-          charName = c.name;
-        } else {
-          if (!isGM) fail("Bir karakter seçmelisin.");
-          if (p.modifier) parts.push({ label: "Düzenleyici", value: p.modifier });
+        // GM isteğine yanıt: parametreleri istemciden değil istekten al.
+        let req: PendingRequest | null = null;
+        if (p.requestId) {
+          req = campaignRequests(p.campaignId).get(p.requestId) ?? null;
+          if (!req || req.kind !== "check") fail("Bu zar isteği artık geçerli değil.");
+          if (!p.characterId || !req!.remaining.includes(p.characterId)) fail("Bu istek bu karakter için değil.");
         }
-        const total = d20 + parts.reduce((a, b) => a + b.value, 0);
-        const outcome = outcomeFor(d20, total, th?.value ?? null);
-        const label = p.label || (p.stat ? `${STAT_LABELS[p.stat]} zarı` : "d20");
-        const detail: RollDetail = {
-          parts: [{ label: "d20", value: d20 }, ...parts],
-          total,
-          threshold: th?.value ?? null,
-          thresholdLabel: th?.label ?? null,
-          outcome,
-          ...(p.requestId ? { requestId: p.requestId } : {}),
-          note: JSON.stringify({ stat: p.stat, part: p.part, modifier: p.modifier, blackMagic: p.blackMagic, threshold: p.threshold }),
-        };
-        const [r] = await db
-          .insert(rolls)
-          .values({
-            campaignId: p.campaignId,
-            userId: s.data.user.id,
-            characterId: p.characterId,
-            kind: p.blackMagic ? "kara-buyu" : "check",
-            label,
-            dice: [d20],
-            detail,
-            hidden: isGM && p.hidden,
-          })
-          .returning();
-        await emitRoll(io, p.campaignId, r, s.data.user, charName);
-        return { id: r.id, total, outcome: outcomeLabel(outcome) };
+        const release = req ? claim(req, p.characterId!) : () => {};
+        try {
+          const stat = req ? req.stat : p.stat;
+          const th = req
+            ? req.thresholdValue != null
+              ? {
+                  value: req.thresholdValue,
+                  label: req.thresholdLabel ?? `Eşik ${req.thresholdValue}`,
+                }
+              : resolveThreshold(req.threshold, null, false)
+            : resolveThreshold(p.threshold, p.thresholdValue, isGM);
+          const modifier = req ? req.modifier : p.modifier;
+          const blackMagic = req ? req.blackMagic : p.blackMagic;
+          const part = req && !req.playerPart ? null : p.part;
+          const d20 = randomInt(1, 21);
+          let parts: { label: string; value: number }[] = [];
+          let charName: string | null = null;
+          if (p.characterId) {
+            const c = await loadChar(p.campaignId, p.characterId);
+            if (!isGM && (c.userId !== s.data.user.id || c.status !== "ACTIVE")) fail("Bu karakter için zar atamazsın.");
+            parts = checkModifiers(asCharLike(c), { stat, part: part as never, modifier, blackMagic }, data);
+            charName = c.name;
+          } else {
+            if (!isGM) fail("Bir karakter seçmelisin.");
+            if (modifier) parts.push({ label: "Düzenleyici", value: modifier });
+          }
+          const total = d20 + parts.reduce((a, b) => a + b.value, 0);
+          const outcome = outcomeFor(d20, total, th?.value ?? null);
+          const label = (req ? req.label : p.label) || (stat ? `${STAT_LABELS[stat]} zarı` : "d20");
+          const detail: RollDetail = {
+            parts: [{ label: "d20", value: d20 }, ...parts],
+            total,
+            threshold: th?.value ?? null,
+            thresholdLabel: th?.label ?? null,
+            outcome,
+            ...(req ? { requestId: req.id, requested: true } : {}),
+            note: JSON.stringify({
+              stat,
+              part,
+              modifier,
+              blackMagic,
+              threshold: th?.value ?? null,
+              thresholdLabel: th?.label ?? null,
+            }),
+          };
+          const [r] = await db
+            .insert(rolls)
+            .values({
+              campaignId: p.campaignId,
+              userId: s.data.user.id,
+              characterId: p.characterId,
+              kind: blackMagic ? "kara-buyu" : "check",
+              label,
+              dice: [d20],
+              detail,
+              hidden: req ? req.hidden : isGM && p.hidden,
+            })
+            .returning();
+          await emitRoll(io, p.campaignId, r, s.data.user, charName);
+          if (req) settleRequest(p.campaignId, req);
+          return { id: r.id, total, outcome: outcomeLabel(outcome) };
+        } catch (e) {
+          release();
+          throw e;
+        }
       }),
 
       reroll: guard(schemas.reroll, async function reroll(s, p) {
         const isGM = joined(s, p.campaignId);
         await assertNotMuted(s, p.campaignId, isGM, "roll");
-        const orig = await db.query.rolls.findFirst({ where: and(eq(rolls.id, p.rollId), eq(rolls.campaignId, p.campaignId)) });
+        const orig = await db.query.rolls.findFirst({
+          where: and(eq(rolls.id, p.rollId), eq(rolls.campaignId, p.campaignId)),
+        });
         if (!orig || !orig.characterId || orig.kind === "death" || orig.kind === "pervitin") fail("Bu zar yeniden atılamaz.");
         if (orig!.rerolled) fail("Bu zar zaten yeniden atıldı.");
         const c = await loadChar(p.campaignId, orig!.characterId!);
         if (!isGM && (c.userId !== s.data.user.id || c.status !== "ACTIVE")) fail("Bu zar senin değil.");
         if (c.inspiration < 1) fail("Inspiration puanın yok.");
         const prm = JSON.parse(orig!.detail.note ?? "{}");
-        // Inspiration düşür (yarış koşuluna karşı koşullu güncelleme).
         const upd = await db
           .update(characters)
           .set({ inspiration: c.inspiration - 1 })
@@ -399,7 +560,16 @@ export function attachRealtime(io: Server) {
         if (!marked.length) fail("Bu zar zaten yeniden atıldı.");
         const fresh = { ...c, inspiration: c.inspiration - 1 };
         const data = rulesData();
-        const parts = checkModifiers(asCharLike(fresh), { stat: prm.stat ?? null, part: prm.part ?? null, modifier: prm.modifier ?? 0, blackMagic: !!prm.blackMagic }, data);
+        const parts = checkModifiers(
+          asCharLike(fresh),
+          {
+            stat: prm.stat ?? null,
+            part: prm.part ?? null,
+            modifier: prm.modifier ?? 0,
+            blackMagic: !!prm.blackMagic,
+          },
+          data,
+        );
         const d20 = randomInt(1, 21);
         const total = d20 + parts.reduce((a, b) => a + b.value, 0);
         const detail: RollDetail = {
@@ -413,132 +583,280 @@ export function attachRealtime(io: Server) {
         };
         const [r] = await db
           .insert(rolls)
-          .values({ campaignId: p.campaignId, userId: s.data.user.id, characterId: c.id, kind: orig!.kind, label: `${orig!.label} (Inspiration)`, dice: [d20], detail, hidden: orig!.hidden })
-          .returning();
-        await db.insert(characterLogs).values({ characterId: c.id, actorId: s.data.user.id, kind: "inspiration", text: `Inspiration harcandı: "${orig!.label}" yeniden atıldı.` });
-        io.to(room(p.campaignId)).emit("roll:rerolled", { id: orig!.id });
-        await emitRoll(io, p.campaignId, r, s.data.user, c.name);
-        io.to(room(p.campaignId)).emit("character:changed", { characterId: c.id });
-      }),
-
-      request: guard(schemas.request, async function request(s, p) {
-        if (!joined(s, p.campaignId)) fail("Zar isteğini yalnızca GM gönderebilir.");
-        const th = p.threshold ? thresholdByKey(p.threshold) : null;
-        const chars = await db
-          .select({ id: characters.id, name: characters.name, userId: characters.userId })
-          .from(characters)
-          .where(and(eq(characters.campaignId, p.campaignId), inArray(characters.id, p.characterIds)));
-        const req = {
-          id: randomUUID(),
-          campaignId: p.campaignId,
-          characters: chars,
-          stat: p.stat,
-          threshold: p.threshold,
-          thresholdLabel: th?.label ?? null,
-          label: p.label || `${STAT_LABELS[p.stat]} zarı`,
-          blackMagic: p.blackMagic,
-          createdAt: new Date().toISOString(),
-        };
-        io.to(room(p.campaignId)).emit("roll:request", req);
-        const [m] = await db
-          .insert(messages)
           .values({
             campaignId: p.campaignId,
             userId: s.data.user.id,
-            channel: "SYSTEM",
-            content: `GM zar istedi: ${req.label}${th ? ` (${th.label})` : ""} → ${chars.map((c) => c.name).join(", ")}`,
+            characterId: c.id,
+            kind: orig!.kind,
+            label: `${orig!.label} (Inspiration)`,
+            dice: [d20],
+            detail,
+            hidden: orig!.hidden,
           })
           .returning();
-        io.to(room(p.campaignId)).emit("message", { ...m, userName: s.data.user.displayName, characterName: null });
+        await db.insert(characterLogs).values({
+          characterId: c.id,
+          actorId: s.data.user.id,
+          kind: "inspiration",
+          text: `Inspiration harcandı: "${orig!.label}" yeniden atıldı.`,
+        });
+        io.to(room(p.campaignId)).emit("roll:rerolled", { id: orig!.id });
+        await emitRoll(io, p.campaignId, r, s.data.user, c.name);
+        io.to(room(p.campaignId)).emit("character:changed", {
+          characterId: c.id,
+        });
+        return { id: r.id };
+      }),
+
+      deleteRoll: guard(
+        schemas.deleteRoll,
+        async function deleteRoll(s, p) {
+          if (!joined(s, p.campaignId)) fail("Zarları yalnızca GM silebilir.");
+          const del = await db
+            .delete(rolls)
+            .where(and(eq(rolls.id, p.rollId), eq(rolls.campaignId, p.campaignId)))
+            .returning({ id: rolls.id });
+          if (!del.length) fail("Zar bulunamadı.");
+          io.to(room(p.campaignId)).emit("roll:deleted", { id: p.rollId });
+        },
+        { max: 40, ms: 10_000 },
+      ),
+
+      clearRolls: guard(
+        schemas.clearRolls,
+        async function clearRolls(s, p) {
+          if (!joined(s, p.campaignId)) fail("Zar geçmişini yalnızca GM temizleyebilir.");
+          await db.delete(rolls).where(eq(rolls.campaignId, p.campaignId));
+          io.to(room(p.campaignId)).emit("rolls:cleared", {});
+          await systemMessage(io, p.campaignId, s.data.user, "GM zar geçmişini temizledi.");
+        },
+        { max: 3, ms: 10_000 },
+      ),
+
+      request: guard(schemas.request, async function request(s, p) {
+        if (!joined(s, p.campaignId)) fail("Zar isteğini yalnızca GM gönderebilir.");
+        const th = p.kind === "death" ? null : resolveThreshold(p.threshold, p.thresholdValue, true);
+        if (p.kind === "pervitin" && !th) fail("Pervitin zarı için bir eşik seç.");
+        if (p.kind === "death") {
+          const camp = await db.query.campaigns.findFirst({
+            where: eq(campaigns.id, p.campaignId),
+            columns: { deathSaveEnabled: true },
+          });
+          if (!camp?.deathSaveEnabled) fail("Bu kampanyada Death Save kapalı.");
+        }
+        const rows = await db
+          .select({
+            id: characters.id,
+            name: characters.name,
+            userId: characters.userId,
+            deathSave: characters.deathSave,
+          })
+          .from(characters)
+          .where(and(eq(characters.campaignId, p.campaignId), inArray(characters.id, p.characterIds), eq(characters.status, "ACTIVE")));
+        const chars = rows.filter((c) => p.kind !== "death" || c.deathSave.available).map(({ id, name, userId }) => ({ id, name, userId }));
+        if (!chars.length) fail(p.kind === "death" ? "Seçilen karakterlerin Death Save hakkı yok." : "Seçilen karakterler aktif değil.");
+        const label = p.label || (p.kind === "death" ? "Death Save" : p.kind === "pervitin" ? "Pervitin zarı" : p.stat ? `${STAT_LABELS[p.stat]} zarı` : "Zar");
+        const req: PendingRequest = {
+          id: randomUUID(),
+          campaignId: p.campaignId,
+          kind: p.kind,
+          characters: chars,
+          remaining: chars.map((c) => c.id),
+          stat: p.kind === "check" ? p.stat : null,
+          threshold: p.thresholdValue != null ? null : p.threshold,
+          thresholdValue: p.thresholdValue ?? null,
+          thresholdLabel: th?.label ?? null,
+          modifier: p.modifier,
+          label,
+          blackMagic: p.kind === "check" && p.blackMagic,
+          hidden: p.hidden,
+          playerPart: p.kind === "check" && p.playerPart,
+          createdAt: new Date().toISOString(),
+        };
+        campaignRequests(p.campaignId).set(req.id, req);
+        io.to(room(p.campaignId)).emit("roll:request", publicRequest(req));
+        const bits = [
+          th ? `${th.label}${p.thresholdValue == null ? "" : ""}` : null,
+          p.modifier ? `durum ${p.modifier > 0 ? "+" : ""}${p.modifier}` : null,
+          p.hidden ? "sonuç gizli" : null,
+        ].filter(Boolean);
+        await systemMessage(io, p.campaignId, s.data.user, `GM zar istedi: ${label}${bits.length ? ` (${bits.join(", ")})` : ""} → ${chars.map((c) => c.name).join(", ")}`);
+        return { id: req.id };
+      }),
+
+      cancelRequest: guard(schemas.cancelRequest, async function cancelRequest(s, p) {
+        if (!joined(s, p.campaignId)) fail("Yalnızca GM.");
+        campaignRequests(p.campaignId).delete(p.requestId);
+        io.to(room(p.campaignId)).emit("roll:request:done", {
+          id: p.requestId,
+        });
       }),
 
       death: guard(schemas.death, async function death(s, p) {
         const isGM = joined(s, p.campaignId);
         await assertNotMuted(s, p.campaignId, isGM, "roll");
-        const camp = await db.query.campaigns.findFirst({ where: eq(campaigns.id, p.campaignId) });
+        const camp = await db.query.campaigns.findFirst({
+          where: eq(campaigns.id, p.campaignId),
+        });
         if (!camp!.deathSaveEnabled) fail("Bu kampanyada Death Save kapalı.");
-        const c = await loadChar(p.campaignId, p.characterId);
-        if (!isGM && (c.userId !== s.data.user.id || c.status !== "ACTIVE")) fail("Bu karakter senin değil.");
-        const ds = { ...c.deathSave };
-        if (!ds.available) fail("Death Save hakkı yok. Inspiration ile yenilenmeli.");
-        const d6 = randomInt(1, 7);
-        const isDeath = d6 <= 3;
-        if (isDeath) ds.deaths++;
-        else ds.saves++;
-        let note = `Ölüm ${ds.deaths}/3 · Kurtuluş ${ds.saves}/3`;
-        let final: "death" | "save" | null = null;
-        if (ds.deaths >= 3 || ds.saves >= 3) {
-          final = ds.deaths >= 3 ? "death" : "save";
-          note = final === "death" ? "Karakter ölür." : "Karakter kritik yaralı olarak hayatta kalır.";
-          ds.available = false;
-          ds.deaths = 0;
-          ds.saves = 0;
+        const { req, release } = takeRequest(p.campaignId, p.requestId, "death", p.characterId, isGM);
+        try {
+          const c = await loadChar(p.campaignId, p.characterId);
+          if (!isGM && (c.userId !== s.data.user.id || c.status !== "ACTIVE")) fail("Bu karakter senin değil.");
+          if (c.status === "DEAD") fail("Karakter zaten ölü.");
+          const ds = { ...c.deathSave };
+          if (!ds.available) fail("Death Save hakkı yok. Inspiration ile yenilenmeli.");
+          const d6 = randomInt(1, 7);
+          const isDeath = d6 <= 3;
+          if (isDeath) ds.deaths++;
+          else ds.saves++;
+          const track = {
+            deaths: ds.deaths,
+            saves: ds.saves,
+            final: null as "death" | "save" | null,
+          };
+          let note = isDeath ? `Ölüme bir adım daha yaklaştı. Ölüm ${ds.deaths}/3 · Kurtuluş ${ds.saves}/3` : `Hayata tutundu. Ölüm ${ds.deaths}/3 · Kurtuluş ${ds.saves}/3`;
+          if (ds.deaths >= 3 || ds.saves >= 3) {
+            track.final = ds.deaths >= 3 ? "death" : "save";
+            note = track.final === "death" ? `${c.name} öldü.` : `${c.name} kritik yaralı olarak hayatta kaldı.`;
+            ds.available = false;
+            ds.deaths = 0;
+            ds.saves = 0;
+          }
+          const upd = await db
+            .update(characters)
+            .set({
+              deathSave: ds,
+              ...(track.final === "death" ? { status: "DEAD" as const } : {}),
+            })
+            .where(and(eq(characters.id, c.id), eq(characters.updatedAt, c.updatedAt)))
+            .returning({ id: characters.id });
+          if (!upd.length) fail("Karakter bu sırada değişti, tekrar dene.");
+          const detail: RollDetail = {
+            parts: [{ label: "d6", value: d6 }],
+            total: d6,
+            threshold: 4,
+            thresholdLabel: "1–3 ölüm · 4–6 kurtuluş",
+            outcome: isDeath ? "death" : "save",
+            note,
+            deathTrack: track,
+            ...(req ? { requestId: req.id, requested: true } : {}),
+          };
+          const [r] = await db
+            .insert(rolls)
+            .values({
+              campaignId: p.campaignId,
+              userId: s.data.user.id,
+              characterId: c.id,
+              kind: "death",
+              label: "Death Save",
+              dice: [d6],
+              detail,
+              hidden: req?.hidden ?? false,
+            })
+            .returning();
+          if (track.final)
+            await db.insert(characterLogs).values({
+              characterId: c.id,
+              actorId: s.data.user.id,
+              kind: "death-save",
+              text: `Death Save sonucu: ${note}`,
+            });
+          await emitRoll(io, p.campaignId, r, s.data.user, c.name);
+          if (req) settleRequest(p.campaignId, req);
+          if (track.final === "death") await systemMessage(io, p.campaignId, s.data.user, `☠ ${c.name} Death Save'i kaybetti ve öldü.`);
+          io.to(room(p.campaignId)).emit("character:changed", {
+            characterId: c.id,
+          });
+        } catch (e) {
+          release();
+          throw e;
         }
-        const upd = await db
-          .update(characters)
-          .set({ deathSave: ds })
-          .where(and(eq(characters.id, c.id), eq(characters.updatedAt, c.updatedAt)))
-          .returning({ id: characters.id });
-        if (!upd.length) fail("Karakter bu sırada değişti, tekrar dene.");
-        const detail: RollDetail = {
-          parts: [{ label: "d6", value: d6 }],
-          total: d6,
-          threshold: null,
-          thresholdLabel: null,
-          outcome: isDeath ? "death" : "save",
-          note,
-        };
-        const [r] = await db
-          .insert(rolls)
-          .values({ campaignId: p.campaignId, userId: s.data.user.id, characterId: c.id, kind: "death", label: "Death Save", dice: [d6], detail })
-          .returning();
-        if (final) await db.insert(characterLogs).values({ characterId: c.id, actorId: s.data.user.id, kind: "death-save", text: `Death Save sonucu: ${note}` });
-        await emitRoll(io, p.campaignId, r, s.data.user, c.name);
-        io.to(room(p.campaignId)).emit("character:changed", { characterId: c.id });
       }),
 
       pervitin: guard(schemas.pervitin, async function pervitin(s, p) {
         const isGM = joined(s, p.campaignId);
         await assertNotMuted(s, p.campaignId, isGM, "roll");
-        const c = await loadChar(p.campaignId, p.characterId);
-        if (!isGM && (c.userId !== s.data.user.id || c.status !== "ACTIVE")) fail("Bu karakter senin değil.");
-        const th = thresholdByKey(p.threshold)!;
-        const data = rulesData();
-        const eff = effectiveStats(asCharLike(c), data);
-        const d20 = randomInt(1, 21);
-        const parts = [
-          { label: "d20", value: d20 },
-          { label: "Sanita", value: eff.sanita.value },
-          { label: "Corruption / 3", value: -Math.floor(c.corruption / 3) },
-        ];
-        const total = parts.reduce((a, b) => a + b.value, 0);
-        let note: string;
-        let outcome: RollDetail["outcome"];
-        if (c.corruption >= CORRUPTION_PERVITIN_IMMUNE) {
-          note = "Corruption 10+: Pervitin artık Corruption'ı etkilemez.";
-          outcome = "info";
-        } else if (total >= th.value) {
-          note = "Corruption artmadı.";
-          outcome = "success";
-        } else {
-          const next = clampCorruption(c.corruption + 1, c.corruptionLocked);
-          const upd = await db
-            .update(characters)
-            .set({ corruption: next.value, corruptionLocked: next.locked })
-            .where(and(eq(characters.id, c.id), eq(characters.updatedAt, c.updatedAt)))
-            .returning({ id: characters.id });
-          if (!upd.length) fail("Karakter bu sırada değişti, tekrar dene.");
-          await db.insert(characterLogs).values({ characterId: c.id, actorId: s.data.user.id, kind: "corruption", text: `Pervitin: Corruption ${c.corruption} → ${next.value}` });
-          note = `Corruption ${c.corruption} → ${next.value}`;
-          outcome = "fail";
+        const { req, release } = takeRequest(p.campaignId, p.requestId, "pervitin", p.characterId, isGM);
+        try {
+          const c = await loadChar(p.campaignId, p.characterId);
+          if (!isGM && (c.userId !== s.data.user.id || c.status !== "ACTIVE")) fail("Bu karakter senin değil.");
+          const th = req
+            ? req.thresholdValue != null
+              ? {
+                  value: req.thresholdValue,
+                  label: req.thresholdLabel ?? `Eşik ${req.thresholdValue}`,
+                }
+              : resolveThreshold(req.threshold, null, false)
+            : resolveThreshold(p.threshold ?? null, p.thresholdValue, isGM);
+          if (!th) fail("Pervitin zarı için eşik gerekli.");
+          const modifier = req ? req.modifier : isGM ? (p.modifier ?? 0) : 0;
+          const data = rulesData();
+          const eff = effectiveStats(asCharLike(c), data);
+          const d20 = randomInt(1, 21);
+          const parts = [
+            { label: "d20", value: d20 },
+            { label: "Sanita", value: eff.sanita.value },
+            { label: "Corruption / 3", value: -Math.floor(c.corruption / 3) },
+            ...(modifier ? [{ label: "GM durum", value: modifier }] : []),
+          ];
+          const total = parts.reduce((a, b) => a + b.value, 0);
+          let note: string;
+          let outcome: RollDetail["outcome"];
+          if (c.corruption >= CORRUPTION_PERVITIN_IMMUNE) {
+            note = "Corruption 10+: Pervitin artık Corruption'ı etkilemez.";
+            outcome = "info";
+          } else if (total >= th!.value) {
+            note = "Corruption artmadı.";
+            outcome = "success";
+          } else {
+            const next = clampCorruption(c.corruption + 1, c.corruptionLocked);
+            const upd = await db
+              .update(characters)
+              .set({ corruption: next.value, corruptionLocked: next.locked })
+              .where(and(eq(characters.id, c.id), eq(characters.updatedAt, c.updatedAt)))
+              .returning({ id: characters.id });
+            if (!upd.length) fail("Karakter bu sırada değişti, tekrar dene.");
+            await db.insert(characterLogs).values({
+              characterId: c.id,
+              actorId: s.data.user.id,
+              kind: "corruption",
+              text: `Pervitin: Corruption ${c.corruption} → ${next.value}`,
+            });
+            note = `Corruption ${c.corruption} → ${next.value}`;
+            outcome = "fail";
+          }
+          const detail: RollDetail = {
+            parts,
+            total,
+            threshold: th!.value,
+            thresholdLabel: th!.label,
+            outcome,
+            note,
+            ...(req ? { requestId: req.id, requested: true } : {}),
+          };
+          const [r] = await db
+            .insert(rolls)
+            .values({
+              campaignId: p.campaignId,
+              userId: s.data.user.id,
+              characterId: c.id,
+              kind: "pervitin",
+              label: "Pervitin",
+              dice: [d20],
+              detail,
+              hidden: req?.hidden ?? false,
+            })
+            .returning();
+          await emitRoll(io, p.campaignId, r, s.data.user, c.name);
+          if (req) settleRequest(p.campaignId, req);
+          io.to(room(p.campaignId)).emit("character:changed", {
+            characterId: c.id,
+          });
+        } catch (e) {
+          release();
+          throw e;
         }
-        const detail: RollDetail = { parts, total, threshold: th.value, thresholdLabel: th.label, outcome, note };
-        const [r] = await db
-          .insert(rolls)
-          .values({ campaignId: p.campaignId, userId: s.data.user.id, characterId: c.id, kind: "pervitin", label: "Pervitin", dice: [d20], detail })
-          .returning();
-        await emitRoll(io, p.campaignId, r, s.data.user, c.name);
-        io.to(room(p.campaignId)).emit("character:changed", { characterId: c.id });
       }),
     };
 
@@ -546,7 +864,10 @@ export function attachRealtime(io: Server) {
 
     s.on("disconnect", () => {
       for (const cid of s.data.campaigns.keys())
-        io.to(room(cid)).emit("presence", { campaignId: cid, online: setPresence(cid, s.data.user.id, -1) });
+        io.to(room(cid)).emit("presence", {
+          campaignId: cid,
+          online: setPresence(cid, s.data.user.id, -1),
+        });
     });
   });
 }

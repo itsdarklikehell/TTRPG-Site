@@ -1,0 +1,1 @@
+ALTER TABLE "characters" ADD COLUMN "perk_edit_allowed" boolean DEFAULT false NOT NULL;

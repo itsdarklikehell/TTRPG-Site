@@ -122,3 +122,68 @@ h3 {
 .prose-shz p:last-child {
   @apply mb-0;
 }
+
+/* ---------------------------------------------------------------- v2.4 */
+/* metindeki stat etkileri: "+2 Rede" → yeşil, "-1 Korp" → kırmızı rozet */
+.prose-shz .stat-mod {
+  @apply mx-0.5 inline-flex items-center rounded px-1.5 py-px font-mono text-[0.86em] font-semibold whitespace-nowrap;
+}
+.prose-shz .stat-mod.pos {
+  @apply bg-ok/15 text-ok;
+}
+.prose-shz .stat-mod.neg {
+  @apply bg-danger/15 text-danger;
+}
+.prose-shz .stat-name {
+  @apply font-semibold text-accent;
+}
+.prose-shz .dice {
+  @apply rounded bg-surface2 px-1 font-mono text-[0.9em] text-ink;
+}
+
+@keyframes roll-pop-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-12px) scale(0.96);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(2px) scale(1.01);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+.roll-pop {
+  animation: roll-pop-in 0.35s ease-out both;
+}
+@keyframes death-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgb(var(--danger, 224 87 75) / 0.45);
+  }
+  50% {
+    box-shadow: 0 0 22px 2px rgb(var(--danger, 224 87 75) / 0.35);
+  }
+}
+.death-final {
+  animation: death-pulse 1.6s ease-in-out 3;
+}
+@keyframes clean-beam {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(420%);
+  }
+}
+.corr-clean-beam {
+  animation: clean-beam 3.2s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .roll-pop,
+  .death-final,
+  .corr-clean-beam {
+    animation: none;
+  }
+}

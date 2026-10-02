@@ -5,14 +5,40 @@ import { campaignMembers, messages, users } from "@/db/schema";
 import { notFound, route } from "@/lib/api";
 import { requireCampaignGM } from "@/lib/access";
 import { disconnectUserSockets } from "@/lib/auth/core";
-import { notifyCampaign } from "@/lib/realtime-bus";
+import { notifyCampaign, notifyUser } from "@/lib/realtime-bus";
 
 export const DELETE = route({}, async ({ params, user }) => {
-  await requireCampaignGM(params.id, user);
-  await db.delete(campaignMembers).where(and(eq(campaignMembers.campaignId, params.id), eq(campaignMembers.userId, params.userId)));
-  // Açık oda bağlantısını kes; yeniden bağlanınca bu kampanyaya katılamaz.
-  disconnectUserSockets(params.userId);
-  notifyCampaign(params.id, "members:changed", {});
+  const campaign = await requireCampaignGM(params.id, user);
+  const del = await db
+    .delete(campaignMembers)
+    .where(and(eq(campaignMembers.campaignId, params.id), eq(campaignMembers.userId, params.userId)))
+    .returning({ userId: campaignMembers.userId });
+  if (!del.length) throw notFound("Oyuncu bu kampanyada değil.");
+  const u = await db.query.users.findFirst({ where: eq(users.id, params.userId), columns: { displayName: true } });
+  // Oyuncuya haber ver, sonra açık oda bağlantısını kes; yeniden bağlanınca bu kampanyaya katılamaz.
+  notifyUser(params.userId, "kicked", { campaignId: params.id, campaignName: campaign.name });
+  setTimeout(() => disconnectUserSockets(params.userId), 300);
+  const [msg] = await db
+    .insert(messages)
+    .values({ campaignId: params.id, userId: user.id, channel: "SYSTEM", content: `${u?.displayName ?? "Oyuncu"} kampanyadan çıkarıldı.` })
+    .returning();
+  notifyCampaign(params.id, "message", { ...msg, userName: user.displayName, characterName: null });
+  // Bu oyuncunun karakterlerini bekleyen zar isteklerinden düş.
+  type Req = { id: string; characters: { id: string; userId: string }[]; remaining: string[] };
+  const reqs = (globalThis as { __shzPending?: Map<string, Map<string, Req>> }).__shzPending?.get(params.id);
+  for (const r of reqs?.values() ?? []) {
+    const gone = r.characters.filter((c) => c.userId === params.userId).map((c) => c.id);
+    if (!gone.length) continue;
+    r.remaining = r.remaining.filter((x) => !gone.includes(x));
+    if (!r.remaining.length) {
+      reqs!.delete(r.id);
+      notifyCampaign(params.id, "roll:request:done", { id: r.id });
+    } else {
+      const { remaining, ...rest } = r;
+      notifyCampaign(params.id, "roll:request", { ...rest, characters: r.characters.filter((c) => remaining.includes(c.id)) });
+    }
+  }
+  notifyCampaign(params.id, "members:changed", { removed: params.userId });
   return { ok: true };
 });
 

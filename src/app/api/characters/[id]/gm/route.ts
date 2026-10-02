@@ -4,10 +4,11 @@ import { db } from "@/db";
 import { characters, type Character } from "@/db/schema";
 import { bad, forbidden, route } from "@/lib/api";
 import { addLog, characterAccess } from "@/lib/access";
-import { characterChanged } from "@/lib/realtime-bus";
+import { characterChanged, notifyCampaign } from "@/lib/realtime-bus";
+import { messages } from "@/db/schema";
 import { CORRUPTION_MAX, LEVEL_CAP_MAX, MAX_TREES, STAT_KEYS, STAT_LABELS, STAT_MAX } from "@/lib/shz/constants";
-import { getAbility, getPerk, getTree } from "@/lib/shz/content";
-import { clampCorruption } from "@/lib/shz/rules";
+import { getAbility, getPerk, getTree, rulesData } from "@/lib/shz/content";
+import { clampCorruption, refundPlan } from "@/lib/shz/rules";
 
 /** GM'in karakter üzerindeki tam yetkili düzenlemeleri. Her değişiklik kayda geçer. */
 export const PATCH = route(
@@ -27,6 +28,9 @@ export const PATCH = route(
       abilities: z.record(z.string().max(80), z.number().int().min(0).max(3)).optional(),
       perks: z.array(z.string().max(80)).max(40).optional(),
       deathSave: z.object({ available: z.boolean(), resets: z.number().int().min(0).max(50) }).optional(),
+      perkEditAllowed: z.boolean().optional(),
+      revive: z.literal(true).optional(),
+      refund: z.object({ stats: z.boolean(), abilities: z.boolean() }).optional(),
       reason: z.string().trim().max(200).optional(),
     }),
   },
@@ -101,10 +105,40 @@ export const PATCH = route(
       set.deathSave = { ...c.deathSave, ...body.deathSave };
       log.push(`Death Save ${body.deathSave.available ? "hakkı verildi" : "hakkı kaldırıldı"}`);
     }
+    if (body.perkEditAllowed !== undefined && body.perkEditAllowed !== c.perkEditAllowed) {
+      set.perkEditAllowed = body.perkEditAllowed;
+      log.push(body.perkEditAllowed ? "perk düzenleme izni verildi" : "perk düzenleme izni kaldırıldı");
+    }
+    let announce: string | null = null;
+    if (body.revive) {
+      if (c.status !== "DEAD") throw bad("Karakter ölü değil.");
+      set.status = "ACTIVE";
+      set.deathSave = { ...c.deathSave, available: true, deaths: 0, saves: 0 };
+      log.push("karakter diriltildi");
+      announce = `✚ ${c.name} GM tarafından diriltildi.`;
+    }
+    if (body.refund && (body.refund.stats || body.refund.abilities)) {
+      const plan = refundPlan({ ...c, stats: (set.stats as typeof c.stats) ?? c.stats }, rulesData());
+      if (body.refund.stats && plan.statPoints > 0) {
+        set.stats = plan.stats;
+        set.freeStatPoints = (set.freeStatPoints ?? c.freeStatPoints) + plan.statPoints;
+        log.push(`${plan.statPoints} stat puanı iade edildi`);
+      }
+      if (body.refund.abilities && plan.abilityPoints > 0) {
+        set.abilities = {};
+        set.trees = plan.trees;
+        set.abilityPoints = (set.abilityPoints ?? c.abilityPoints) + plan.abilityPoints;
+        log.push(`${plan.abilityPoints} yetenek puanı iade edildi (yetenekler ve ek ağaçlar sıfırlandı)`);
+      }
+    }
     if (!Object.keys(set).length) return { ok: true };
     await db.update(characters).set(set).where(eq(characters.id, c.id));
     if (log.length) await addLog(c.id, user.id, "gm", `GM: ${log.join(", ")}${body.reason ? ` (${body.reason})` : ""}`);
     characterChanged(a.campaign.id, c.id);
+    if (announce) {
+      const [m] = await db.insert(messages).values({ campaignId: a.campaign.id, userId: user.id, channel: "SYSTEM", content: announce }).returning();
+      notifyCampaign(a.campaign.id, "message", { ...m, userName: user.displayName, characterName: null });
+    }
     return { ok: true };
   },
 );
