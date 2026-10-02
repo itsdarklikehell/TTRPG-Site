@@ -1,5 +1,0 @@
-[build]
-buildCommand = "npm install && npx prisma generate && cd server && npm install"
-
-[deploy]
-startCommand = "cd server && npm start"

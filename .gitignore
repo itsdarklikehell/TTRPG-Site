@@ -1,34 +1,11 @@
-# dependencies
 node_modules/
-server/node_modules/
-
-# next.js
 .next/
 out/
-
-# production
-build/
-dist/
-
-# env files
 .env
-.env.local
-.env.*.local
-
-# prisma
-src/generated/
-
-# misc
-.DS_Store
-*.tsbuildinfo
+.env.*
+!.env.example
+*.log
 next-env.d.ts
-
-# debug
-npm-debug.log*
-
-# IDE
-.vscode/
-.idea/
-
-# docs temp
-docs/tmp/
+*.tsbuildinfo
+.DS_Store
+/backups/

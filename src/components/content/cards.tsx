@@ -1,0 +1,151 @@
+import type { ReactNode } from "react";
+import { resolveContentLinks } from "@/lib/base";
+import { STAT_LABELS, bodyPartLabel } from "@/lib/shz/constants";
+import type { Ability, Augment, Perk } from "@/lib/shz/content-types";
+import { Badge, cx } from "../ui";
+
+export function Html({ html, className }: { html: string; className?: string }) {
+  if (!html) return null;
+  return <div className={cx("prose-shz", className)} dangerouslySetInnerHTML={{ __html: resolveContentLinks(html) }} />;
+}
+
+const TYPE_TONE: Record<string, "accent" | "neutral" | "warn"> = { Aktif: "accent", Pasif: "neutral", Tepki: "warn" };
+
+export function branchLabel(a: Pick<Ability, "branch" | "branchName">) {
+  if (a.branch === "Kök") return "Kök";
+  return `${a.branch}${a.branchName ? ` · ${a.branchName}` : ""}`;
+}
+
+export function AbilityCard({
+  ability: a,
+  level,
+  footer,
+  compact,
+  highlight,
+  prereqName,
+}: {
+  ability: Ability;
+  level?: number;
+  footer?: ReactNode;
+  compact?: boolean;
+  highlight?: "owned" | "available" | "locked";
+  prereqName?: string | null;
+}) {
+  return (
+    <article
+      id={a.key}
+      className={cx(
+        "card flex scroll-mt-24 flex-col p-4 transition",
+        highlight === "owned" && "border-accent/60 bg-accent/[0.06]",
+        highlight === "available" && "border-ok/40",
+        highlight === "locked" && "opacity-80",
+      )}
+    >
+      <div className="flex items-start justify-between gap-3">
+        <h3 className="font-serif text-[17px] leading-snug text-ink">{a.name}</h3>
+        {level ? (
+          <span className="shrink-0 rounded-md bg-accent px-2 py-0.5 font-mono text-xs font-semibold text-onAccent">
+            Sv {level}/{a.maxLevel}
+          </span>
+        ) : null}
+      </div>
+      <div className="mt-2 flex flex-wrap gap-1.5">
+        <Badge tone={TYPE_TONE[a.type] ?? "neutral"}>{a.type}</Badge>
+        <Badge>{branchLabel(a)}</Badge>
+        <Badge title="Gereksinim">{!a.requirementText || /^yok$/i.test(a.requirementText) ? "Gereksinim yok" : a.requirementText}</Badge>
+        {a.maxLevel > 1 && <Badge>{a.maxLevel} seviye</Badge>}
+        {prereqName && <Badge tone="warn">Öncül: {prereqName}</Badge>}
+      </div>
+      {!compact && (
+        <div className="mt-3 space-y-3 text-sm">
+          {a.levelEffects.length > 0 && (
+            <ol className="space-y-1.5">
+              {a.levelEffects.map((l) => (
+                <li key={l.level} className={cx("grid grid-cols-[44px_1fr] gap-2 rounded-md px-2 py-1.5", level && l.level <= level ? "bg-accent/10" : "bg-surface2/60")}>
+                  <span className="font-mono text-xs text-accent">Sv {l.level}</span>
+                  <span className="prose-shz text-sm" dangerouslySetInnerHTML={{ __html: resolveContentLinks(l.html) }} />
+                </li>
+              ))}
+            </ol>
+          )}
+          {a.sections.map((s) => (
+            <div
+              key={s.key}
+              className={cx(
+                "rounded-md border-l-2 px-3 py-2",
+                s.key === "BEDEL" ? "border-danger/60 bg-danger/[0.06]" : s.key === "SİNERJİ" ? "border-accent/60 bg-accent/[0.06]" : "border-line bg-surface2/50",
+              )}
+            >
+              <p className="mb-1 text-[10px] font-semibold uppercase tracking-widest text-muted">{s.label}</p>
+              <Html html={s.html} className="text-sm" />
+            </div>
+          ))}
+          {a.flavorHtml && <Html html={a.flavorHtml} className="border-t border-line pt-3 font-serif text-[13px] italic text-muted" />}
+        </div>
+      )}
+      {footer && <div className="mt-auto pt-3">{footer}</div>}
+    </article>
+  );
+}
+
+export function PerkCard({ perk: p, action, selected, disabled }: { perk: Perk; action?: ReactNode; selected?: boolean; disabled?: boolean }) {
+  const pos = p.kind === "positive";
+  return (
+    <article id={p.key} className={cx("card scroll-mt-24 p-4 transition", selected && "border-accent/70 bg-accent/[0.07]", disabled && "opacity-50")}>
+      <div className="flex items-start gap-3">
+        <span
+          className={cx("grid h-8 min-w-8 shrink-0 place-items-center rounded-md px-1.5 font-mono text-sm font-semibold", pos ? "bg-ok/15 text-ok" : "bg-danger/15 text-danger")}
+          title={pos ? "Perk puanı harcar" : "Perk puanı kazandırır"}
+        >
+          {pos ? "−" : "+"}
+          {p.points}
+        </span>
+        <div className="min-w-0 flex-1">
+          <h3 className="font-serif text-base leading-snug text-ink">{p.name}</h3>
+          <Html html={p.html} className="mt-1 text-sm text-ink/80" />
+        </div>
+        {action}
+      </div>
+    </article>
+  );
+}
+
+export function AugmentCard({ augment: a, action }: { augment: Augment; action?: ReactNode }) {
+  return (
+    <article id={a.key} className="card flex scroll-mt-24 flex-col p-4">
+      <div className="flex items-start justify-between gap-3">
+        <h3 className="font-serif text-[17px] text-ink">{a.name}</h3>
+        {a.tier && <Badge tone={a.tier === "T3" ? "danger" : a.tier === "T2" ? "warn" : "accent"}>{a.tier}</Badge>}
+      </div>
+      <div className="mt-2 flex flex-wrap gap-1.5">
+        {a.slots.map((s) => (
+          <span key={s} className="chip">
+            {bodyPartLabel(s)}
+          </span>
+        ))}
+      </div>
+      <div className="mt-2 flex flex-wrap gap-1.5">
+        {a.mods.map((m) => (
+          <span key={m.stat} className={cx("rounded px-1.5 py-0.5 font-mono text-xs", m.value > 0 ? "bg-ok/15 text-ok" : "bg-danger/15 text-danger")}>
+            {m.value > 0 ? "+" : "−"}
+            {Math.abs(m.value)} {STAT_LABELS[m.stat]}
+          </span>
+        ))}
+      </div>
+      {a.usageHtml && (
+        <div className="mt-3 rounded-md border-l-2 border-line bg-surface2/50 px-3 py-2">
+          <p className="mb-1 text-[10px] font-semibold uppercase tracking-widest text-muted">Kullanım</p>
+          <Html html={a.usageHtml} className="text-sm" />
+        </div>
+      )}
+      {a.extra.map((x) => (
+        <div key={x.label} className="mt-2 rounded-md border-l-2 border-line bg-surface2/50 px-3 py-2">
+          <p className="mb-1 text-[10px] font-semibold uppercase tracking-widest text-muted">{x.label}</p>
+          <Html html={x.html} className="text-sm" />
+        </div>
+      ))}
+      {a.flavorHtml && <Html html={a.flavorHtml} className="mt-3 border-t border-line pt-3 font-serif text-[13px] italic text-muted" />}
+      {action && <div className="mt-auto pt-3">{action}</div>}
+    </article>
+  );
+}

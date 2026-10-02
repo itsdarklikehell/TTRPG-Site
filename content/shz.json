@@ -1,0 +1,3583 @@
+{
+ "generatedAt": "2026-10-02T12:42:34.677Z",
+ "hash": "9ff95caa2b56",
+ "docs": [
+  {
+   "key": "temel-kurallar",
+   "title": "Temel Kurallar",
+   "html": "<p>SHZ-TTRPG oyunu geleneksel olarak d20 zarı ile oynanmak için tasarlanmıştır. GM, çeşitli aksiyonlarda oyunu renklendirmek için farklı zarlar kullanabilir ancak sistem d20 üzerine kurulmuştur.</p>\n<h4>ÖLÜM</h4>\n<p>Oyunda ölüm oyuncunun RP sonucu ölmesi sonucu gerçekleşir. Bu konuda Uzuvların durum bilgisi ve yaşanan son aksiyonda atılan zarlar GM inisiyatifi ile oyuncunun ölümü ile sonlandırılabilir.</p>\n<h4>DEATH SAVE THROW</h4>\n<p>Karakterin ölüm ile karşılaşması durumunda eğer mevcut ise oyuncu için son bir çare görevi görür. Mücadele arayan oyuncular için bu sistemi doğrudan kapatmak, GM'lere önerilir.</p>\n<p>Oyunda sadece inspiration puanı kullanarak sıfırlanacak şekilde  (her sıfırlama sonrası gereken inspiration puanı 1 artar) her oyuncu 1 tane death save throw atma hakkına sahiptir.</p>\n<p>Death save throw DnD ile benzer şekilde işler. Oyuncu d6 zar atar. 1-2-3 gelirse death, 4-5-6 gelirse save kutucuğuna 1 çarpı atılır. Hangisi 3 olursa o gerçekleşir. Death: Karakter Ölür, Save: Karakter kritik yaralı olarak hayatta kalır.</p>\n<h4>LEVELING</h4>\n<p>Oyunda atlanan her seviye sonrası yetenek ağacı açmak için veya yetenek açmak, yetenek seviyesi arttırmak için kullanılabilir bir Yetenek Puanı kazanılır. Oyuncu oyuna seviye 0 olarak ve 1 yetenek puanı ve 1 açık ekspertiz ağacı ile başlar</p>\n<p>Kampanya başına seviye sınırı 10'dur; uzun veya birbirine bağlı kampanyalarda GM bu sınırı 15'e kadar çıkarabilir. Bir yeteneğin 3. seviyesini almak için karakter seviyesi en az 4 olmalıdır. Ağaç stat'ı 10'a ulaştığında, seviye atlamada o stat'a gidecek garanti puan oyuncunun seçtiği başka bir stat'a verilir.</p>\n<h4>YETENEK AĞAÇLARI</h4>\n<p>Her ekspertiz ağacında 8 yetenek bulunur: 1 kök yetenek, her biri kendi bitirici yeteneğiyle biten A ve B kolları (3'er yetenek) ve bir kolun ilk yeteneğinden ayrılan 1 alt kol yeteneği. Yetenek dosyalarındaki KOL alanı yeteneğin yerini gösterir (Kök, A, A′, B, B′).</p>\n<ul><li><strong>Kolun ilk yeteneği:</strong> Ana stat en fazla 3 ister.</li><li><strong>Orta yetenek:</strong> Ana stat 4–5 ve bir ikincil stat ister; öncülü kolun ilk yeteneğidir.</li><li><strong>Alt kol:</strong> Ana stat 5 ve bir ikincil stat ister; öncülü ayrıldığı yetenektir.</li><li><strong>Bitirici:</strong> Ana stat 7, ikincil stat 4–5 ve karakter seviyesi en az 6–7 ister; öncülü kolun orta yeteneğidir.</li><li><strong>Sinerji (Kimya):</strong> Bazı yetenekler başka bir koldan ya da ağaçtan belirli bir yetenekle birlikte alındığında ek etki kazanır. Bu etkiler yetenek dosyalarında SİNERJİ başlığı altında yazılıdır.</li></ul>\n<h4>STATS</h4>\n<p>Statlar atılan aksiyon zarlarını doğrudan etkiler. Oyunu zorlaştırmak isteyen GM'ler oyuncuların bonuslarını değiştirmek yerine başarı thresholdlarını hikayeyi kullanarak manipüle etmesi önerilir.</p>\n<p>Formül: d20 + stat ≥ eşik uygulanır.<br>Referans Eşik Tablosu: { Çok Kolay 7 / Kolay 9 / Orta 13 / Zor 15 / Çok Zor 19 / Uber 22}<br>Nat20 ve Nat1 tablo dışı değerlendirilir. İkisi de olası en iyi/kötü senaryoyu temsil eder.</p>\n<p>Statlar için minimum 0(Klang hariç) kuralı mevcuttur. Maksimum ise 10'dur.</p>\n<p>Oyunda Statları arttırmak için &quot;Seviye&quot; atlanması gerekir. Her seviye atlanmasında karaktere ait 2+1 stat 1 bonus alır (Yetenek bazlı güçlendirmeler bu kuralın dışındadır) 1 stat karakterin seviye içi aksiyonlarına bağlı verilirken diğer 1 stat oyuncunun ekspertiz ağacının sembol stat'ına verilir. Ekstra 1 stat ise seviye atlayan tüm oyuncular içindeki MVP'ye verilir. Session içi her oyuncu aynı anda seviye atlamak zorunda olmadığı için bu puanlar geç dağıtılabilir. Ancak bu puanın çok geç dağıtılmaması için eğer geride kalan oyuncu MVP verilecek seviyeden 3 veya daha fazla seviye gerideyse MVP skalası hesabından ayrılır. Örnek: (Oyuncu A: sv3, B: sv6, C:sv7 sv6 MVP'si B ve C arasında belirlenir)</p>\n<p>Seviye atlama geleneksel olarak Session başı 1/2 tane olarak kullanılmaktadır ancak bu karar Nihai olarak GM'e bırakılmıştır. Oyunda yerleşik bir EXP sistemi yer almamaktadır.</p>\n<p>Oyun başlangıcı oyunculara 2+2 stat verilir (+2 Klang statı hariç, Klang başlangıçta herkese +2 olarak verilir). 2 puan seçilen başlangıç ekspertiz ağacının özelliğine verilirken diğer 2 stat puanı, seçilmiş ekspertiz ağacının özelliği hariç diğer statlara dağıtılmak üzere oyuncuya bırakılmıştır.</p>",
+   "searchText": "temel kurallar shz-ttrpg oyunu geleneksel olarak d20 zarı ile oynanmak için tasarlanmıştır. gm, çeşitli aksiyonlarda oyunu renklendirmek için farklı zarlar kullanabilir ancak sistem d20 üzerine kurulmuştur. ölüm oyunda ölüm oyuncunun rp sonucu ölmesi sonucu gerçekleşir. bu konuda uzuvların durum bilgisi ve yaşanan son aksiyonda atılan zarlar gm inisiyatifi ile oyuncunun ölümü ile sonlandırılabilir. death save throw karakterin ölüm ile karşılaşması durumunda eğer mevcut ise oyuncu için son bir çare görevi görür. mücadele arayan oyuncular için bu sistemi doğrudan kapatmak, gm'lere önerilir. oyunda sadece inspiration puanı kullanarak sıfırlanacak şekilde (her sıfırlama sonrası gereken inspiration puanı 1 artar) her oyuncu 1 tane death save throw atma hakkına sahiptir. death save throw dnd ile benzer şekilde işler. oyuncu d6 zar atar. 1-2-3 gelirse death, 4-5-6 gelirse save kutucuğuna 1 çarpı atılır. hangisi 3 olursa o gerçekleşir. death: karakter ölür, save: karakter kritik yaralı olarak hayatta kalır. leveling oyunda atlanan her seviye sonrası yetenek ağacı açmak için veya yetenek açmak, yetenek seviyesi arttırmak için kullanılabilir bir yetenek puanı kazanılır. oyuncu oyuna seviye 0 olarak ve 1 yetenek puanı ve 1 açık ekspertiz ağacı ile başlar kampanya başına seviye sınırı 10'dur; uzun veya birbirine bağlı kampanyalarda gm bu sınırı 15'e kadar çıkarabilir. bir yeteneğin 3. seviyesini almak için karakter seviyesi en az 4 olmalıdır. ağaç stat'ı 10'a ulaştığında, seviye atlamada o stat'a gidecek garanti puan oyuncunun seçtiği başka bir stat'a verilir. yetenek ağaçlari her ekspertiz ağacında 8 yetenek bulunur: 1 kök yetenek, her biri kendi bitirici yeteneğiyle biten a ve b kolları (3'er yetenek) ve bir kolun ilk yeteneğinden ayrılan 1 alt kol yeteneği. yetenek dosyalarındaki kol alanı yeteneğin yerini gösterir (kök, a, a′, b, b′). kolun ilk yeteneği: ana stat en fazla 3 ister. orta yetenek: ana stat 4–5 ve bir ikincil stat ister; öncülü kolun ilk yeteneğidir. alt kol: ana stat 5 ve bir ikincil stat ister; öncülü ayrıldığı yetenektir. bitirici: ana stat 7, ikincil stat 4–5 ve karakter seviyesi en az 6–7 ister; öncülü kolun orta yeteneğidir. sinerji (kimya): bazı yetenekler başka bir koldan ya da ağaçtan belirli bir yetenekle birlikte alındığında ek etki kazanır. bu etkiler yetenek dosyalarında sinerji başlığı altında yazılıdır. stats statlar atılan aksiyon zarlarını doğrudan etkiler. oyunu zorlaştırmak isteyen gm'ler oyuncuların bonuslarını değiştirmek yerine başarı thresholdlarını hikayeyi kullanarak manipüle etmesi önerilir. formül: d20 + stat ≥ eşik uygulanır. referans eşik tablosu: { çok kolay 7 / kolay 9 / orta 13 / zor 15 / çok zor 19 / uber 22} nat20 ve nat1 tablo dışı değerlendirilir. ikisi de olası en iyi/kötü senaryoyu temsil eder. statlar için minimum 0(klang hariç) kuralı mevcuttur. maksimum ise 10'dur. oyunda statları arttırmak için seviye atlanması gerekir. her seviye atlanmasında karaktere ait 2+1 stat 1 bonus alır (yetenek bazlı güçlendirmeler bu kuralın dışındadır) 1 stat karakterin seviye içi aksiyonlarına bağlı verilirken diğer 1 stat oyuncunun ekspertiz ağacının sembol stat'ına verilir. ekstra 1 stat ise seviye atlayan tüm oyuncular içindeki mvp'ye verilir. session içi her oyuncu aynı anda seviye atlamak zorunda olmadığı için bu puanlar geç dağıtılabilir. ancak bu puanın çok geç dağıtılmaması için eğer geride kalan oyuncu mvp verilecek seviyeden 3 veya daha fazla seviye gerideyse mvp skalası hesabından ayrılır. örnek: (oyuncu a: sv3, b: sv6, c:sv7 sv6 mvp'si b ve c arasında belirlenir) seviye atlama geleneksel olarak session başı 1/2 tane olarak kullanılmaktadır ancak bu karar nihai olarak gm'e bırakılmıştır. oyunda yerleşik bir exp sistemi yer almamaktadır. oyun başlangıcı oyunculara 2+2 stat verilir (+2 klang statı hariç, klang başlangıçta herkese +2 olarak verilir). 2 puan seçilen başlangıç ekspertiz ağacının özelliğine verilirken diğer 2 stat puanı, seçilmiş ekspertiz ağacının özelliği hariç diğer statlara dağıtılmak üzere oyuncuya bırakılmıştır."
+  },
+  {
+   "key": "karakter",
+   "title": "Karakter",
+   "html": "<h3>KOZMETİK</h3>\n<h4 class=\"label\">1- Karakter ismi</h4>\n<p>Karakterin hikaye boyunca kullanacağı isim bilgisidir. RP'yi doğrudan etkilemez ancak seçilen milliyete uygun bir isim tercih edilmesi doğru olacaktır.</p>\n<h4 class=\"label\">2- Karakter Yaşı</h4>\n<p>Karakter yaşı 18-60 arası olmalıdır. Yaşlı veya Genç karakterler hikaye için uygun değildir (60+ için istisnai durumlar olabilir.)</p>\n<h4 class=\"label\">3- Karakterin Alignment Bilgisi</h4>\n<p>Karakterin genel faction bilgisini belirler. Alignment RP içi belirleyici değildir ancak belirlenmesi genel portre için gereklidir.</p>\n<h4 class=\"label\">4- Karakterin Milliyeti</h4>\n<p>Evrenin doğası gereği RP içinde &quot;Irk&quot; ve &quot;Milliyet&quot; kavramları iletişimi etkileyebilir.</p>\n<h4 class=\"label\">5- Karakterin Sahip olduğu Para</h4>\n<p>Genellikle hikayenin merkezine koyulması önerilmese de &quot;Reichsmark&quot; hikayede kullanılabilir.</p>\n<h4 class=\"label\">6- Karakterin Corruption seviyesi</h4>\n<p>Yer alan her karakterin 0-13 arası Corruption seviyesi bulunur. Corruption, mental sağlığı temsil eder. Corruption, özellikle savaş anı stresi gidermek için kullanılan Amfetamin, Met amfetamin içeren Pervitin gibi maddelerin kullanımında artar.</p>\n<h4 class=\"label\">7- Karakterin Beden Tablosu</h4>\n<p>Oyunda karakterlerin tüm uzuvlarının sağlık ve mekanizasyon durumunu gösteren bir beden tablosu yer alır. Alınan yaralar, sarılı bandajlar, takılan eklentiler buradan takip edilir.</p>\n<h4 class=\"label\">8- Oyuncunun Inspiration Puanı</h4>\n<p>Doğrudan GM tarafından doğru RP veya GM-hatası Compensation'u olarak oyunculara verilir. Bir inspiration(ilham) karşılığında re-roll atılabilir. Meta sayılabilecek kararlar için de birden fazla ilham puanı kullanılabilir. Inspiration -'ye düşerse(Çoğunlukla GM tarafından ceza olarak kullanılabilir veya GM-oyuncu anlaşması ile oyuncu borç Inspiration bile alabilir. Karar nihai olarak GM'e aittir.), Oyuncu attığı her zarda - başına -2 puan alır.</p>\n<h3>ÖZELLİKLER</h3>\n<p><strong>CAN VE BEDEN</strong> : Karakter canı sayı ile belirtilmez. Oyunda karakterin bedenini temsilen bulunan resim yolu ile karakterin sağlık durumu belirtilir. Aynı zamanda Augmentation da bu alanda kontrol edilir. Her karakterin tek uzuv slotunda 1 augment yer alır.</p>\n<p>Oyunda her karakterin 4 ayrı özelliği bulunur:</p>\n<h4 class=\"label\">STATS</h4>\n<p>Stat'lar oyun içi zarlarda kullanılan ve Ability açmada ihtiyaç duyulan istatistik puanlarıdır. Stat puanını Perk'ler ve oyun içi seviye atlamalar etkiler.</p>\n<h4 class=\"label\">PERKS</h4>\n<p>Perk'ler oyun başı seçilir ve oyun boyunca oyuncunun RP'sini etkiler. Perk seçim ekranında oyuncu + seçim puanı ile başlar ve toplam puan miktarı negatife düşmeden istediği kadar perk alabilir. Perk seçim sonrası arta kalan + seçim puanları stat'a dönüştürülür.  Sistem şu şekildedir:</p>\n<div class=\"formula\"><div style=\"padding-left:0em\">(Dönüşecek Perk Puanı + 1) / 2 ve Aşağıya yuvarlanır.</div></div>\n<p>Başlangıç Perk puanı GM tarafından belirtilir, fazla verilmesi oyunu kolaylaştırmada kullanılabilir. GM'lere önerilen baz +0 veya +2'dir.</p>\n<h4 class=\"label\">ABILITIES</h4>\n<p>Oyunda aktif/pasif olarak kullanılabilen yetenekler yer alır. Yetenekler oyun başı ve oyun içi elde edilir. Yetenek edinmek için karakter seviyesi gerekir ve her seviyede yeni yetenekler açılır. Bazı yetenekler stat limiti ister.</p>\n<p>Oyunda her yetenek bir ekspertiz ağacı altında yer alır. Oyunda her karakterin 2 ekspertiz ağacı yer alabilir. Oyun başı 1 ekspertiz ağacı bulunur ve yetenek puanı ile yeni ağaç açılır.</p>\n<h4 class=\"label\">AUGMENTATION</h4>\n<p>Oyunda oyuncular oyun başı augment ile başlayabilir. (GM ile anlaşılması gerekir. Sisteme entegre değildir ve oyun başı augment ile başlamak önerilmez) Tamamen RP sonucu doğru sistemler ile her oyuncuya augment takılabilir. Augmentler'in kendine ait yetenekleri veya stat modifier'ları olabilir.</p>",
+   "searchText": "karakter kozmetik 1- karakter ismi karakterin hikaye boyunca kullanacağı isim bilgisidir. rp'yi doğrudan etkilemez ancak seçilen milliyete uygun bir isim tercih edilmesi doğru olacaktır. 2- karakter yaşı karakter yaşı 18-60 arası olmalıdır. yaşlı veya genç karakterler hikaye için uygun değildir (60+ için istisnai durumlar olabilir.) 3- karakterin alignment bilgisi karakterin genel faction bilgisini belirler. alignment rp içi belirleyici değildir ancak belirlenmesi genel portre için gereklidir. 4- karakterin milliyeti evrenin doğası gereği rp içinde irk ve milliyet kavramları iletişimi etkileyebilir. 5- karakterin sahip olduğu para genellikle hikayenin merkezine koyulması önerilmese de reichsmark hikayede kullanılabilir. 6- karakterin corruption seviyesi yer alan her karakterin 0-13 arası corruption seviyesi bulunur. corruption, mental sağlığı temsil eder. corruption, özellikle savaş anı stresi gidermek için kullanılan amfetamin, met amfetamin içeren pervitin gibi maddelerin kullanımında artar. 7- karakterin beden tablosu oyunda karakterlerin tüm uzuvlarının sağlık ve mekanizasyon durumunu gösteren bir beden tablosu yer alır. alınan yaralar, sarılı bandajlar, takılan eklentiler buradan takip edilir. 8- oyuncunun inspiration puanı doğrudan gm tarafından doğru rp veya gm-hatası compensation'u olarak oyunculara verilir. bir inspiration(ilham) karşılığında re-roll atılabilir. meta sayılabilecek kararlar için de birden fazla ilham puanı kullanılabilir. inspiration -'ye düşerse(çoğunlukla gm tarafından ceza olarak kullanılabilir veya gm-oyuncu anlaşması ile oyuncu borç inspiration bile alabilir. karar nihai olarak gm'e aittir.), oyuncu attığı her zarda - başına -2 puan alır. özellikler can ve beden : karakter canı sayı ile belirtilmez. oyunda karakterin bedenini temsilen bulunan resim yolu ile karakterin sağlık durumu belirtilir. aynı zamanda augmentation da bu alanda kontrol edilir. her karakterin tek uzuv slotunda 1 augment yer alır. oyunda her karakterin 4 ayrı özelliği bulunur: stats stat'lar oyun içi zarlarda kullanılan ve ability açmada ihtiyaç duyulan istatistik puanlarıdır. stat puanını perk'ler ve oyun içi seviye atlamalar etkiler. perks perk'ler oyun başı seçilir ve oyun boyunca oyuncunun rp'sini etkiler. perk seçim ekranında oyuncu + seçim puanı ile başlar ve toplam puan miktarı negatife düşmeden istediği kadar perk alabilir. perk seçim sonrası arta kalan + seçim puanları stat'a dönüştürülür. sistem şu şekildedir: (dönüşecek perk puanı + 1) / 2 ve aşağıya yuvarlanır. başlangıç perk puanı gm tarafından belirtilir, fazla verilmesi oyunu kolaylaştırmada kullanılabilir. gm'lere önerilen baz +0 veya +2'dir. abilities oyunda aktif/pasif olarak kullanılabilen yetenekler yer alır. yetenekler oyun başı ve oyun içi elde edilir. yetenek edinmek için karakter seviyesi gerekir ve her seviyede yeni yetenekler açılır. bazı yetenekler stat limiti ister. oyunda her yetenek bir ekspertiz ağacı altında yer alır. oyunda her karakterin 2 ekspertiz ağacı yer alabilir. oyun başı 1 ekspertiz ağacı bulunur ve yetenek puanı ile yeni ağaç açılır. augmentation oyunda oyuncular oyun başı augment ile başlayabilir. (gm ile anlaşılması gerekir. sisteme entegre değildir ve oyun başı augment ile başlamak önerilmez) tamamen rp sonucu doğru sistemler ile her oyuncuya augment takılabilir. augmentler'in kendine ait yetenekleri veya stat modifier'ları olabilir."
+  },
+  {
+   "key": "statlar",
+   "title": "Statlar",
+   "html": "<p><strong>Korp</strong>: Oyuncunun fiziksel direnç kapasitesidir. <em>(UBERMANN)</em><br><strong>Krach</strong>: Oyuncunun fiziksel hasar/uygulama kapasitesidir.<br><strong>Klang</strong>: Augmentation uyum becerisi. <em>( METALLKORP )</em><br><strong>Sanita</strong>: Oyuncunun zihinsel direnç kapasitesidir.<br><strong>Rede</strong>: Oyuncunun iletişim kapasitesidir. <em>( DIPLOMAT )</em><br><strong>Wissen</strong>: Oyuncunun bilgi birikim kapasitesidir. <em>( SHZ )</em><br><strong>Sicht</strong>: Oyuncunun görüş kapasitesidir.<br><strong>Agil</strong>: Oyuncunun çeviklik kapasitesidir.<br><strong>Werk</strong>: Oyuncunun mühendislik el becerisi kapasitesidir. <em>( WUNDERWAFFE )</em><br><strong>Leis</strong>: Oyuncunun gizlilik becerisidir. <em>( SPIONAGE )</em><br><strong>Aim</strong>: Oyuncunun nişan alma becerisidir. <em>( STAHLKRIEG )</em></p>\n<p><strong>Corruption</strong>: Oyuncunun zihinsel yozlaşma seviyesidir. 0-13 skalasında yer alır</p>\n<p><em>NOT:</em> Sicht ve Aim birbirine yakın olsa da ayrı tutulmaktadır. AIM çatışma anında devamlı dinamik olarak değişebilirken Sicht, ayrıntıları yakalama gibi aksiyonlarda kullanılan bir beceridir.</p>",
+   "searchText": "statlar korp : oyuncunun fiziksel direnç kapasitesidir. (ubermann) krach : oyuncunun fiziksel hasar/uygulama kapasitesidir. klang : augmentation uyum becerisi. ( metallkorp ) sanita : oyuncunun zihinsel direnç kapasitesidir. rede : oyuncunun iletişim kapasitesidir. ( diplomat ) wissen : oyuncunun bilgi birikim kapasitesidir. ( shz ) sicht : oyuncunun görüş kapasitesidir. agil : oyuncunun çeviklik kapasitesidir. werk : oyuncunun mühendislik el becerisi kapasitesidir. ( wunderwaffe ) leis : oyuncunun gizlilik becerisidir. ( spionage ) aim : oyuncunun nişan alma becerisidir. ( stahlkrieg ) corruption : oyuncunun zihinsel yozlaşma seviyesidir. 0-13 skalasında yer alır not: sicht ve aim birbirine yakın olsa da ayrı tutulmaktadır. aim çatışma anında devamlı dinamik olarak değişebilirken sicht, ayrıntıları yakalama gibi aksiyonlarda kullanılan bir beceridir."
+  },
+  {
+   "key": "beden-ve-yaralar",
+   "title": "Beden ve Yaralar",
+   "html": "<p>Oyun kağıdında bir vücut anatomisi resmi üzerinde her parça ayrı olarak gösterilir. Tablo 2 amaca hizmet eder. Birincisi oyuncunun vücut parçalarının sağlık/bandaj/ekipman durumu, diğeri ise bölgeye takılan Augmentation bilgisidir.</p>\n<h3>UZUV HASAR DURUMLARI</h3>\n<p>Sağlam → Çizik → Hafif Yaralı → Ağır Yaralı → Kullanılamaz → Kopuk</p>\n<p>Eğer Sargı kirlenirse etkisini yitirir ve yara negatif etki verir(formül aşağıda) ve Sargılı(Kirli) durumuna geçer.</p>\n<p><strong>ETKİLER:</strong></p>\n<p>UZVUN KULLANILDIĞI AKSİYON ZARLARINDA ETKİLENİR:</p>\n<table class=\"kv\"><tr><th>SAĞLAM</th><td>Etkisi Yoktur</td></tr><tr><th>SARGILI(TEMİZ)</th><td>-Eski Hali/2 → Aşağı Yuvarla</td></tr><tr><th>SARGILI(KRİLİ)</th><td>-Eski Hali*3/4</td></tr><tr><th>ÇİZİK</th><td>-1</td></tr><tr><th>HAFİF YARALI</th><td>-2</td></tr><tr><th>AĞIR YARALI</th><td>-5</td></tr><tr><th>KULLANILAMAZ</th><td>-15</td></tr><tr><th>KOPUK</th><td>-20</td></tr></table>\n<p>Yaranın ilerlemesi sistemleştirilmek yerine GM'in yönettiği RP'ye bırakılmıştır. Yara ve yaranın ilerlemesi yaratıcılık amacı ile sistemleştirilmemiştir.</p>\n<h3>AUGMENTATION</h3>\n<p>Augmentation şekilleri genellikle GM'in hayal gücüne bırakılmıştır ancak temel olarak Augmentation ile amaçlanan, oyuncuları oyunun zorluğunda sadece stat/ability'ler dışında 2. bir çıkış kapısı sunmak ve oynanışı çeşitlendirmektir. Özellikle kendine has özelliği olan ancak stat puanı kıran Augment tipleri oluşturmaları GM'lere tavsiye edilir. Örnek Augmentationlar &quot;Augmentations&quot; alt klasöründe yer alır.</p>\n<p>Oyuncunun Augmentation kullanabilme becerisi &quot;Klang&quot; ile ölçülmektedir. Her oyuncu oyuna +2 Klang ile başlar. Klang -'ye düşerse oyuncunun attığı tüm zarlar - miktarı kadar negatif etkilenir ve augmentli uzuv aksiyon sırasında parçalanabilir veya bozulabilir.</p>\n<h3>VÜCUT PARÇALARI</h3>\n<p>İnsan vücudu çeşitli parçalardan oluşur ve karakter bedeni sağ/sol ayrımı ile çeşitli parçalara bölünmüştür.</p>\n<p>Uzuvlardaki yaralar sebebiyle yaşanacak aksiyon etkileri GM'in inisiyatifine bırakılmıştır. Elin kullanıldığı her aksiyonda eldeki çizik etkili olmak zorunda değildir ancak yara daha fazla açılabilir (Örneğin yukarıdan düşen bir şeyi elinin tersi ile tutma).</p>\n<div class=\"chips\"><span class=\"chip\">HEAD &amp; NECK</span><span class=\"chip\">L-HAND</span><span class=\"chip\">R-HAND</span><span class=\"chip\">L-ARM</span><span class=\"chip\">R-ARM</span><span class=\"chip\">UPPER TORSO</span><span class=\"chip\">LOWER TORSO</span><span class=\"chip\">L-LEG</span><span class=\"chip\">R-LEG</span><span class=\"chip\">L-FOOT</span><span class=\"chip\">R-FOOT</span></div>",
+   "searchText": "beden ve yaralar oyun kağıdında bir vücut anatomisi resmi üzerinde her parça ayrı olarak gösterilir. tablo 2 amaca hizmet eder. birincisi oyuncunun vücut parçalarının sağlık/bandaj/ekipman durumu, diğeri ise bölgeye takılan augmentation bilgisidir. uzuv hasar durumlari sağlam → çizik → hafif yaralı → ağır yaralı → kullanılamaz → kopuk eğer sargı kirlenirse etkisini yitirir ve yara negatif etki verir(formül aşağıda) ve sargılı(kirli) durumuna geçer. etkiler: uzvun kullanildiği aksiyon zarlarinda etkilenir: sağlam etkisi yoktur sargili(temiz) -eski hali/2 → aşağı yuvarla sargili(krili) -eski hali*3/4 çizik -1 hafif yarali -2 ağir yarali -5 kullanilamaz -15 kopuk -20 yaranın ilerlemesi sistemleştirilmek yerine gm'in yönettiği rp'ye bırakılmıştır. yara ve yaranın ilerlemesi yaratıcılık amacı ile sistemleştirilmemiştir. augmentation augmentation şekilleri genellikle gm'in hayal gücüne bırakılmıştır ancak temel olarak augmentation ile amaçlanan, oyuncuları oyunun zorluğunda sadece stat/ability'ler dışında 2. bir çıkış kapısı sunmak ve oynanışı çeşitlendirmektir. özellikle kendine has özelliği olan ancak stat puanı kıran augment tipleri oluşturmaları gm'lere tavsiye edilir. örnek augmentationlar augmentations alt klasöründe yer alır. oyuncunun augmentation kullanabilme becerisi klang ile ölçülmektedir. her oyuncu oyuna +2 klang ile başlar. klang -'ye düşerse oyuncunun attığı tüm zarlar - miktarı kadar negatif etkilenir ve augmentli uzuv aksiyon sırasında parçalanabilir veya bozulabilir. vücut parçalari insan vücudu çeşitli parçalardan oluşur ve karakter bedeni sağ/sol ayrımı ile çeşitli parçalara bölünmüştür. uzuvlardaki yaralar sebebiyle yaşanacak aksiyon etkileri gm'in inisiyatifine bırakılmıştır. elin kullanıldığı her aksiyonda eldeki çizik etkili olmak zorunda değildir ancak yara daha fazla açılabilir (örneğin yukarıdan düşen bir şeyi elinin tersi ile tutma). head neck l-hand r-hand l-arm r-arm upper torso lower torso l-leg r-leg l-foot r-foot"
+  },
+  {
+   "key": "corruption",
+   "title": "Corruption",
+   "html": "<p>Karakterin &quot;Yozlaşmış&quot;lığını belirtir. 0-13 arası skalada gösterilir. Oyun içi çeşitli yollar ile arttırılıp azaltılabilir (Bağımlılıklar, Pervitin). Başlangıç değeri Corruption 0'dır.</p>\n<h4>CORRUPTION STATUS TABLE</h4>\n<ol class=\"corr\"><li data-level=\"0\"><span class=\"lvl\">0</span><span>Hiç bir etki yoktur</span></li><li data-level=\"1\"><span class=\"lvl\">1</span><span>Oyuncunun attığı her kara büyü zarında ( + 2 ) zar etkisi uygulanır.</span></li><li data-level=\"2\"><span class=\"lvl\">2</span><span>Negatif bir etki yoktur</span></li><li data-level=\"3\"><span class=\"lvl\">3</span><span>Oyuncu bu seviyeden sonra her bir Corruption için +1 Klang alır.</span></li><li data-level=\"4\"><span class=\"lvl\">4</span><span>Oyuncu bu seviyeden sonra her bir Corruption için kara büyü(SHZ sigil'leri gibi ezoterik yetenekler) aksiyonlarında +1 zar alır. (Corruption 5 ise +2, 6 ise +3 gibi)</span></li><li data-level=\"5\"><span class=\"lvl\">5</span><span>&quot;Cower&quot; durumu açılır. Cower durumu düşman tarafından hasar alınca gerçekleşme zarı atılır. Eğer oyuncu &quot;Cower&quot; durumundaysa durum geçene kadar aksiyon alamaz. Cower durumundan kurtulmak için &quot;Sanita&quot; zarı atılmalıdır</span></li><li data-level=\"6\"><span class=\"lvl\">6</span><span>Bu seviyedeki karakterlerin &quot;saldırı&quot; aksiyonları hırçınlaşır. Daha fazla kan döker ve daha fazla kaynak harcar.</span></li><li data-level=\"7\"><span class=\"lvl\">7</span><span>Bu seviyeye gelen Corruption 7'den aşağıya azaltılamaz.</span></li><li data-level=\"8\"><span class=\"lvl\">8</span><span>Karakter aksiyonları dengesizleşmeye başlar. Aksiyonları tamamlamak için daha yüksek zar atma, sinir kontrolü zarları gibi mekanikler DM tarafından oyuncunun rolüne bağlı zorlanabilir.</span></li><li data-level=\"9\"><span class=\"lvl\">9</span><span>&quot;Frenzy&quot; durumu açılır. Frenzy durumu düşman öldürünce gerçekleşme zarı atılır. Eğer oyuncu &quot;Frenzy&quot; durumuna geçerse görüşündeki diğer bir hedefe saldırı gerçekleştirir. Frenzy zincirleme gerçekleşebilir. (Frenzy saldırıları yakın menzilde güçlendirilmiş, uzak menzilde zayıflatılmıştır.)</span></li><li data-level=\"10\"><span class=\"lvl\">10</span><span>Bu seviyeden sonra Pervitin / Metamfetamin oyuncunun Corruption seviyesini etkilemez</span></li><li data-level=\"11\"><span class=\"lvl\">11</span><span>Karakter aksiyonları ciddi seviyede dengesizleşir</span></li><li data-level=\"12\"><span class=\"lvl\">12</span><span>Karakter aksiyonları tamamen dengesizleşir.</span></li><li data-level=\"13\"><span class=\"lvl\">13</span><span>Karakterin zihinsel sağlığı çöker. Ölüm gerçekleşir.</span></li></ol>\n<h4>PERVITIN / METAMFETAMIN</h4>\n<p>Oyunda oyuncular anlık stres gibi durumlardan kurtulmak için Pervitin veya benzeri ürünler kullanabilir. (Metamfetamin/Amfetamin bazlı uyuşturucu kökenli maddeler GM tarafından oyuncuların önüne sadece Pervitin olarak çıkmak zorunda değildir) Madde kullanılınca karakter sakinleşir ve olumsuz stres durum etkilerinden kurtulur ancak Corruption etki zarı atmalıdır:</p>\n<p>Eğer Corruption Seviyesi &lt; 10 ise:</p>\n<div class=\"formula\"><div style=\"padding-left:0em\">d20 + Sanita − Corruption/3 ≥ eşik ise Corruption artmaz</div></div>",
+   "searchText": "corruption karakterin yozlaşmış lığını belirtir. 0-13 arası skalada gösterilir. oyun içi çeşitli yollar ile arttırılıp azaltılabilir (bağımlılıklar, pervitin). başlangıç değeri corruption 0'dır. corruption status table 0 hiç bir etki yoktur 1 oyuncunun attığı her kara büyü zarında ( + 2 ) zar etkisi uygulanır. 2 negatif bir etki yoktur 3 oyuncu bu seviyeden sonra her bir corruption için +1 klang alır. 4 oyuncu bu seviyeden sonra her bir corruption için kara büyü(shz sigil'leri gibi ezoterik yetenekler) aksiyonlarında +1 zar alır. (corruption 5 ise +2, 6 ise +3 gibi) 5 cower durumu açılır. cower durumu düşman tarafından hasar alınca gerçekleşme zarı atılır. eğer oyuncu cower durumundaysa durum geçene kadar aksiyon alamaz. cower durumundan kurtulmak için sanita zarı atılmalıdır 6 bu seviyedeki karakterlerin saldırı aksiyonları hırçınlaşır. daha fazla kan döker ve daha fazla kaynak harcar. 7 bu seviyeye gelen corruption 7'den aşağıya azaltılamaz. 8 karakter aksiyonları dengesizleşmeye başlar. aksiyonları tamamlamak için daha yüksek zar atma, sinir kontrolü zarları gibi mekanikler dm tarafından oyuncunun rolüne bağlı zorlanabilir. 9 frenzy durumu açılır. frenzy durumu düşman öldürünce gerçekleşme zarı atılır. eğer oyuncu frenzy durumuna geçerse görüşündeki diğer bir hedefe saldırı gerçekleştirir. frenzy zincirleme gerçekleşebilir. (frenzy saldırıları yakın menzilde güçlendirilmiş, uzak menzilde zayıflatılmıştır.) 10 bu seviyeden sonra pervitin / metamfetamin oyuncunun corruption seviyesini etkilemez 11 karakter aksiyonları ciddi seviyede dengesizleşir 12 karakter aksiyonları tamamen dengesizleşir. 13 karakterin zihinsel sağlığı çöker. ölüm gerçekleşir. pervitin / metamfetamin oyunda oyuncular anlık stres gibi durumlardan kurtulmak için pervitin veya benzeri ürünler kullanabilir. (metamfetamin/amfetamin bazlı uyuşturucu kökenli maddeler gm tarafından oyuncuların önüne sadece pervitin olarak çıkmak zorunda değildir) madde kullanılınca karakter sakinleşir ve olumsuz stres durum etkilerinden kurtulur ancak corruption etki zarı atmalıdır: eğer corruption seviyesi 10 ise: d20 + sanita − corruption/3 ≥ eşik ise corruption artmaz"
+  }
+ ],
+ "trees": [
+  {
+   "key": "ubermann",
+   "name": "Ubermann",
+   "stat": "korp",
+   "introHtml": "<p>Ubermann oyuncu tarafından ilk ekspertiz olarak açılırsa oyuncu oyuna +1 Krach ile  başlar.</p>",
+   "startBonus": {
+    "kind": "stat",
+    "stat": "krach",
+    "amount": 1
+   },
+   "startBonusText": "Ubermann oyuncu tarafından ilk ekspertiz olarak açılırsa oyuncu oyuna +1 Krach ile başlar.",
+   "abilities": [
+    "kampfmedizin",
+    "grosse-macht",
+    "sturmbrecher",
+    "titan",
+    "wurgegriff",
+    "herr-der-toten",
+    "mein-liebe",
+    "endsieg-der-mann"
+   ]
+  },
+  {
+   "key": "stahlkrieg",
+   "name": "Stahlkrieg",
+   "stat": "aim",
+   "introHtml": "<p>Stahlkrieg oyuncu tarafından ilk ekspertiz olarak açılırsa oyuncu oyuna +1 Sicht ile  başlar.</p>",
+   "startBonus": {
+    "kind": "stat",
+    "stat": "sicht",
+    "amount": 1
+   },
+   "startBonusText": "Stahlkrieg oyuncu tarafından ilk ekspertiz olarak açılırsa oyuncu oyuna +1 Sicht ile başlar.",
+   "abilities": [
+    "kampfveteran",
+    "snipe",
+    "lauerstellung",
+    "ein-schuss",
+    "feuerleitung",
+    "zweihandler",
+    "panzerknacker",
+    "engel-des-todes"
+   ]
+  },
+  {
+   "key": "spionage",
+   "name": "Spionage",
+   "stat": "leis",
+   "introHtml": "<p>Spionage oyuncu tarafından ilk ekspertiz olarak açılırsa oyuncu oyuna +1 Agil ile  başlar.</p>",
+   "startBonus": {
+    "kind": "stat",
+    "stat": "agil",
+    "amount": 1
+   },
+   "startBonusText": "Spionage oyuncu tarafından ilk ekspertiz olarak açılırsa oyuncu oyuna +1 Agil ile başlar.",
+   "abilities": [
+    "silent-step-low-profile",
+    "throwing-expertise",
+    "giftmischer",
+    "silent-takedown",
+    "dunkelhand",
+    "the-great-pretender",
+    "der-maulwurf",
+    "saboteur"
+   ]
+  },
+  {
+   "key": "diplomat",
+   "name": "Diplomat",
+   "stat": "rede",
+   "introHtml": "<p>Diplomat oyuncu tarafından ilk ekspertiz olarak açılırsa oyuncu oyuna +1 Wissen  başlar.</p>",
+   "startBonus": {
+    "kind": "stat",
+    "stat": "wissen",
+    "amount": 1
+   },
+   "startBonusText": "Diplomat oyuncu tarafından ilk ekspertiz olarak açılırsa oyuncu oyuna +1 Wissen başlar.",
+   "abilities": [
+    "geist-la-resistance",
+    "authority-like-herr-a",
+    "volksredner",
+    "fahnentrager",
+    "ihr-preis",
+    "see-through-em",
+    "schlangenzunge",
+    "verhormeister"
+   ]
+  },
+  {
+   "key": "wunderwaffe",
+   "name": "Wunderwaffe",
+   "stat": "werk",
+   "introHtml": "<p>Wunderwaffe oyuncu tarafından ilk ekspertiz olarak açılırsa oyuncu oyuna +1 Wissen ile  başlar.</p>",
+   "startBonus": {
+    "kind": "stat",
+    "stat": "wissen",
+    "amount": 1
+   },
+   "startBonusText": "Wunderwaffe oyuncu tarafından ilk ekspertiz olarak açılırsa oyuncu oyuna +1 Wissen ile başlar.",
+   "abilities": [
+    "kriegsengineer",
+    "maschinengehirn",
+    "sprengmeister",
+    "eiserner-kamerad",
+    "panzerschrauber",
+    "knowledge-of-future",
+    "kriegssheilung",
+    "aryan-cryptology"
+   ]
+  },
+  {
+   "key": "schwarzesonne",
+   "name": "Schwarzesonne",
+   "stat": "wissen",
+   "introHtml": "<p>Schwarzesonne oyuncu tarafından ilk ekspertiz olarak açılırsa oyuncu oyuna +1 Corruption ile  başlar.</p>",
+   "startBonus": {
+    "kind": "corruption",
+    "amount": 1
+   },
+   "startBonusText": "Schwarzesonne oyuncu tarafından ilk ekspertiz olarak açılırsa oyuncu oyuna +1 Corruption ile başlar.",
+   "abilities": [
+    "kluger-kopf",
+    "siegel-der-leere",
+    "siegel-der-verdamm",
+    "grosses-siegel",
+    "extracio-aus-ss",
+    "totenruf",
+    "toter-soldaten",
+    "blutopfer"
+   ]
+  },
+  {
+   "key": "metallkorp",
+   "name": "Metallkorp",
+   "stat": "klang",
+   "introHtml": "<p>Metallkorp oyuncu tarafından ilk ekspertiz olarak açılırsa oyuncu oyuna T1 augment ile  başlar.</p>",
+   "startBonus": {
+    "kind": "augment",
+    "tier": "T1"
+   },
+   "startBonusText": "Metallkorp oyuncu tarafından ilk ekspertiz olarak açılırsa oyuncu oyuna T1 augment ile başlar.",
+   "abilities": [
+    "stahlnerv",
+    "zweite-haut",
+    "kalte-seele",
+    "neuer-mensch",
+    "ersatzteil",
+    "uberladung",
+    "schnittstelle",
+    "kriegsmaschine"
+   ]
+  }
+ ],
+ "abilities": {
+  "endsieg-der-mann": {
+   "key": "endsieg-der-mann",
+   "name": "Endsieg der Mann",
+   "tree": "ubermann",
+   "type": "Tepki",
+   "requirementText": "Korp 7, Sanita 4, Sv 6",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "korp",
+     "min": 7
+    },
+    {
+     "kind": "stat",
+     "stat": "sanita",
+     "min": 4
+    },
+    {
+     "kind": "level",
+     "min": 6
+    }
+   ],
+   "maxLevel": 1,
+   "prerequisite": "mein-liebe",
+   "branch": "B",
+   "branchName": "Unkaputtbar",
+   "levelEffects": [],
+   "sections": [
+    {
+     "key": "ETKİ",
+     "label": "Etki",
+     "html": "<p>Çatışmada öldüğün an (Death Save'den önce) &quot;Endsieg&quot; moduna girersin. 2 tur boyunca tüm yara cezalarını yok sayarak aksiyon alırsın. Bu süre içinde seni öldüren hedefi öldürürsen kritik yaralı olarak hayatta kalırsın. Başaramazsan ölürsün; varsa Death Save hakkını yine kullanabilirsin.</p>"
+    },
+    {
+     "key": "BEDEL",
+     "label": "Bedel",
+     "html": "<p>Her tetiklenmede +2 Corruption. Seans başına 1 kez.</p>"
+    },
+    {
+     "key": "NOT",
+     "label": "Not",
+     "html": "<p>Endsieg bir Death Save değildir; <a href=\"@/kurallar/yetenekler/ubermann#mein-liebe\">Mein Liebe</a> ile birlikte kullanılabilir.</p>"
+    },
+    {
+     "key": "SİNERJİ",
+     "label": "Sinerji",
+     "html": "<p><strong><a href=\"@/kurallar/yetenekler/ubermann#titan\">Titan</a></strong> ile: Endsieg modundayken Titan bir kez daha kullanılabilir.</p>"
+    }
+   ],
+   "synergies": [
+    "titan"
+   ],
+   "flavorHtml": "<p>Nihai zafer ya da hiçbir şey. Seni öldüren onu görmeden ölmeyeceksin.</p>",
+   "searchText": "endsieg der mann ubermann tepki korp 7, sanita 4, sv 6 unkaputtbar çatışmada öldüğün an (death save'den önce) endsieg moduna girersin. 2 tur boyunca tüm yara cezalarını yok sayarak aksiyon alırsın. bu süre içinde seni öldüren hedefi öldürürsen kritik yaralı olarak hayatta kalırsın. başaramazsan ölürsün; varsa death save hakkını yine kullanabilirsin. her tetiklenmede +2 corruption. seans başına 1 kez. endsieg bir death save değildir; mein liebe ile birlikte kullanılabilir. titan ile: endsieg modundayken titan bir kez daha kullanılabilir. nihai zafer ya da hiçbir şey. seni öldüren onu görmeden ölmeyeceksin."
+  },
+  "grosse-macht": {
+   "key": "grosse-macht",
+   "name": "Große Macht",
+   "tree": "ubermann",
+   "type": "Pasif",
+   "requirementText": "Korp 3",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "korp",
+     "min": 3
+    }
+   ],
+   "maxLevel": 3,
+   "prerequisite": null,
+   "branch": "A",
+   "branchName": "Koloss",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Kaba kuvvet gerektiren aksiyonlarda (kapı kırma, kaldırma, boğuşma) Krach zarlarına +1."
+    },
+    {
+     "level": 2,
+     "html": "Bu zarlara +2."
+    },
+    {
+     "level": 3,
+     "html": "Bu zarlara +3. Normalde imkânsız sayılacak insanüstü eylemler (bir aracı devirmek, duvarı yıkmak) GM onayıyla Uber eşikte denenebilir."
+    }
+   ],
+   "sections": [],
+   "synergies": [],
+   "flavorHtml": "<p>Bedenin insan sınırlarının ötesine itilmiş. Ne kadarının eğitim, ne kadarının Pervitin olduğunu kimse bilmiyor.</p>",
+   "searchText": "große macht ubermann pasif korp 3 koloss kaba kuvvet gerektiren aksiyonlarda (kapı kırma, kaldırma, boğuşma) krach zarlarına +1. bu zarlara +2. bu zarlara +3. normalde imkânsız sayılacak insanüstü eylemler (bir aracı devirmek, duvarı yıkmak) gm onayıyla uber eşikte denenebilir. bedenin insan sınırlarının ötesine itilmiş. ne kadarının eğitim, ne kadarının pervitin olduğunu kimse bilmiyor."
+  },
+  "herr-der-toten": {
+   "key": "herr-der-toten",
+   "name": "Herr der Toten",
+   "tree": "ubermann",
+   "type": "Pasif",
+   "requirementText": "Korp 4",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "korp",
+     "min": 4
+    }
+   ],
+   "maxLevel": 2,
+   "prerequisite": null,
+   "branch": "B",
+   "branchName": "Unkaputtbar",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Çatışmada öldürdüğün her hedef için 1 Ölüm Yükü kazanırsın (en fazla 2). Sana isabet eden bir saldırıda 1 yük harcayarak yaranın ilerlemesini 1 kademe azaltırsın. Yükler çatışma sonunda sıfırlanır."
+    },
+    {
+     "level": 2,
+     "html": "En fazla 3 yük. 1 yük harcayarak bir Cower gerçekleşme zarını otomatik geçebilirsin."
+    }
+   ],
+   "sections": [],
+   "synergies": [],
+   "flavorHtml": "<p>Etrafındaki cesetler arttıkça daha az korkar, daha az acı hissedersin.</p>",
+   "searchText": "herr der toten ubermann pasif korp 4 unkaputtbar çatışmada öldürdüğün her hedef için 1 ölüm yükü kazanırsın (en fazla 2). sana isabet eden bir saldırıda 1 yük harcayarak yaranın ilerlemesini 1 kademe azaltırsın. yükler çatışma sonunda sıfırlanır. en fazla 3 yük. 1 yük harcayarak bir cower gerçekleşme zarını otomatik geçebilirsin. etrafındaki cesetler arttıkça daha az korkar, daha az acı hissedersin."
+  },
+  "kampfmedizin": {
+   "key": "kampfmedizin",
+   "name": "Kampfmedizin",
+   "tree": "ubermann",
+   "type": "Aktif",
+   "requirementText": "Yok",
+   "requirements": [],
+   "maxLevel": 3,
+   "prerequisite": null,
+   "branch": "Kök",
+   "branchName": "Kök",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Bir tur harcayarak kendi uzuvlarından birini zar atmadan sararsın (Sargılı (Temiz)). Sargı malzemesi gerekir."
+    },
+    {
+     "level": 2,
+     "html": "Sarma işlemi tur harcamaz. Çatışma başına 1 kez."
+    },
+    {
+     "level": 3,
+     "html": "Sararken d20 + Korp ≥ Zor atarsan yaranın kademesi 1 düşer (örn. Ağır Yaralı → Hafif Yaralı). Seans başına 1 kez. Kullanılamaz ve Kopuk uzuvlara etki etmez."
+    }
+   ],
+   "sections": [],
+   "synergies": [],
+   "flavorHtml": "<p>Cephede doktor beklenmez. Yaranı kendin kapatır, savaşmaya devam edersin.</p>",
+   "searchText": "kampfmedizin ubermann aktif yok kök bir tur harcayarak kendi uzuvlarından birini zar atmadan sararsın (sargılı (temiz)). sargı malzemesi gerekir. sarma işlemi tur harcamaz. çatışma başına 1 kez. sararken d20 + korp ≥ zor atarsan yaranın kademesi 1 düşer (örn. ağır yaralı → hafif yaralı). seans başına 1 kez. kullanılamaz ve kopuk uzuvlara etki etmez. cephede doktor beklenmez. yaranı kendin kapatır, savaşmaya devam edersin."
+  },
+  "mein-liebe": {
+   "key": "mein-liebe",
+   "name": "Mein Liebe",
+   "tree": "ubermann",
+   "type": "Pasif",
+   "requirementText": "Korp 5, Sanita 3",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "korp",
+     "min": 5
+    },
+    {
+     "kind": "stat",
+     "stat": "sanita",
+     "min": 3
+    }
+   ],
+   "maxLevel": 2,
+   "prerequisite": "herr-der-toten",
+   "branch": "B",
+   "branchName": "Unkaputtbar",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Çizik ve Hafif Yaralı uzuvların cezalarını yok sayarsın."
+    },
+    {
+     "level": 2,
+     "html": "Ağır Yaralı cezası -5 yerine -2 uygulanır."
+    }
+   ],
+   "sections": [
+    {
+     "key": "BEDEL",
+     "label": "Bedel",
+     "html": "<p>Bu yetenek açıldığı anda Death Save Throw hakkını kalıcı olarak kaybedersin. Inspiration ile yenilenemez.</p>"
+    },
+    {
+     "key": "SİNERJİ",
+     "label": "Sinerji",
+     "html": "<p><strong><a href=\"@/kurallar/yetenekler/schwarzesonne#blutopfer\">Blutopfer</a></strong> ile: Blutopfer'in kendi uzvuna verdiği yaranın cezası yok sayılır.</p>"
+    }
+   ],
+   "synergies": [
+    "blutopfer"
+   ],
+   "flavorHtml": "<p>Acı artık senin tek sevgilin. Bedenin bir araca dönüştü; onu ne zaman bırakacağına sen karar vermiyorsun.</p>",
+   "searchText": "mein liebe ubermann pasif korp 5, sanita 3 unkaputtbar çizik ve hafif yaralı uzuvların cezalarını yok sayarsın. ağır yaralı cezası -5 yerine -2 uygulanır. bu yetenek açıldığı anda death save throw hakkını kalıcı olarak kaybedersin. inspiration ile yenilenemez. blutopfer ile: blutopfer'in kendi uzvuna verdiği yaranın cezası yok sayılır. acı artık senin tek sevgilin. bedenin bir araca dönüştü; onu ne zaman bırakacağına sen karar vermiyorsun."
+  },
+  "sturmbrecher": {
+   "key": "sturmbrecher",
+   "name": "Sturmbrecher",
+   "tree": "ubermann",
+   "type": "Aktif",
+   "requirementText": "Korp 5, Krach 3",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "korp",
+     "min": 5
+    },
+    {
+     "kind": "stat",
+     "stat": "krach",
+     "min": 3
+    }
+   ],
+   "maxLevel": 2,
+   "prerequisite": "grosse-macht",
+   "branch": "A",
+   "branchName": "Koloss",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Koşarak bir hedefe yakın dövüş hücumu yaparsın: d20 + Krach ≥ eşik (sivil Kolay, asker Orta, zırhlı hedef Zor). Başarıda hedef yere düşer ve bir sonraki turunda yalnızca kalkabilir. Sandık veya ahşap kapı gibi hafif siperler hücumu durdurmaz."
+    },
+    {
+     "level": 2,
+     "html": "Başarıda hedefin isabet alan uzvundaki yara 1 kademe ilerler. Hücum yolundaki ikinci bir hedefi de devirmeyi deneyebilirsin (ayrı zar)."
+    }
+   ],
+   "sections": [],
+   "synergies": [],
+   "flavorHtml": "<p>Önünde duran ya devrilir ya ezilir.</p>",
+   "searchText": "sturmbrecher ubermann aktif korp 5, krach 3 koloss koşarak bir hedefe yakın dövüş hücumu yaparsın: d20 + krach ≥ eşik (sivil kolay, asker orta, zırhlı hedef zor). başarıda hedef yere düşer ve bir sonraki turunda yalnızca kalkabilir. sandık veya ahşap kapı gibi hafif siperler hücumu durdurmaz. başarıda hedefin isabet alan uzvundaki yara 1 kademe ilerler. hücum yolundaki ikinci bir hedefi de devirmeyi deneyebilirsin (ayrı zar). önünde duran ya devrilir ya ezilir."
+  },
+  "titan": {
+   "key": "titan",
+   "name": "Titan",
+   "tree": "ubermann",
+   "type": "Aktif",
+   "requirementText": "Korp 7, Krach 5, Sv 6",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "korp",
+     "min": 7
+    },
+    {
+     "kind": "stat",
+     "stat": "krach",
+     "min": 5
+    },
+    {
+     "kind": "level",
+     "min": 6
+    }
+   ],
+   "maxLevel": 1,
+   "prerequisite": "sturmbrecher",
+   "branch": "A",
+   "branchName": "Koloss",
+   "levelEffects": [],
+   "sections": [
+    {
+     "key": "ETKİ",
+     "label": "Etki",
+     "html": "<p>Çatışma başına 1 kez, yakın dövüş saldırın zar atılmadan isabet eder ve hedefin seçtiğin uzvundaki yara 2 kademe ilerler. Augmentli uzuvlar ve zırh bu darbeye karşı koruma sağlamaz.</p>"
+    },
+    {
+     "key": "BEDEL",
+     "label": "Bedel",
+     "html": "<p>Darbeden sonraki tur aksiyon alamazsın.</p>"
+    },
+    {
+     "key": "SİNERJİ",
+     "label": "Sinerji",
+     "html": "<p><strong><a href=\"@/kurallar/yetenekler/ubermann#endsieg-der-mann\">Endsieg der Mann</a></strong> ile: Endsieg modundayken Titan bir kez daha kullanılabilir.</p>"
+    }
+   ],
+   "synergies": [
+    "endsieg-der-mann"
+   ],
+   "flavorHtml": "<p>Bir insanın vurabileceğinden fazlası. Bedel bedeninden ödenir.</p>",
+   "searchText": "titan ubermann aktif korp 7, krach 5, sv 6 koloss çatışma başına 1 kez, yakın dövüş saldırın zar atılmadan isabet eder ve hedefin seçtiğin uzvundaki yara 2 kademe ilerler. augmentli uzuvlar ve zırh bu darbeye karşı koruma sağlamaz. darbeden sonraki tur aksiyon alamazsın. endsieg der mann ile: endsieg modundayken titan bir kez daha kullanılabilir. bir insanın vurabileceğinden fazlası. bedel bedeninden ödenir."
+  },
+  "wurgegriff": {
+   "key": "wurgegriff",
+   "name": "Würgegriff",
+   "tree": "ubermann",
+   "type": "Aktif",
+   "requirementText": "Korp 5, Agil 3",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "korp",
+     "min": 5
+    },
+    {
+     "kind": "stat",
+     "stat": "agil",
+     "min": 3
+    }
+   ],
+   "maxLevel": 2,
+   "prerequisite": "grosse-macht",
+   "branch": "A′",
+   "branchName": "Ringer",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Yakındaki bir hedefi kilitlersin: d20 + Krach ≥ Orta (hedef d20 + Agil ile karşı zar atabilir). Kilitliyken hedef saldıramaz; kurtulmak için her tur Zor bir Agil zarı atar. Sen de bu sırada yalnızca hedefi tutabilir veya bırakabilirsin."
+    },
+    {
+     "level": 2,
+     "html": "Hedefi 2 tur üst üste kilitli tutarsan sessizce bayılır."
+    }
+   ],
+   "sections": [
+    {
+     "key": "SİNERJİ",
+     "label": "Sinerji",
+     "html": "<p><strong><a href=\"@/kurallar/yetenekler/schwarzesonne#siegel-der-verdamm\">Siegel Der Verdamm</a></strong> ile: Kilitlediğin hedefe rün çizmek için ayrıca Krach veya Agil zarı gerekmez.</p>"
+    }
+   ],
+   "synergies": [
+    "siegel-der-verdamm"
+   ],
+   "flavorHtml": "<p>Kaçış yok. Sadece nefesin bitmesini beklemek var.</p>",
+   "searchText": "würgegriff ubermann aktif korp 5, agil 3 ringer yakındaki bir hedefi kilitlersin: d20 + krach ≥ orta (hedef d20 + agil ile karşı zar atabilir). kilitliyken hedef saldıramaz; kurtulmak için her tur zor bir agil zarı atar. sen de bu sırada yalnızca hedefi tutabilir veya bırakabilirsin. hedefi 2 tur üst üste kilitli tutarsan sessizce bayılır. siegel der verdamm ile: kilitlediğin hedefe rün çizmek için ayrıca krach veya agil zarı gerekmez. kaçış yok. sadece nefesin bitmesini beklemek var."
+  },
+  "ein-schuss": {
+   "key": "ein-schuss",
+   "name": "Ein Schuss",
+   "tree": "stahlkrieg",
+   "type": "Pasif",
+   "requirementText": "Aim 7, Sicht 5, Sv 6",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "aim",
+     "min": 7
+    },
+    {
+     "kind": "stat",
+     "stat": "sicht",
+     "min": 5
+    },
+    {
+     "kind": "level",
+     "min": 6
+    }
+   ],
+   "maxLevel": 1,
+   "prerequisite": "lauerstellung",
+   "branch": "A",
+   "branchName": "Scharfschütze",
+   "levelEffects": [],
+   "sections": [
+    {
+     "key": "ETKİ",
+     "label": "Etki",
+     "html": "<p>Snipe ile yapılan ve Nat20 sayılan bir atışta (Snipe Seviye 3 ile 18–20) sivil veya asker hedef anında etkisiz kalır. Elit ve augmentli hedeflerde yara 3 kademe ilerler.</p>"
+    },
+    {
+     "key": "BEDEL",
+     "label": "Bedel",
+     "html": "<p>Bu şekilde öldürdüğün her hedef için çatışma sonunda Sanita zarı (Kolay); başarısızlıkta +1 Corruption.</p>"
+    },
+    {
+     "key": "SİNERJİ",
+     "label": "Sinerji",
+     "html": "<p><strong><a href=\"@/kurallar/yetenekler/stahlkrieg#engel-des-todes\">Engel des Todes</a></strong> ile: Ein Schuss ile yapılan öldürme Engel des Todes birikimine +2 sayar.</p>"
+    }
+   ],
+   "synergies": [
+    "engel-des-todes"
+   ],
+   "flavorHtml": "<p>Bir mermi. Bir isim. Bir son.</p>",
+   "searchText": "ein schuss stahlkrieg pasif aim 7, sicht 5, sv 6 scharfschütze snipe ile yapılan ve nat20 sayılan bir atışta (snipe seviye 3 ile 18–20) sivil veya asker hedef anında etkisiz kalır. elit ve augmentli hedeflerde yara 3 kademe ilerler. bu şekilde öldürdüğün her hedef için çatışma sonunda sanita zarı (kolay); başarısızlıkta +1 corruption. engel des todes ile: ein schuss ile yapılan öldürme engel des todes birikimine +2 sayar. bir mermi. bir isim. bir son."
+  },
+  "engel-des-todes": {
+   "key": "engel-des-todes",
+   "name": "Engel des Todes",
+   "tree": "stahlkrieg",
+   "type": "Pasif",
+   "requirementText": "Aim 7, Korp 4, Sv 6",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "aim",
+     "min": 7
+    },
+    {
+     "kind": "stat",
+     "stat": "korp",
+     "min": 4
+    },
+    {
+     "kind": "level",
+     "min": 6
+    }
+   ],
+   "maxLevel": 2,
+   "prerequisite": "panzerknacker",
+   "branch": "B",
+   "branchName": "Sturmtruppe",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Çatışmadaki her öldürmende Aim zarlarına +1 alırsın (en fazla +3). Bonus çatışma sonunda sıfırlanır."
+    },
+    {
+     "level": 2,
+     "html": "En fazla +5."
+    }
+   ],
+   "sections": [
+    {
+     "key": "BEDEL",
+     "label": "Bedel",
+     "html": "<p>Çatışmayı +3 veya üzeri birikimle bitirirsen +1 Corruption.</p>"
+    },
+    {
+     "key": "SİNERJİ",
+     "label": "Sinerji",
+     "html": "<p><strong><a href=\"@/kurallar/yetenekler/stahlkrieg#ein-schuss\">Ein Schuss</a></strong> ile: Ein Schuss ile yapılan öldürme Engel des Todes birikimine +2 sayar.</p>"
+    }
+   ],
+   "synergies": [
+    "ein-schuss"
+   ],
+   "flavorHtml": "<p>Her düşen, bir sonrakini kolaylaştırır. Bir noktadan sonra ölümün meleği olduğunu sen de fark edersin.</p>",
+   "searchText": "engel des todes stahlkrieg pasif aim 7, korp 4, sv 6 sturmtruppe çatışmadaki her öldürmende aim zarlarına +1 alırsın (en fazla +3). bonus çatışma sonunda sıfırlanır. en fazla +5. çatışmayı +3 veya üzeri birikimle bitirirsen +1 corruption. ein schuss ile: ein schuss ile yapılan öldürme engel des todes birikimine +2 sayar. her düşen, bir sonrakini kolaylaştırır. bir noktadan sonra ölümün meleği olduğunu sen de fark edersin."
+  },
+  "feuerleitung": {
+   "key": "feuerleitung",
+   "name": "Feuerleitung",
+   "tree": "stahlkrieg",
+   "type": "Aktif",
+   "requirementText": "Aim 5, Sicht 4",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "aim",
+     "min": 5
+    },
+    {
+     "kind": "stat",
+     "stat": "sicht",
+     "min": 4
+    }
+   ],
+   "maxLevel": 2,
+   "prerequisite": "snipe",
+   "branch": "A′",
+   "branchName": "Spotter",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Bir aksiyon harcayarak görüşündeki bir hedefi işaretlersin. Bir sonraki turunun sonuna kadar müttefiklerinin o hedefe yaptığı atışlara +2."
+    },
+    {
+     "level": 2,
+     "html": "+3. İşaretli hedef siperden yararlanamaz."
+    }
+   ],
+   "sections": [
+    {
+     "key": "SİNERJİ",
+     "label": "Sinerji",
+     "html": "<p><strong><a href=\"@/kurallar/yetenekler/diplomat#volksredner\">Volksredner</a></strong> ile: İşaretli hedefe saldıran müttefiklerin Cower durumu sona erer.</p>"
+    }
+   ],
+   "synergies": [
+    "volksredner"
+   ],
+   "flavorHtml": "<p>Dürbün senin, tetik onların.</p>",
+   "searchText": "feuerleitung stahlkrieg aktif aim 5, sicht 4 spotter bir aksiyon harcayarak görüşündeki bir hedefi işaretlersin. bir sonraki turunun sonuna kadar müttefiklerinin o hedefe yaptığı atışlara +2. +3. işaretli hedef siperden yararlanamaz. volksredner ile: işaretli hedefe saldıran müttefiklerin cower durumu sona erer. dürbün senin, tetik onların."
+  },
+  "kampfveteran": {
+   "key": "kampfveteran",
+   "name": "Kampfveteran",
+   "tree": "stahlkrieg",
+   "type": "Pasif",
+   "requirementText": "Yok",
+   "requirements": [],
+   "maxLevel": 3,
+   "prerequisite": null,
+   "branch": "Kök",
+   "branchName": "Kök",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Yaraların Aim zarlarına verdiği toplam ceza 1 azalır."
+    },
+    {
+     "level": 2,
+     "html": "Ceza 2 azalır. Cower gerçekleşme zarlarına +2."
+    },
+    {
+     "level": 3,
+     "html": "Ceza 3 azalır. Cower gerçekleşme zarlarına +3."
+    }
+   ],
+   "sections": [],
+   "synergies": [],
+   "flavorHtml": "<p>Ateş altında titremeyen eller. Kaç cephe gördüğünü artık saymıyorsun.</p>",
+   "searchText": "kampfveteran stahlkrieg pasif yok kök yaraların aim zarlarına verdiği toplam ceza 1 azalır. ceza 2 azalır. cower gerçekleşme zarlarına +2. ceza 3 azalır. cower gerçekleşme zarlarına +3. ateş altında titremeyen eller. kaç cephe gördüğünü artık saymıyorsun."
+  },
+  "lauerstellung": {
+   "key": "lauerstellung",
+   "name": "Lauerstellung",
+   "tree": "stahlkrieg",
+   "type": "Pasif",
+   "requirementText": "Aim 5, Leis 3",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "aim",
+     "min": 5
+    },
+    {
+     "kind": "stat",
+     "stat": "leis",
+     "min": 3
+    }
+   ],
+   "maxLevel": 2,
+   "prerequisite": "snipe",
+   "branch": "A",
+   "branchName": "Scharfschütze",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Gizli bir pozisyondan atış yaptığında, düşmanlar yerini bulmak için Kolay yerine Zor bir Sicht zarı atar."
+    },
+    {
+     "level": 2,
+     "html": "Çok Zor. Aynı pozisyondan yaptığın ikinci atışta da bu koruma sürer."
+    }
+   ],
+   "sections": [
+    {
+     "key": "SİNERJİ",
+     "label": "Sinerji",
+     "html": "<p><strong><a href=\"@/kurallar/yetenekler/spionage#silent-step-low-profile\">Silent Step, Low Profile</a></strong> ile: Atıştan sonra aynı tur içinde fark edilmeden yer değiştirebilirsin.</p>"
+    }
+   ],
+   "synergies": [
+    "silent-step-low-profile"
+   ],
+   "flavorHtml": "<p>Ateş edildi. Kimse nereden geldiğini bilmiyor.</p>",
+   "searchText": "lauerstellung stahlkrieg pasif aim 5, leis 3 scharfschütze gizli bir pozisyondan atış yaptığında, düşmanlar yerini bulmak için kolay yerine zor bir sicht zarı atar. çok zor. aynı pozisyondan yaptığın ikinci atışta da bu koruma sürer. silent step, low profile ile: atıştan sonra aynı tur içinde fark edilmeden yer değiştirebilirsin. ateş edildi. kimse nereden geldiğini bilmiyor."
+  },
+  "panzerknacker": {
+   "key": "panzerknacker",
+   "name": "Panzerknacker",
+   "tree": "stahlkrieg",
+   "type": "Pasif",
+   "requirementText": "Aim 4, Krach 3",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "aim",
+     "min": 4
+    },
+    {
+     "kind": "stat",
+     "stat": "krach",
+     "min": 3
+    }
+   ],
+   "maxLevel": 2,
+   "prerequisite": "zweihandler",
+   "branch": "B",
+   "branchName": "Sturmtruppe",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Zırhlı hedeflere (araçlar, zırh giyenler, augmentli uzuvlar) isabet eden atışlarında yara 1 kademe fazla ilerler."
+    },
+    {
+     "level": 2,
+     "html": "Ayrıca zırhlı hedeflere yapılan atışlarda eşik bir kademe düşer."
+    }
+   ],
+   "sections": [],
+   "synergies": [],
+   "flavorHtml": "<p>Çelik de etten farksızdır, nereye vuracağını biliyorsan.</p>",
+   "searchText": "panzerknacker stahlkrieg pasif aim 4, krach 3 sturmtruppe zırhlı hedeflere (araçlar, zırh giyenler, augmentli uzuvlar) isabet eden atışlarında yara 1 kademe fazla ilerler. ayrıca zırhlı hedeflere yapılan atışlarda eşik bir kademe düşer. çelik de etten farksızdır, nereye vuracağını biliyorsan."
+  },
+  "snipe": {
+   "key": "snipe",
+   "name": "Snipe",
+   "tree": "stahlkrieg",
+   "type": "Aktif",
+   "requirementText": "Aim 3",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "aim",
+     "min": 3
+    }
+   ],
+   "maxLevel": 3,
+   "prerequisite": null,
+   "branch": "A",
+   "branchName": "Scharfschütze",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Bir tur nişan alırsın. Sonraki atışın +2 Aim alır ve isabet ederse vurduğun uzvu sen seçersin."
+    },
+    {
+     "level": 2,
+     "html": "+3 Aim. İsabette yara 1 kademe fazla ilerler."
+    },
+    {
+     "level": 3,
+     "html": "+4 Aim. Bu atışta doğal 18 ve 19 sonuçları da Nat20 sayılır."
+    }
+   ],
+   "sections": [
+    {
+     "key": "NOT",
+     "label": "Not",
+     "html": "<p>Nişan alırken hasar alırsan bonus kaybolur.</p>"
+    }
+   ],
+   "synergies": [],
+   "flavorHtml": "<p>Bir nefes, bir tetik, bir ceset.</p>",
+   "searchText": "snipe stahlkrieg aktif aim 3 scharfschütze bir tur nişan alırsın. sonraki atışın +2 aim alır ve isabet ederse vurduğun uzvu sen seçersin. +3 aim. isabette yara 1 kademe fazla ilerler. +4 aim. bu atışta doğal 18 ve 19 sonuçları da nat20 sayılır. nişan alırken hasar alırsan bonus kaybolur. bir nefes, bir tetik, bir ceset."
+  },
+  "zweihandler": {
+   "key": "zweihandler",
+   "name": "Zweihandler",
+   "tree": "stahlkrieg",
+   "type": "Aktif",
+   "requirementText": "Aim 3, Agil 2",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "aim",
+     "min": 3
+    },
+    {
+     "kind": "stat",
+     "stat": "agil",
+     "min": 2
+    }
+   ],
+   "maxLevel": 3,
+   "prerequisite": null,
+   "branch": "B",
+   "branchName": "Sturmtruppe",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "İki tek elli silahla aynı turda iki atış yaparsın; her silah için ayrı isabet zarı atılır. Her iki zara -4."
+    },
+    {
+     "level": 2,
+     "html": "Ceza -2."
+    },
+    {
+     "level": 3,
+     "html": "Ceza yoktur."
+    }
+   ],
+   "sections": [
+    {
+     "key": "NOT",
+     "label": "Not",
+     "html": "<p>İki elin de Kullanılamaz olmamalıdır. El ve kol yaralarının cezası ilgili silahın zarına uygulanır.</p>"
+    }
+   ],
+   "synergies": [],
+   "flavorHtml": "<p>Bir elinde Luger, diğerinde ne bulduysan.</p>",
+   "searchText": "zweihandler stahlkrieg aktif aim 3, agil 2 sturmtruppe iki tek elli silahla aynı turda iki atış yaparsın; her silah için ayrı isabet zarı atılır. her iki zara -4. ceza -2. ceza yoktur. iki elin de kullanılamaz olmamalıdır. el ve kol yaralarının cezası ilgili silahın zarına uygulanır. bir elinde luger, diğerinde ne bulduysan."
+  },
+  "der-maulwurf": {
+   "key": "der-maulwurf",
+   "name": "Der Maulwurf",
+   "tree": "spionage",
+   "type": "Pasif",
+   "requirementText": "Leis 7, Rede 5, Sv 7",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "leis",
+     "min": 7
+    },
+    {
+     "kind": "stat",
+     "stat": "rede",
+     "min": 5
+    },
+    {
+     "kind": "level",
+     "min": 7
+    }
+   ],
+   "maxLevel": 1,
+   "prerequisite": "the-great-pretender",
+   "branch": "B",
+   "branchName": "Maske",
+   "levelEffects": [],
+   "sections": [
+    {
+     "key": "ETKİ",
+     "label": "Etki",
+     "html": "<p>GM ile birlikte bir faksiyonda kalıcı bir sahte kimlik kurarsın (isim, rütbe, geçmiş). Bu kimlikle seans başına 1 kez bir kimlik kontrolünü veya sorgulamayı zarsız geçersin ve GM takdiriyle o faksiyonun iç bilgilerine (emirler, devriye düzenleri) erişirsin.</p>"
+    },
+    {
+     "key": "BEDEL",
+     "label": "Bedel",
+     "html": "<p>Kimliğin açığa çıkarsa o faksiyona karşı kalıcı olarak Gesucht perkinin etkisini alırsın.</p>"
+    }
+   ],
+   "synergies": [],
+   "flavorHtml": "<p>Yıllardır onlardan biri. Kimse sormuyor; kimse bilmiyor.</p>",
+   "searchText": "der maulwurf spionage pasif leis 7, rede 5, sv 7 maske gm ile birlikte bir faksiyonda kalıcı bir sahte kimlik kurarsın (isim, rütbe, geçmiş). bu kimlikle seans başına 1 kez bir kimlik kontrolünü veya sorgulamayı zarsız geçersin ve gm takdiriyle o faksiyonun iç bilgilerine (emirler, devriye düzenleri) erişirsin. kimliğin açığa çıkarsa o faksiyona karşı kalıcı olarak gesucht perkinin etkisini alırsın. yıllardır onlardan biri. kimse sormuyor; kimse bilmiyor."
+  },
+  "dunkelhand": {
+   "key": "dunkelhand",
+   "name": "Dunkelhand",
+   "tree": "spionage",
+   "type": "Aktif",
+   "requirementText": "Yok",
+   "requirements": [],
+   "maxLevel": 2,
+   "prerequisite": null,
+   "branch": "B",
+   "branchName": "Maske",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Yankesicilik ve çalma için atılan Leis zarlarında eşik bir kademe düşer."
+    },
+    {
+     "level": 2,
+     "html": "Aynı aksiyonla hedefin üzerine küçük bir nesne de bırakabilirsin. Başarısız olsan bile hedef, kimin denediğini anlamak için Zor bir Sicht zarı atmalıdır."
+    }
+   ],
+   "sections": [],
+   "synergies": [],
+   "flavorHtml": "<p>Cüzdan, anahtar, mühür. Ya da bir cebe sıkıştırılmış suç delili.</p>",
+   "searchText": "dunkelhand spionage aktif yok maske yankesicilik ve çalma için atılan leis zarlarında eşik bir kademe düşer. aynı aksiyonla hedefin üzerine küçük bir nesne de bırakabilirsin. başarısız olsan bile hedef, kimin denediğini anlamak için zor bir sicht zarı atmalıdır. cüzdan, anahtar, mühür. ya da bir cebe sıkıştırılmış suç delili."
+  },
+  "giftmischer": {
+   "key": "giftmischer",
+   "name": "Giftmischer",
+   "tree": "spionage",
+   "type": "Aktif",
+   "requirementText": "Leis 5, Wissen 3",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "leis",
+     "min": 5
+    },
+    {
+     "kind": "stat",
+     "stat": "wissen",
+     "min": 3
+    }
+   ],
+   "maxLevel": 3,
+   "prerequisite": "throwing-expertise",
+   "branch": "A",
+   "branchName": "Schatten",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Uzun dinlenmede malzeme harcayarak 1 doz zehir hazırlarsın (d20 + Wissen ≥ Orta). Zehirli silahla isabet alan hedefin yarası 2 tur boyunca her tur sonunda 1 kademe ilerler."
+    },
+    {
+     "level": 2,
+     "html": "2 doz hazırlarsın ya da bayıltıcı zehir yaparsın: hedef d20 + Korp ≥ Zor atamazsa 1 sahne baygın kalır."
+    },
+    {
+     "level": 3,
+     "html": "Zehri yiyecek veya içeceğe karıştırabilirsin; fark etmek için Çok Zor bir Sicht zarı gerekir."
+    }
+   ],
+   "sections": [
+    {
+     "key": "SİNERJİ",
+     "label": "Sinerji",
+     "html": "<p><strong><a href=\"@/kurallar/yetenekler/wunderwaffe#kriegssheilung\">Kriegssheilung</a></strong> ile: Panzehir üretebilirsin; zehirli yaralar 1 kademe az ilerler.</p>"
+    }
+   ],
+   "synergies": [
+    "kriegssheilung"
+   ],
+   "flavorHtml": "<p>Bıçak bir kez keser. Zehir işini yavaş yapar.</p>",
+   "searchText": "giftmischer spionage aktif leis 5, wissen 3 schatten uzun dinlenmede malzeme harcayarak 1 doz zehir hazırlarsın (d20 + wissen ≥ orta). zehirli silahla isabet alan hedefin yarası 2 tur boyunca her tur sonunda 1 kademe ilerler. 2 doz hazırlarsın ya da bayıltıcı zehir yaparsın: hedef d20 + korp ≥ zor atamazsa 1 sahne baygın kalır. zehri yiyecek veya içeceğe karıştırabilirsin; fark etmek için çok zor bir sicht zarı gerekir. kriegssheilung ile: panzehir üretebilirsin; zehirli yaralar 1 kademe az ilerler. bıçak bir kez keser. zehir işini yavaş yapar."
+  },
+  "saboteur": {
+   "key": "saboteur",
+   "name": "Saboteur",
+   "tree": "spionage",
+   "type": "Aktif",
+   "requirementText": "Leis 5, Werk 3",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "leis",
+     "min": 5
+    },
+    {
+     "kind": "stat",
+     "stat": "werk",
+     "min": 3
+    }
+   ],
+   "maxLevel": 2,
+   "prerequisite": "dunkelhand",
+   "branch": "B′",
+   "branchName": "Sabotage",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Fark edilmeden bir araca, silaha veya makineye sabotaj yaparsın: d20 + Leis ≥ Orta (nöbetçi veya alarm varsa Zor). Arıza GM'in belirlediği uygun bir anda ortaya çıkar (motor durur, silah tutukluk yapar)."
+    },
+    {
+     "level": 2,
+     "html": "Arızanın anını sen belirlersin (ör. ilk atışta, köprünün ortasında). Sabotajı fark etmek için Çok Zor bir Werk zarı gerekir."
+    }
+   ],
+   "sections": [
+    {
+     "key": "SİNERJİ",
+     "label": "Sinerji",
+     "html": "<p><strong><a href=\"@/kurallar/yetenekler/wunderwaffe#maschinengehirn\">Maschinengehirn</a></strong> ile: Sabotaj zarlarında eşik bir kademe düşer.</p>"
+    }
+   ],
+   "synergies": [
+    "maschinengehirn"
+   ],
+   "flavorHtml": "<p>Bir somun eksik, bir kablo gevşek. Gerisini kader halleder.</p>",
+   "searchText": "saboteur spionage aktif leis 5, werk 3 sabotage fark edilmeden bir araca, silaha veya makineye sabotaj yaparsın: d20 + leis ≥ orta (nöbetçi veya alarm varsa zor). arıza gm'in belirlediği uygun bir anda ortaya çıkar (motor durur, silah tutukluk yapar). arızanın anını sen belirlersin (ör. ilk atışta, köprünün ortasında). sabotajı fark etmek için çok zor bir werk zarı gerekir. maschinengehirn ile: sabotaj zarlarında eşik bir kademe düşer. bir somun eksik, bir kablo gevşek. gerisini kader halleder."
+  },
+  "silent-step-low-profile": {
+   "key": "silent-step-low-profile",
+   "name": "Silent Step, Low Profile",
+   "tree": "spionage",
+   "type": "Pasif",
+   "requirementText": "Yok",
+   "requirements": [],
+   "maxLevel": 3,
+   "prerequisite": null,
+   "branch": "Kök",
+   "branchName": "Kök",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Gizli hareket için atılan Leis zarlarına +1."
+    },
+    {
+     "level": 2,
+     "html": "+2."
+    },
+    {
+     "level": 3,
+     "html": "+3. Fark edildiğinde sahne başına 1 kez gizlilik zarını yeniden atabilirsin."
+    }
+   ],
+   "sections": [
+    {
+     "key": "SİNERJİ",
+     "label": "Sinerji",
+     "html": "<p><strong><a href=\"@/kurallar/yetenekler/stahlkrieg#lauerstellung\">Lauerstellung</a></strong> ile: Atıştan sonra aynı tur içinde fark edilmeden yer değiştirebilirsin.</p>"
+    }
+   ],
+   "synergies": [
+    "lauerstellung"
+   ],
+   "flavorHtml": "<p>Gölgeden gölgeye. Kimse seni görmedi, kimse seni hatırlamayacak.</p>",
+   "searchText": "silent step, low profile spionage pasif yok kök gizli hareket için atılan leis zarlarına +1. +2. +3. fark edildiğinde sahne başına 1 kez gizlilik zarını yeniden atabilirsin. lauerstellung ile: atıştan sonra aynı tur içinde fark edilmeden yer değiştirebilirsin. gölgeden gölgeye. kimse seni görmedi, kimse seni hatırlamayacak."
+  },
+  "silent-takedown": {
+   "key": "silent-takedown",
+   "name": "Silent Takedown",
+   "tree": "spionage",
+   "type": "Aktif",
+   "requirementText": "Leis 7, Agil 4, Sv 6",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "leis",
+     "min": 7
+    },
+    {
+     "kind": "stat",
+     "stat": "agil",
+     "min": 4
+    },
+    {
+     "kind": "level",
+     "min": 6
+    }
+   ],
+   "maxLevel": 2,
+   "prerequisite": "giftmischer",
+   "branch": "A",
+   "branchName": "Schatten",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Fark edilmemişken yakın mesafedeki bir hedefi tek aksiyonla sessizce etkisiz bırakırsın. d20 + Leis ≥ eşik: Sivil Kolay / Asker Orta / Elit Zor / Augmentli Çok Zor. Başarısızlıkta hedef Hafif Yaralı olur ve alarm verebilir."
+    },
+    {
+     "level": 2,
+     "html": "Eşik bir kademe düşer. Başarısızlıkta hedef bir tur boyunca bağıramaz."
+    }
+   ],
+   "sections": [],
+   "synergies": [],
+   "flavorHtml": "<p>Ne bir çığlık, ne bir kurşun. Sadece yere yatırılan bir beden.</p>",
+   "searchText": "silent takedown spionage aktif leis 7, agil 4, sv 6 schatten fark edilmemişken yakın mesafedeki bir hedefi tek aksiyonla sessizce etkisiz bırakırsın. d20 + leis ≥ eşik: sivil kolay / asker orta / elit zor / augmentli çok zor. başarısızlıkta hedef hafif yaralı olur ve alarm verebilir. eşik bir kademe düşer. başarısızlıkta hedef bir tur boyunca bağıramaz. ne bir çığlık, ne bir kurşun. sadece yere yatırılan bir beden."
+  },
+  "the-great-pretender": {
+   "key": "the-great-pretender",
+   "name": "The Great Pretender",
+   "tree": "spionage",
+   "type": "Aktif",
+   "requirementText": "Leis 4, Rede 3",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "leis",
+     "min": 4
+    },
+    {
+     "kind": "stat",
+     "stat": "rede",
+     "min": 3
+    }
+   ],
+   "maxLevel": 3,
+   "prerequisite": "dunkelhand",
+   "branch": "B",
+   "branchName": "Maske",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Başka birini taklit edebilirsin. Taklit zarı d20 + Leis ile atılır; seni sorgulayan biri Sicht ile karşı zar atabilir. Kıyafet, belge ve hazırlık gerekir."
+    },
+    {
+     "level": 2,
+     "html": "Yalnızca kıyafet yeterlidir."
+    },
+    {
+     "level": 3,
+     "html": "Hazırlıksız doğaçlama yapabilirsin. Seni sorgulayanların Sicht zarlarında eşik bir kademe yükselir."
+    }
+   ],
+   "sections": [],
+   "synergies": [],
+   "flavorHtml": "<p>Doğru üniforma, doğru selam, doğru aksan. Gerisi özgüven.</p>",
+   "searchText": "the great pretender spionage aktif leis 4, rede 3 maske başka birini taklit edebilirsin. taklit zarı d20 + leis ile atılır; seni sorgulayan biri sicht ile karşı zar atabilir. kıyafet, belge ve hazırlık gerekir. yalnızca kıyafet yeterlidir. hazırlıksız doğaçlama yapabilirsin. seni sorgulayanların sicht zarlarında eşik bir kademe yükselir. doğru üniforma, doğru selam, doğru aksan. gerisi özgüven."
+  },
+  "throwing-expertise": {
+   "key": "throwing-expertise",
+   "name": "Throwing Expertise",
+   "tree": "spionage",
+   "type": "Aktif",
+   "requirementText": "Leis 3",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "leis",
+     "min": 3
+    }
+   ],
+   "maxLevel": 2,
+   "prerequisite": null,
+   "branch": "A",
+   "branchName": "Schatten",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Keskin, fırlatılabilir silahlarla atışlarını Aim yerine Leis ile atabilirsin. Fark edilmemişken isabet edersen yara 1 kademe fazla ilerler."
+    },
+    {
+     "level": 2,
+     "html": "Atış sessizdir; çevredekiler fark etmek için Zor bir Sicht zarı atmalıdır."
+    }
+   ],
+   "sections": [
+    {
+     "key": "NOT",
+     "label": "Not",
+     "html": "<p>Fırlatılan silah geri toplanmalıdır.</p>"
+    }
+   ],
+   "synergies": [],
+   "flavorHtml": "<p>Bıçak ses çıkarmaz. Silah sesi ise herkesi uyandırır.</p>",
+   "searchText": "throwing expertise spionage aktif leis 3 schatten keskin, fırlatılabilir silahlarla atışlarını aim yerine leis ile atabilirsin. fark edilmemişken isabet edersen yara 1 kademe fazla ilerler. atış sessizdir; çevredekiler fark etmek için zor bir sicht zarı atmalıdır. fırlatılan silah geri toplanmalıdır. bıçak ses çıkarmaz. silah sesi ise herkesi uyandırır."
+  },
+  "authority-like-herr-a": {
+   "key": "authority-like-herr-a",
+   "name": "Authority like Herr A",
+   "tree": "diplomat",
+   "type": "Pasif",
+   "requirementText": "Yok",
+   "requirements": [],
+   "maxLevel": 1,
+   "prerequisite": null,
+   "branch": "A",
+   "branchName": "Demagog",
+   "levelEffects": [],
+   "sections": [],
+   "synergies": [],
+   "flavorHtml": "<p>Karşındaki kişiyi sözlerinle bastırıp ezmeni kolaylaştırır. (Sözlü Pres zarlarında ekstra +1 d20 zar bonusu)</p>",
+   "searchText": "authority like herr a diplomat pasif yok demagog karşındaki kişiyi sözlerinle bastırıp ezmeni kolaylaştırır. (sözlü pres zarlarında ekstra +1 d20 zar bonusu)"
+  },
+  "fahnentrager": {
+   "key": "fahnentrager",
+   "name": "Fahnenträger",
+   "tree": "diplomat",
+   "type": "Aktif",
+   "requirementText": "Rede 7, Sanita 5, Sv 7",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "rede",
+     "min": 7
+    },
+    {
+     "kind": "stat",
+     "stat": "sanita",
+     "min": 5
+    },
+    {
+     "kind": "level",
+     "min": 7
+    }
+   ],
+   "maxLevel": 1,
+   "prerequisite": "volksredner",
+   "branch": "A",
+   "branchName": "Demagog",
+   "levelEffects": [],
+   "sections": [
+    {
+     "key": "ETKİ",
+     "label": "Etki",
+     "html": "<p>Seans başına 1 kez bir kalabalığı, köy halkını veya küçük bir birliği (en fazla yaklaşık 30 kişi) bir amaç için harekete geçirirsin: ayaklanma, barikat, kaçış, bir saldırıya katılma. d20 + Rede ≥ Zor (kalabalık sana düşmansa Çok Zor). GM kalabalığı tek bir müttefik birim olarak oynatır.</p>"
+    },
+    {
+     "key": "BEDEL",
+     "label": "Bedel",
+     "html": "<p>Kalabalıktan her 5 kayıp için +1 Corruption.</p>"
+    },
+    {
+     "key": "SİNERJİ",
+     "label": "Sinerji",
+     "html": "<p><strong><a href=\"@/kurallar/yetenekler/diplomat#schlangenzunge\">Schlangenzunge</a></strong> ile: Kalabalığa söylenen büyük yalan sahne boyunca sorgulanmaz.</p>"
+    }
+   ],
+   "synergies": [
+    "schlangenzunge"
+   ],
+   "flavorHtml": "<p>Bayrağı kaldıran sensin. Arkandan gelenlerin kanı da senin.</p>",
+   "searchText": "fahnenträger diplomat aktif rede 7, sanita 5, sv 7 demagog seans başına 1 kez bir kalabalığı, köy halkını veya küçük bir birliği (en fazla yaklaşık 30 kişi) bir amaç için harekete geçirirsin: ayaklanma, barikat, kaçış, bir saldırıya katılma. d20 + rede ≥ zor (kalabalık sana düşmansa çok zor). gm kalabalığı tek bir müttefik birim olarak oynatır. kalabalıktan her 5 kayıp için +1 corruption. schlangenzunge ile: kalabalığa söylenen büyük yalan sahne boyunca sorgulanmaz. bayrağı kaldıran sensin. arkandan gelenlerin kanı da senin."
+  },
+  "geist-la-resistance": {
+   "key": "geist-la-resistance",
+   "name": "Geist la Resistance",
+   "tree": "diplomat",
+   "type": "Pasif",
+   "requirementText": "Yok",
+   "requirements": [],
+   "maxLevel": 1,
+   "prerequisite": null,
+   "branch": "Kök",
+   "branchName": "Kök",
+   "levelEffects": [],
+   "sections": [],
+   "synergies": [],
+   "flavorHtml": "<p>Direnişin ruhu senin içine işlemiş. Oyun boyunca “Sanita” zarlarını kaybetme durumunda aksiyonun sonuna kadar tekrardan “Sanita” zarı atma hakkına sahip olursun.</p>",
+   "searchText": "geist la resistance diplomat pasif yok kök direnişin ruhu senin içine işlemiş. oyun boyunca “sanita” zarlarını kaybetme durumunda aksiyonun sonuna kadar tekrardan “sanita” zarı atma hakkına sahip olursun."
+  },
+  "ihr-preis": {
+   "key": "ihr-preis",
+   "name": "Ihr Preis",
+   "tree": "diplomat",
+   "type": "Pasif",
+   "requirementText": "Yok",
+   "requirements": [],
+   "maxLevel": 3,
+   "prerequisite": null,
+   "branch": "B",
+   "branchName": "Unterhändler",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Rüşvet Bedeli: 100%, bedel GM tarafından role uygun belirlenir."
+    },
+    {
+     "level": 2,
+     "html": "Rüşvet Bedeli: 70%"
+    },
+    {
+     "level": 3,
+     "html": "Rüşvet Bedeli: 40%"
+    }
+   ],
+   "sections": [
+    {
+     "key": "HESAP",
+     "label": "Hesap",
+     "html": "<p><strong>Rüşvet Bedel hesabı: tens-d10+50</strong></p>"
+    }
+   ],
+   "synergies": [],
+   "flavorHtml": "<p>Herkesin bir bedeli vardır. Karşındaki kişiye rüşvet teklif etmen kolaylaşır. Bu yetenek son seviye iken rüşvet teklifi yüksek bedel karşılığında otomatik başarı ile kullanılabilir.</p>",
+   "searchText": "ihr preis diplomat pasif yok unterhändler rüşvet bedeli: 100%, bedel gm tarafından role uygun belirlenir. rüşvet bedeli: 70% rüşvet bedeli: 40% rüşvet bedel hesabı: tens-d10+50 herkesin bir bedeli vardır. karşındaki kişiye rüşvet teklif etmen kolaylaşır. bu yetenek son seviye iken rüşvet teklifi yüksek bedel karşılığında otomatik başarı ile kullanılabilir."
+  },
+  "schlangenzunge": {
+   "key": "schlangenzunge",
+   "name": "Schlangenzunge",
+   "tree": "diplomat",
+   "type": "Aktif",
+   "requirementText": "Rede 7, Sicht 4, Sv 6",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "rede",
+     "min": 7
+    },
+    {
+     "kind": "stat",
+     "stat": "sicht",
+     "min": 4
+    },
+    {
+     "kind": "level",
+     "min": 6
+    }
+   ],
+   "maxLevel": 2,
+   "prerequisite": "see-through-em",
+   "branch": "B",
+   "branchName": "Unterhändler",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Yalan söylerken d20 + Rede atarsın; karşı taraf Sicht ile karşı zar atar. Senin zarında eşik bir kademe düşer. Başarılı bir büyük yalan (GM onaylı), hedef açık bir kanıtla yüzleşene kadar kendiliğinden sorgulanmaz."
+    },
+    {
+     "level": 2,
+     "html": "Bir yalanın ortaya çıktığında, sahne başına 1 kez, d20 + Rede ≥ Zor atarak yeni bir yalanla durumu kurtarabilirsin."
+    }
+   ],
+   "sections": [
+    {
+     "key": "BEDEL",
+     "label": "Bedel",
+     "html": "<p>Kurtarma zarı başarısız olursa hedef sana artık güvenmez: sahne sonuna kadar o hedefe karşı tüm Rede zarlarına -3.</p>"
+    },
+    {
+     "key": "SİNERJİ",
+     "label": "Sinerji",
+     "html": "<p><strong><a href=\"@/kurallar/yetenekler/diplomat#fahnentrager\">Fahnenträger</a></strong> ile: Kalabalığa söylenen büyük yalan sahne boyunca sorgulanmaz.</p>"
+    }
+   ],
+   "synergies": [
+    "fahnentrager"
+   ],
+   "flavorHtml": "<p>Bir yılan gibi yalan söylersin. Doğru kelime, doğru zamanda, doğru tonla. Gerçek ise ancak çok geç olduğunda ortaya çıkar.</p>",
+   "searchText": "schlangenzunge diplomat aktif rede 7, sicht 4, sv 6 unterhändler yalan söylerken d20 + rede atarsın; karşı taraf sicht ile karşı zar atar. senin zarında eşik bir kademe düşer. başarılı bir büyük yalan (gm onaylı), hedef açık bir kanıtla yüzleşene kadar kendiliğinden sorgulanmaz. bir yalanın ortaya çıktığında, sahne başına 1 kez, d20 + rede ≥ zor atarak yeni bir yalanla durumu kurtarabilirsin. kurtarma zarı başarısız olursa hedef sana artık güvenmez: sahne sonuna kadar o hedefe karşı tüm rede zarlarına -3. fahnenträger ile: kalabalığa söylenen büyük yalan sahne boyunca sorgulanmaz. bir yılan gibi yalan söylersin. doğru kelime, doğru zamanda, doğru tonla. gerçek ise ancak çok geç olduğunda ortaya çıkar."
+  },
+  "see-through-em": {
+   "key": "see-through-em",
+   "name": "See Through'em",
+   "tree": "diplomat",
+   "type": "Aktif",
+   "requirementText": "Rede 3, Sicht 2",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "rede",
+     "min": 3
+    },
+    {
+     "kind": "stat",
+     "stat": "sicht",
+     "min": 2
+    }
+   ],
+   "maxLevel": 3,
+   "prerequisite": "ihr-preis",
+   "branch": "B",
+   "branchName": "Unterhändler",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Konuştuğun bir kişiyi okumaya çalışırsın: d20 + Rede veya Sicht (hangisi yüksekse) ≥ Orta. Başarıda GM, hedefin o anki duygusu veya niyeti hakkında 1 doğru bilgi verir."
+    },
+    {
+     "level": 2,
+     "html": "Başarıda 2 bilgi alırsın. Hedef sana yalan söylüyorsa bunu fark edersin (hedef yalan için zar attıysa sonuçları karşılaştırılır)."
+    },
+    {
+     "level": 3,
+     "html": "Eşik bir kademe düşer. Başarıda hedefin bir zaafını da öğrenirsin (korku, para, sadakat, gurur…); bu hedefe karşı atacağın bir sonraki Rede zarına +2."
+    }
+   ],
+   "sections": [],
+   "synergies": [],
+   "flavorHtml": "<p>Titreyen bir göz kapağı, fazla uzun bir sessizlik, yanlış yere kayan bir bakış. İnsanlar konuşmadan önce çoktan her şeyi söylemiştir.</p>",
+   "searchText": "see through'em diplomat aktif rede 3, sicht 2 unterhändler konuştuğun bir kişiyi okumaya çalışırsın: d20 + rede veya sicht (hangisi yüksekse) ≥ orta. başarıda gm, hedefin o anki duygusu veya niyeti hakkında 1 doğru bilgi verir. başarıda 2 bilgi alırsın. hedef sana yalan söylüyorsa bunu fark edersin (hedef yalan için zar attıysa sonuçları karşılaştırılır). eşik bir kademe düşer. başarıda hedefin bir zaafını da öğrenirsin (korku, para, sadakat, gurur…); bu hedefe karşı atacağın bir sonraki rede zarına +2. titreyen bir göz kapağı, fazla uzun bir sessizlik, yanlış yere kayan bir bakış. insanlar konuşmadan önce çoktan her şeyi söylemiştir."
+  },
+  "verhormeister": {
+   "key": "verhormeister",
+   "name": "Verhörmeister",
+   "tree": "diplomat",
+   "type": "Aktif",
+   "requirementText": "Rede 5, Wissen 3",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "rede",
+     "min": 5
+    },
+    {
+     "kind": "stat",
+     "stat": "wissen",
+     "min": 3
+    }
+   ],
+   "maxLevel": 2,
+   "prerequisite": "ihr-preis",
+   "branch": "B′",
+   "branchName": "Verhör",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Etkisiz bir kişiyi sorgularsın: d20 + Rede ≥ eşik (sivil Kolay, asker Orta, subay veya elit Zor). Başarıda GM bir soruna doğru cevap verir; başarısızlıkta hedef sahne boyunca hiçbir şey söylemez."
+    },
+    {
+     "level": 2,
+     "html": "Başarıda 2 soru sorarsın; hedef yalan söylerse fark edersin."
+    }
+   ],
+   "sections": [
+    {
+     "key": "NOT",
+     "label": "Not",
+     "html": "<p>Bu yetenek baskı, pazarlık ve psikolojiyle çalışır; fiziksel işkence içermez.</p>"
+    },
+    {
+     "key": "SİNERJİ",
+     "label": "Sinerji",
+     "html": "<p><strong><a href=\"@/kurallar/yetenekler/schwarzesonne#extracio-aus-ss\">Extracio Aus SS</a></strong> ile: Ölüden öğrenilen bilgiyle sorgulanan kişinin zarlarına -2.</p>"
+    }
+   ],
+   "synergies": [
+    "extracio-aus-ss"
+   ],
+   "flavorHtml": "<p>Herkes konuşur. Mesele, neyi ne zaman söyleyeceği.</p>",
+   "searchText": "verhörmeister diplomat aktif rede 5, wissen 3 verhör etkisiz bir kişiyi sorgularsın: d20 + rede ≥ eşik (sivil kolay, asker orta, subay veya elit zor). başarıda gm bir soruna doğru cevap verir; başarısızlıkta hedef sahne boyunca hiçbir şey söylemez. başarıda 2 soru sorarsın; hedef yalan söylerse fark edersin. bu yetenek baskı, pazarlık ve psikolojiyle çalışır; fiziksel işkence içermez. extracio aus ss ile: ölüden öğrenilen bilgiyle sorgulanan kişinin zarlarına -2. herkes konuşur. mesele, neyi ne zaman söyleyeceği."
+  },
+  "volksredner": {
+   "key": "volksredner",
+   "name": "Volksredner",
+   "tree": "diplomat",
+   "type": "Aktif",
+   "requirementText": "Rede 5, Sanita 3",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "rede",
+     "min": 5
+    },
+    {
+     "kind": "stat",
+     "stat": "sanita",
+     "min": 3
+    }
+   ],
+   "maxLevel": 3,
+   "prerequisite": "authority-like-herr-a",
+   "branch": "A",
+   "branchName": "Demagog",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Bir tur harcayarak müttefiklerine seslenirsin: d20 + Rede ≥ Orta. Başarıda seni duyan müttefiklerin Cower durumu sona erer."
+    },
+    {
+     "level": 2,
+     "html": "Ayrıca müttefiklerin bir sonraki zarına +1."
+    },
+    {
+     "level": 3,
+     "html": "+2. Sahne başına 1 kez tur harcamaz."
+    }
+   ],
+   "sections": [
+    {
+     "key": "SİNERJİ",
+     "label": "Sinerji",
+     "html": "<p><strong><a href=\"@/kurallar/yetenekler/stahlkrieg#feuerleitung\">Feuerleitung</a></strong> ile: İşaretli hedefe saldıran müttefiklerin Cower durumu sona erer.</p>"
+    }
+   ],
+   "synergies": [
+    "feuerleitung"
+   ],
+   "flavorHtml": "<p>Doğru sözler, doğru anda. Korku dağılır.</p>",
+   "searchText": "volksredner diplomat aktif rede 5, sanita 3 demagog bir tur harcayarak müttefiklerine seslenirsin: d20 + rede ≥ orta. başarıda seni duyan müttefiklerin cower durumu sona erer. ayrıca müttefiklerin bir sonraki zarına +1. +2. sahne başına 1 kez tur harcamaz. feuerleitung ile: işaretli hedefe saldıran müttefiklerin cower durumu sona erer. doğru sözler, doğru anda. korku dağılır."
+  },
+  "aryan-cryptology": {
+   "key": "aryan-cryptology",
+   "name": "Aryan Cryptology",
+   "tree": "wunderwaffe",
+   "type": "Aktif",
+   "requirementText": "Werk 7, Wissen 4, Sv 6",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "werk",
+     "min": 7
+    },
+    {
+     "kind": "stat",
+     "stat": "wissen",
+     "min": 4
+    },
+    {
+     "kind": "level",
+     "min": 6
+    }
+   ],
+   "maxLevel": 2,
+   "prerequisite": "kriegssheilung",
+   "branch": "B",
+   "branchName": "Labor",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Şifreli SS bilim metinlerini çözebilirsin (d20 + Werk ≥ Zor). Başarı, GM'in belirlediği bir sır, plan veya teknik veri verir."
+    },
+    {
+     "level": 2,
+     "html": "Çözdüğün plandan, <a href=\"@/kurallar/yetenekler/wunderwaffe#kriegsengineer\">Kriegsengineer</a> Seviye 3'e sahipsen, GM onayıyla prototip bir augment veya Wunderwaffe üretebilirsin."
+    }
+   ],
+   "sections": [
+    {
+     "key": "BEDEL",
+     "label": "Bedel",
+     "html": "<p>Uber eşikli metinleri çözmek zihni kemirir: her başarılı çözümde +1 Corruption.</p>"
+    }
+   ],
+   "synergies": [],
+   "flavorHtml": "<p>Rünler, formüller ve deliliğin sınırında yazılmış notlar. Hepsi bir yere çıkıyor.</p>",
+   "searchText": "aryan cryptology wunderwaffe aktif werk 7, wissen 4, sv 6 labor şifreli ss bilim metinlerini çözebilirsin (d20 + werk ≥ zor). başarı, gm'in belirlediği bir sır, plan veya teknik veri verir. çözdüğün plandan, kriegsengineer seviye 3'e sahipsen, gm onayıyla prototip bir augment veya wunderwaffe üretebilirsin. uber eşikli metinleri çözmek zihni kemirir: her başarılı çözümde +1 corruption. rünler, formüller ve deliliğin sınırında yazılmış notlar. hepsi bir yere çıkıyor."
+  },
+  "eiserner-kamerad": {
+   "key": "eiserner-kamerad",
+   "name": "Eiserner Kamerad",
+   "tree": "wunderwaffe",
+   "type": "Aktif",
+   "requirementText": "Werk 7, Wissen 4, Sv 7",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "werk",
+     "min": 7
+    },
+    {
+     "kind": "stat",
+     "stat": "wissen",
+     "min": 4
+    },
+    {
+     "kind": "level",
+     "min": 7
+    }
+   ],
+   "maxLevel": 1,
+   "prerequisite": "sprengmeister",
+   "branch": "A",
+   "branchName": "Maschinen",
+   "levelEffects": [],
+   "sections": [
+    {
+     "key": "ETKİ",
+     "label": "Etki",
+     "html": "<p>Kampanya başına 1 kez, malzeme ve atölye ile küçük bir savaş otomatonu kurarsın. Otomaton tüm stat'ları 3, Aim ve Korp'u 5 olan bir müttefiktir; konuşamaz, basit komutlara uyar. Komut vermek senin aksiyonunu harcar. Hasar alınca Kriegsengineer ile tamir edilebilir.</p>"
+    },
+    {
+     "key": "BEDEL",
+     "label": "Bedel",
+     "html": "<p>Otomaton Akku ile çalışır: seans başına 3 sahne aktif kalır ve yalnızca şebeke elektriği olan bir yerde dolar.</p>"
+    },
+    {
+     "key": "SİNERJİ",
+     "label": "Sinerji",
+     "html": "<p><strong><a href=\"@/kurallar/yetenekler/metallkorp#schnittstelle\">Schnittstelle</a></strong> ile: Otomatonu augmentinle yönetirsin; komut vermek aksiyon harcamaz.</p>"
+    }
+   ],
+   "synergies": [
+    "schnittstelle"
+   ],
+   "flavorHtml": "<p>Speer'in hücrelerinden çıkmış bir parça. Artık senin sesine itaat ediyor.</p>",
+   "searchText": "eiserner kamerad wunderwaffe aktif werk 7, wissen 4, sv 7 maschinen kampanya başına 1 kez, malzeme ve atölye ile küçük bir savaş otomatonu kurarsın. otomaton tüm stat'ları 3, aim ve korp'u 5 olan bir müttefiktir; konuşamaz, basit komutlara uyar. komut vermek senin aksiyonunu harcar. hasar alınca kriegsengineer ile tamir edilebilir. otomaton akku ile çalışır: seans başına 3 sahne aktif kalır ve yalnızca şebeke elektriği olan bir yerde dolar. schnittstelle ile: otomatonu augmentinle yönetirsin; komut vermek aksiyon harcamaz. speer'in hücrelerinden çıkmış bir parça. artık senin sesine itaat ediyor."
+  },
+  "knowledge-of-future": {
+   "key": "knowledge-of-future",
+   "name": "Knowledge of Future",
+   "tree": "wunderwaffe",
+   "type": "Pasif",
+   "requirementText": "Yok",
+   "requirements": [],
+   "maxLevel": 2,
+   "prerequisite": null,
+   "branch": "B",
+   "branchName": "Labor",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Bilinmeyen veya deneysel (Wunderwaffe) cihazları tanımlarken Werk ile Wissen'den yüksek olanı kullanırsın."
+    },
+    {
+     "level": 2,
+     "html": "Bu cihazların tanımlama ve ilk kullanım zarlarında eşik bir kademe düşer."
+    }
+   ],
+   "sections": [],
+   "synergies": [],
+   "flavorHtml": "<p>Bu makinelerin bazıları henüz icat edilmemiş olmalıydı. Sen yine de nasıl çalıştıklarını anlıyorsun.</p>",
+   "searchText": "knowledge of future wunderwaffe pasif yok labor bilinmeyen veya deneysel (wunderwaffe) cihazları tanımlarken werk ile wissen'den yüksek olanı kullanırsın. bu cihazların tanımlama ve ilk kullanım zarlarında eşik bir kademe düşer. bu makinelerin bazıları henüz icat edilmemiş olmalıydı. sen yine de nasıl çalıştıklarını anlıyorsun."
+  },
+  "kriegsengineer": {
+   "key": "kriegsengineer",
+   "name": "Kriegsengineer",
+   "tree": "wunderwaffe",
+   "type": "Aktif",
+   "requirementText": "Yok",
+   "requirements": [],
+   "maxLevel": 3,
+   "prerequisite": null,
+   "branch": "Kök",
+   "branchName": "Kök",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Çatışma dışında bozuk veya Kullanılamaz durumdaki ekipmanı tamir edebilirsin (d20 + Werk, eşik hasara göre GM tarafından belirlenir)."
+    },
+    {
+     "level": 2,
+     "html": "Çatışma içinde 1 tur harcayarak tamir yapabilirsin."
+    },
+    {
+     "level": 3,
+     "html": "Augmentleri de tamir edebilirsin. Tüm tamir zarlarına +2."
+    }
+   ],
+   "sections": [
+    {
+     "key": "NOT",
+     "label": "Not",
+     "html": "<p>Bu yetenek olmadan çatışma içinde yapılan tamirlerde eşik iki kademe yükselir.</p>"
+    },
+    {
+     "key": "SİNERJİ",
+     "label": "Sinerji",
+     "html": "<p><strong><a href=\"@/kurallar/yetenekler/metallkorp#ersatzteil\">Ersatzteil</a></strong> ile: Takım arkadaşının augmentini de sahada söküp takabilirsin.</p>"
+    }
+   ],
+   "synergies": [
+    "ersatzteil"
+   ],
+   "flavorHtml": "<p>Kurşunlar başının üstünden geçerken bile somun sıkmayı bilirsin.</p>",
+   "searchText": "kriegsengineer wunderwaffe aktif yok kök çatışma dışında bozuk veya kullanılamaz durumdaki ekipmanı tamir edebilirsin (d20 + werk, eşik hasara göre gm tarafından belirlenir). çatışma içinde 1 tur harcayarak tamir yapabilirsin. augmentleri de tamir edebilirsin. tüm tamir zarlarına +2. bu yetenek olmadan çatışma içinde yapılan tamirlerde eşik iki kademe yükselir. ersatzteil ile: takım arkadaşının augmentini de sahada söküp takabilirsin. kurşunlar başının üstünden geçerken bile somun sıkmayı bilirsin."
+  },
+  "kriegssheilung": {
+   "key": "kriegssheilung",
+   "name": "Kriegssheilung",
+   "tree": "wunderwaffe",
+   "type": "Pasif",
+   "requirementText": "Werk 3, Wissen 2",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "werk",
+     "min": 3
+    },
+    {
+     "kind": "stat",
+     "stat": "wissen",
+     "min": 2
+    }
+   ],
+   "maxLevel": 2,
+   "prerequisite": "knowledge-of-future",
+   "branch": "B",
+   "branchName": "Labor",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Başkalarına uyguladığın sargılarda Sargılı (Temiz) cezası Eski Hali/2 yerine Eski Hali/3 olur (aşağı yuvarla)."
+    },
+    {
+     "level": 2,
+     "html": "Çatışma dışında, malzeme harcayarak d20 + Werk ≥ Zor atarsan bir uzvun yara kademesini 1 düşürürsün. Hasta başına seans başına 1 kez."
+    }
+   ],
+   "sections": [
+    {
+     "key": "SİNERJİ",
+     "label": "Sinerji",
+     "html": "<p><strong><a href=\"@/kurallar/yetenekler/spionage#giftmischer\">Giftmischer</a></strong> ile: Panzehir üretebilirsin; zehirli yaralar 1 kademe az ilerler.</p>"
+    }
+   ],
+   "synergies": [
+    "giftmischer"
+   ],
+   "flavorHtml": "<p>Sahra hastanesi yok, bir çanta ve iki elin var. Yeterli.</p>",
+   "searchText": "kriegssheilung wunderwaffe pasif werk 3, wissen 2 labor başkalarına uyguladığın sargılarda sargılı (temiz) cezası eski hali/2 yerine eski hali/3 olur (aşağı yuvarla). çatışma dışında, malzeme harcayarak d20 + werk ≥ zor atarsan bir uzvun yara kademesini 1 düşürürsün. hasta başına seans başına 1 kez. giftmischer ile: panzehir üretebilirsin; zehirli yaralar 1 kademe az ilerler. sahra hastanesi yok, bir çanta ve iki elin var. yeterli."
+  },
+  "maschinengehirn": {
+   "key": "maschinengehirn",
+   "name": "Maschinengehirn",
+   "tree": "wunderwaffe",
+   "type": "Pasif",
+   "requirementText": "Werk 4",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "werk",
+     "min": 4
+    }
+   ],
+   "maxLevel": 2,
+   "prerequisite": null,
+   "branch": "A",
+   "branchName": "Maschinen",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Makine, robot ve augmentli hedeflerin zayıf noktalarını tespit etmek için Sicht yerine Werk kullanırsın. Tespit ettiğin hedefe ilk isabetinde yara 1 kademe fazla ilerler."
+    },
+    {
+     "level": 2,
+     "html": "Kullandığın silah ve cihazlarla atılan tüm zarlara +1."
+    }
+   ],
+   "sections": [
+    {
+     "key": "SİNERJİ",
+     "label": "Sinerji",
+     "html": "<p><strong><a href=\"@/kurallar/yetenekler/spionage#saboteur\">Saboteur</a></strong> ile: Sabotaj zarlarında eşik bir kademe düşer.</p>"
+    }
+   ],
+   "synergies": [
+    "saboteur"
+   ],
+   "flavorHtml": "<p>Makinelerin dilini konuşursun. Kullandığın silahlar kendi uzvunmuşçasına hareket eder.</p>",
+   "searchText": "maschinengehirn wunderwaffe pasif werk 4 maschinen makine, robot ve augmentli hedeflerin zayıf noktalarını tespit etmek için sicht yerine werk kullanırsın. tespit ettiğin hedefe ilk isabetinde yara 1 kademe fazla ilerler. kullandığın silah ve cihazlarla atılan tüm zarlara +1. saboteur ile: sabotaj zarlarında eşik bir kademe düşer. makinelerin dilini konuşursun. kullandığın silahlar kendi uzvunmuşçasına hareket eder."
+  },
+  "panzerschrauber": {
+   "key": "panzerschrauber",
+   "name": "Panzerschrauber",
+   "tree": "wunderwaffe",
+   "type": "Pasif",
+   "requirementText": "Werk 5, Agil 3",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "werk",
+     "min": 5
+    },
+    {
+     "kind": "stat",
+     "stat": "agil",
+     "min": 3
+    }
+   ],
+   "maxLevel": 2,
+   "prerequisite": "maschinengehirn",
+   "branch": "A′",
+   "branchName": "Fahrzeug",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Askerî araç (kamyon, zırhlı araç, tank) kullanırken sürüş zarlarında eşik bir kademe düşer. Çatışma içinde 1 tur harcayarak araçtaki bir arızayı geçici olarak giderirsin."
+    },
+    {
+     "level": 2,
+     "html": "Araç silahlarıyla yaptığın atışlarda Aim yerine Werk kullanabilirsin. Aracın aldığı hasar 1 kademe az ilerler."
+    }
+   ],
+   "sections": [],
+   "synergies": [],
+   "flavorHtml": "<p>Yağ, ter ve Gletschmetall. Motorun sesinden neyin bozuk olduğunu bilirsin.</p>",
+   "searchText": "panzerschrauber wunderwaffe pasif werk 5, agil 3 fahrzeug askerî araç (kamyon, zırhlı araç, tank) kullanırken sürüş zarlarında eşik bir kademe düşer. çatışma içinde 1 tur harcayarak araçtaki bir arızayı geçici olarak giderirsin. araç silahlarıyla yaptığın atışlarda aim yerine werk kullanabilirsin. aracın aldığı hasar 1 kademe az ilerler. yağ, ter ve gletschmetall. motorun sesinden neyin bozuk olduğunu bilirsin."
+  },
+  "sprengmeister": {
+   "key": "sprengmeister",
+   "name": "Sprengmeister",
+   "tree": "wunderwaffe",
+   "type": "Aktif",
+   "requirementText": "Werk 5, Agil 2",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "werk",
+     "min": 5
+    },
+    {
+     "kind": "stat",
+     "stat": "agil",
+     "min": 2
+    }
+   ],
+   "maxLevel": 3,
+   "prerequisite": "maschinengehirn",
+   "branch": "A",
+   "branchName": "Maschinen",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Malzemeyle patlayıcı hazırlayıp yerleştirirsin (d20 + Werk ≥ Orta). Patlama alanındaki hedeflerin uzuvlarında yara 1 kademe ilerler; yapılar ve araçlar ciddi hasar alır."
+    },
+    {
+     "level": 2,
+     "html": "Zamanlayıcı veya tetik teli kurabilirsin. Patlayıcı etkisizleştirme zarlarında eşik bir kademe düşer."
+    },
+    {
+     "level": 3,
+     "html": "Yönlendirilmiş patlayıcı: yalnızca seçtiğin yöndeki hedefler etkilenir ve yara 2 kademe ilerler."
+    }
+   ],
+   "sections": [],
+   "synergies": [],
+   "flavorHtml": "<p>Köprüler, raylar, kapılar. Hepsi bir fitil uzunluğunda.</p>",
+   "searchText": "sprengmeister wunderwaffe aktif werk 5, agil 2 maschinen malzemeyle patlayıcı hazırlayıp yerleştirirsin (d20 + werk ≥ orta). patlama alanındaki hedeflerin uzuvlarında yara 1 kademe ilerler; yapılar ve araçlar ciddi hasar alır. zamanlayıcı veya tetik teli kurabilirsin. patlayıcı etkisizleştirme zarlarında eşik bir kademe düşer. yönlendirilmiş patlayıcı: yalnızca seçtiğin yöndeki hedefler etkilenir ve yara 2 kademe ilerler. köprüler, raylar, kapılar. hepsi bir fitil uzunluğunda."
+  },
+  "blutopfer": {
+   "key": "blutopfer",
+   "name": "Blutopfer",
+   "tree": "schwarzesonne",
+   "type": "Tepki",
+   "requirementText": "Wissen 5, Korp 3",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "wissen",
+     "min": 5
+    },
+    {
+     "kind": "stat",
+     "stat": "korp",
+     "min": 3
+    }
+   ],
+   "maxLevel": 2,
+   "prerequisite": "extracio-aus-ss",
+   "branch": "B′",
+   "branchName": "Blut",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Bir kara büyü zarı atmadan önce kendi uzuvlarından birine 1 kademe yara verirsin; o zara +3."
+    },
+    {
+     "level": 2,
+     "html": "2 kademe yara vererek +6."
+    }
+   ],
+   "sections": [
+    {
+     "key": "BEDEL",
+     "label": "Bedel",
+     "html": "<p>Her kullanımda Sanita zarı (Kolay); başarısızlıkta +1 Corruption.</p>"
+    },
+    {
+     "key": "NOT",
+     "label": "Not",
+     "html": "<p>Bu yeteneğin zarları kara büyü zarıdır; Corruption kaynaklı kara büyü etkileri uygulanır.</p>"
+    },
+    {
+     "key": "SİNERJİ",
+     "label": "Sinerji",
+     "html": "<p><strong><a href=\"@/kurallar/yetenekler/ubermann#mein-liebe\">Mein Liebe</a></strong> ile: Blutopfer'in kendi uzvuna verdiği yaranın cezası yok sayılır.</p>"
+    }
+   ],
+   "synergies": [
+    "mein-liebe"
+   ],
+   "flavorHtml": "<p>Rünler mürekkeple değil, kanla daha iyi tutar.</p>",
+   "searchText": "blutopfer schwarzesonne tepki wissen 5, korp 3 blut bir kara büyü zarı atmadan önce kendi uzuvlarından birine 1 kademe yara verirsin; o zara +3. 2 kademe yara vererek +6. her kullanımda sanita zarı (kolay); başarısızlıkta +1 corruption. bu yeteneğin zarları kara büyü zarıdır; corruption kaynaklı kara büyü etkileri uygulanır. mein liebe ile: blutopfer'in kendi uzvuna verdiği yaranın cezası yok sayılır. rünler mürekkeple değil, kanla daha iyi tutar."
+  },
+  "extracio-aus-ss": {
+   "key": "extracio-aus-ss",
+   "name": "Extracio Aus SS",
+   "tree": "schwarzesonne",
+   "type": "Aktif",
+   "requirementText": "Yok",
+   "requirements": [],
+   "maxLevel": 2,
+   "prerequisite": null,
+   "branch": "B",
+   "branchName": "Totenkult",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Bir ceset üzerinde d20 + Wissen atarsın. "
+    },
+    {
+     "level": 2,
+     "html": "Zor sonuçta 2 soru sorabilirsin."
+    }
+   ],
+   "sections": [
+    {
+     "key": "BEDEL",
+     "label": "Bedel",
+     "html": "<p>Zor veya daha yüksek eşikli denemelerde +1 Corruption.</p>"
+    },
+    {
+     "key": "NOT",
+     "label": "Not",
+     "html": "<p>Bu yeteneğin zarları kara büyü zarıdır; Corruption kaynaklı kara büyü etkileri uygulanır.</p>"
+    },
+    {
+     "key": "SİNERJİ",
+     "label": "Sinerji",
+     "html": "<p><strong><a href=\"@/kurallar/yetenekler/diplomat#verhormeister\">Verhörmeister</a></strong> ile: Ölüden öğrenilen bilgiyle sorgulanan kişinin zarlarına -2.</p>"
+    }
+   ],
+   "synergies": [
+    "verhormeister"
+   ],
+   "flavorHtml": "<p>Ölüler konuşmaz. Ama hatırlarlar.</p>",
+   "searchText": "extracio aus ss schwarzesonne aktif yok totenkult bir ceset üzerinde d20 + wissen atarsın. zor sonuçta 2 soru sorabilirsin. zor veya daha yüksek eşikli denemelerde +1 corruption. bu yeteneğin zarları kara büyü zarıdır; corruption kaynaklı kara büyü etkileri uygulanır. verhörmeister ile: ölüden öğrenilen bilgiyle sorgulanan kişinin zarlarına -2. ölüler konuşmaz. ama hatırlarlar."
+  },
+  "kluger-kopf": {
+   "key": "kluger-kopf",
+   "name": "Kluger Kopf",
+   "tree": "schwarzesonne",
+   "type": "Pasif",
+   "requirementText": "Yok",
+   "requirements": [],
+   "maxLevel": 2,
+   "prerequisite": null,
+   "branch": "Kök",
+   "branchName": "Kök",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Uzun dinlenmede d20 + Wissen ≥ Zor atarsan Corruption'ın 1 azalır. Seans başına 1 kez."
+    },
+    {
+     "level": 2,
+     "html": "Eşik Orta olur."
+    }
+   ],
+   "sections": [
+    {
+     "key": "NOT",
+     "label": "Not",
+     "html": "<p>Corruption 7 kuralı geçerlidir; 7 ve üzerindeki Corruption 7'nin altına indirilemez.</p>"
+    }
+   ],
+   "synergies": [],
+   "flavorHtml": "<p>Okülte dokunan herkes bedel öder. Akıllı kafa, bu bedeli tartmayı bilir.</p>",
+   "searchText": "kluger kopf schwarzesonne pasif yok kök uzun dinlenmede d20 + wissen ≥ zor atarsan corruption'ın 1 azalır. seans başına 1 kez. eşik orta olur. corruption 7 kuralı geçerlidir; 7 ve üzerindeki corruption 7'nin altına indirilemez. okülte dokunan herkes bedel öder. akıllı kafa, bu bedeli tartmayı bilir."
+  },
+  "grosses-siegel": {
+   "key": "grosses-siegel",
+   "name": "Großes Siegel",
+   "tree": "schwarzesonne",
+   "type": "Aktif",
+   "requirementText": "Wissen 7, Sanita 4, Corruption en az 3, Sv 7",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "wissen",
+     "min": 7
+    },
+    {
+     "kind": "stat",
+     "stat": "sanita",
+     "min": 4
+    },
+    {
+     "kind": "corruption",
+     "min": 3
+    },
+    {
+     "kind": "level",
+     "min": 7
+    }
+   ],
+   "maxLevel": 1,
+   "prerequisite": "siegel-der-verdamm",
+   "branch": "A",
+   "branchName": "Runen",
+   "levelEffects": [],
+   "sections": [
+    {
+     "key": "ETKİ",
+     "label": "Etki",
+     "html": "<p>Bir tur harcayarak zemine büyük bir rün çizersin: d20 + Wissen ≥ Zor. Başarıda yaklaşık 10 metrelik alan için iki etkiden birini seçersin. Koruma: alandaki müttefikler 2 tur yara almaz. Lanet: alandaki düşmanların yaraları 2 tur boyunca her tur sonunda 1 kademe ilerler.</p>"
+    },
+    {
+     "key": "BEDEL",
+     "label": "Bedel",
+     "html": "<p>+3 Corruption. Seans başına 1 kez.</p>"
+    },
+    {
+     "key": "NOT",
+     "label": "Not",
+     "html": "<p>Bu yeteneğin zarları kara büyü zarıdır; Corruption kaynaklı kara büyü etkileri uygulanır.</p>"
+    }
+   ],
+   "synergies": [],
+   "flavorHtml": "<p>Rünlerin en eskisi. Çizildiği yerde dünya biraz daha incelir.</p>",
+   "searchText": "großes siegel schwarzesonne aktif wissen 7, sanita 4, corruption en az 3, sv 7 runen bir tur harcayarak zemine büyük bir rün çizersin: d20 + wissen ≥ zor. başarıda yaklaşık 10 metrelik alan için iki etkiden birini seçersin. koruma: alandaki müttefikler 2 tur yara almaz. lanet: alandaki düşmanların yaraları 2 tur boyunca her tur sonunda 1 kademe ilerler. +3 corruption. seans başına 1 kez. bu yeteneğin zarları kara büyü zarıdır; corruption kaynaklı kara büyü etkileri uygulanır. rünlerin en eskisi. çizildiği yerde dünya biraz daha incelir."
+  },
+  "siegel-der-leere": {
+   "key": "siegel-der-leere",
+   "name": "Siegel Der Leere",
+   "tree": "schwarzesonne",
+   "type": "Aktif",
+   "requirementText": "Wissen 3",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "wissen",
+     "min": 3
+    }
+   ],
+   "maxLevel": 3,
+   "prerequisite": null,
+   "branch": "A",
+   "branchName": "Runen",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Görüş alanındaki bir hedefi (kendin dahil) boşluk rünü ile işaretlersin: "
+    },
+    {
+     "level": 2,
+     "html": "2 tur."
+    },
+    {
+     "level": 3,
+     "html": "3 tur."
+    }
+   ],
+   "sections": [
+    {
+     "key": "BEDEL",
+     "label": "Bedel",
+     "html": "<p>Her kullanımda +1 Corruption. Çatışma başına 1 kez.</p>"
+    },
+    {
+     "key": "NOT",
+     "label": "Not",
+     "html": "<p>Bu yeteneğin zarları kara büyü zarıdır; Corruption kaynaklı kara büyü etkileri uygulanır.</p>"
+    }
+   ],
+   "synergies": [],
+   "flavorHtml": "<p>Yeni Düzen ile gelen rün sanatı. Boşluğun işaretini taşıyana hiçbir şey dokunamaz.</p>",
+   "searchText": "siegel der leere schwarzesonne aktif wissen 3 runen görüş alanındaki bir hedefi (kendin dahil) boşluk rünü ile işaretlersin: 2 tur. 3 tur. her kullanımda +1 corruption. çatışma başına 1 kez. bu yeteneğin zarları kara büyü zarıdır; corruption kaynaklı kara büyü etkileri uygulanır. yeni düzen ile gelen rün sanatı. boşluğun işaretini taşıyana hiçbir şey dokunamaz."
+  },
+  "siegel-der-verdamm": {
+   "key": "siegel-der-verdamm",
+   "name": "Siegel Der Verdamm",
+   "tree": "schwarzesonne",
+   "type": "Aktif",
+   "requirementText": "Wissen 4, Sanita 2",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "wissen",
+     "min": 4
+    },
+    {
+     "kind": "stat",
+     "stat": "sanita",
+     "min": 2
+    }
+   ],
+   "maxLevel": 3,
+   "prerequisite": "siegel-der-leere",
+   "branch": "A",
+   "branchName": "Runen",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Lanetlinin rününü canlı bir hedefin bir uzvuna, etine çizersin. Hedef etkisiz ya da boğuşma halinde olmalıdır (değilse önce Orta eşikli bir Krach veya Agil zarı). "
+    },
+    {
+     "level": 2,
+     "html": "3 tur."
+    },
+    {
+     "level": 3,
+     "html": "4 tur."
+    }
+   ],
+   "sections": [
+    {
+     "key": "BEDEL",
+     "label": "Bedel",
+     "html": "<p>Her kullanımda +1 Corruption.</p>"
+    },
+    {
+     "key": "NOT",
+     "label": "Not",
+     "html": "<p>Hedef her turun başında d20 + Sanita ≥ Zor atarak rünü kırabilir. Bu yeteneğin zarları kara büyü zarıdır; Corruption kaynaklı kara büyü etkileri uygulanır.</p>"
+    },
+    {
+     "key": "SİNERJİ",
+     "label": "Sinerji",
+     "html": "<p><strong><a href=\"@/kurallar/yetenekler/ubermann#wurgegriff\">Würgegriff</a></strong> ile: Kilitlediğin hedefe rün çizmek için ayrıca Krach veya Agil zarı gerekmez.</p>"
+    }
+   ],
+   "synergies": [
+    "wurgegriff"
+   ],
+   "flavorHtml": "<p>Rün etten silinmez. Taşıyanı yavaşça içten yer.</p>",
+   "searchText": "siegel der verdamm schwarzesonne aktif wissen 4, sanita 2 runen lanetlinin rününü canlı bir hedefin bir uzvuna, etine çizersin. hedef etkisiz ya da boğuşma halinde olmalıdır (değilse önce orta eşikli bir krach veya agil zarı). 3 tur. 4 tur. her kullanımda +1 corruption. hedef her turun başında d20 + sanita ≥ zor atarak rünü kırabilir. bu yeteneğin zarları kara büyü zarıdır; corruption kaynaklı kara büyü etkileri uygulanır. würgegriff ile: kilitlediğin hedefe rün çizmek için ayrıca krach veya agil zarı gerekmez. rün etten silinmez. taşıyanı yavaşça içten yer."
+  },
+  "totenruf": {
+   "key": "totenruf",
+   "name": "Totenruf",
+   "tree": "schwarzesonne",
+   "type": "Aktif",
+   "requirementText": "Wissen 5, Sanita 3",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "wissen",
+     "min": 5
+    },
+    {
+     "kind": "stat",
+     "stat": "sanita",
+     "min": 3
+    }
+   ],
+   "maxLevel": 2,
+   "prerequisite": "extracio-aus-ss",
+   "branch": "B",
+   "branchName": "Totenkult",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Son 1 saat içinde ölmüş birinin ruhunu çağırırsın: d20 + Wissen ≥ Orta. Ruh 3 tur boyunca görünmez bir gözcü olarak duvarlardan geçebilir ve gördüklerini sana aktarır."
+    },
+    {
+     "level": 2,
+     "html": "5 tur. Ruhun gördüklerini bütün grup duyar."
+    }
+   ],
+   "sections": [
+    {
+     "key": "BEDEL",
+     "label": "Bedel",
+     "html": "<p>Her kullanımda +1 Corruption.</p>"
+    },
+    {
+     "key": "NOT",
+     "label": "Not",
+     "html": "<p>Bu yeteneğin zarları kara büyü zarıdır; Corruption kaynaklı kara büyü etkileri uygulanır.</p>"
+    }
+   ],
+   "synergies": [],
+   "flavorHtml": "<p>Ölüler gidemez. Sen onlara bir iş daha verirsin.</p>",
+   "searchText": "totenruf schwarzesonne aktif wissen 5, sanita 3 totenkult son 1 saat içinde ölmüş birinin ruhunu çağırırsın: d20 + wissen ≥ orta. ruh 3 tur boyunca görünmez bir gözcü olarak duvarlardan geçebilir ve gördüklerini sana aktarır. 5 tur. ruhun gördüklerini bütün grup duyar. her kullanımda +1 corruption. bu yeteneğin zarları kara büyü zarıdır; corruption kaynaklı kara büyü etkileri uygulanır. ölüler gidemez. sen onlara bir iş daha verirsin."
+  },
+  "toter-soldaten": {
+   "key": "toter-soldaten",
+   "name": "Toter Soldaten",
+   "tree": "schwarzesonne",
+   "type": "Aktif",
+   "requirementText": "Wissen 7, Corruption en az 4, Sv 6",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "wissen",
+     "min": 7
+    },
+    {
+     "kind": "corruption",
+     "min": 4
+    },
+    {
+     "kind": "level",
+     "min": 6
+    }
+   ],
+   "maxLevel": 2,
+   "prerequisite": "totenruf",
+   "branch": "B",
+   "branchName": "Totenkult",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Bir cesedi hizmetkâr olarak kaldırırsın: d20 + Wissen ≥ Zor. Diriltilen ölünün tüm stat'ları canlı halinin yarısıdır (aşağı yuvarla); konuşamaz, yalnızca basit emirlere uyar. 1 ölü, sahne sonuna kadar."
+    },
+    {
+     "level": 2,
+     "html": "2 ölü sahne sonuna kadar, ya da 1 ölü seans sonuna kadar."
+    }
+   ],
+   "sections": [
+    {
+     "key": "BEDEL",
+     "label": "Bedel",
+     "html": "<p>Her diriltmede +2 Corruption.</p>"
+    },
+    {
+     "key": "NOT",
+     "label": "Not",
+     "html": "<p>Bu yeteneğin zarları kara büyü zarıdır; Corruption kaynaklı kara büyü etkileri uygulanır.</p>"
+    }
+   ],
+   "synergies": [],
+   "flavorHtml": "<p>Reich'ın askerleri ölünce bile görevden azledilmez.</p>",
+   "searchText": "toter soldaten schwarzesonne aktif wissen 7, corruption en az 4, sv 6 totenkult bir cesedi hizmetkâr olarak kaldırırsın: d20 + wissen ≥ zor. diriltilen ölünün tüm stat'ları canlı halinin yarısıdır (aşağı yuvarla); konuşamaz, yalnızca basit emirlere uyar. 1 ölü, sahne sonuna kadar. 2 ölü sahne sonuna kadar, ya da 1 ölü seans sonuna kadar. her diriltmede +2 corruption. bu yeteneğin zarları kara büyü zarıdır; corruption kaynaklı kara büyü etkileri uygulanır. reich'ın askerleri ölünce bile görevden azledilmez."
+  },
+  "ersatzteil": {
+   "key": "ersatzteil",
+   "name": "Ersatzteil",
+   "tree": "metallkorp",
+   "type": "Aktif",
+   "requirementText": "Klang 5, Werk 2",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "klang",
+     "min": 5
+    },
+    {
+     "kind": "stat",
+     "stat": "werk",
+     "min": 2
+    }
+   ],
+   "maxLevel": 2,
+   "prerequisite": "zweite-haut",
+   "branch": "A′",
+   "branchName": "Feldumbau",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Kendi augmentini sahada söküp tekrar takabilir ya da bozuk veya Kullanılamaz augmentini 1 sahne içinde tamir edebilirsin (d20 + Werk ≥ Orta)."
+    },
+    {
+     "level": 2,
+     "html": "Bir augmenti 1 tur içinde söküp uygun başka bir uzvuna takabilirsin; takılan augmentin Klang cezası o sahne için yok sayılır."
+    }
+   ],
+   "sections": [
+    {
+     "key": "SİNERJİ",
+     "label": "Sinerji",
+     "html": "<p><strong><a href=\"@/kurallar/yetenekler/wunderwaffe#kriegsengineer\">Kriegsengineer</a></strong> ile: Takım arkadaşının augmentini de sahada söküp takabilirsin.</p>"
+    }
+   ],
+   "synergies": [
+    "kriegsengineer"
+   ],
+   "flavorHtml": "<p>Vida, anahtar ve biraz sabır. Beden de bir makine.</p>",
+   "searchText": "ersatzteil metallkorp aktif klang 5, werk 2 feldumbau kendi augmentini sahada söküp tekrar takabilir ya da bozuk veya kullanılamaz augmentini 1 sahne içinde tamir edebilirsin (d20 + werk ≥ orta). bir augmenti 1 tur içinde söküp uygun başka bir uzvuna takabilirsin; takılan augmentin klang cezası o sahne için yok sayılır. kriegsengineer ile: takım arkadaşının augmentini de sahada söküp takabilirsin. vida, anahtar ve biraz sabır. beden de bir makine."
+  },
+  "kalte-seele": {
+   "key": "kalte-seele",
+   "name": "Kalte Seele",
+   "tree": "metallkorp",
+   "type": "Pasif",
+   "requirementText": "Klang 4, Sanita 2",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "klang",
+     "min": 4
+    },
+    {
+     "kind": "stat",
+     "stat": "sanita",
+     "min": 2
+    }
+   ],
+   "maxLevel": 1,
+   "prerequisite": "zweite-haut",
+   "branch": "A",
+   "branchName": "Panzerung",
+   "levelEffects": [],
+   "sections": [
+    {
+     "key": "ETKİ",
+     "label": "Etki",
+     "html": "<p>Corruption'ın verdiği Klang bonusu Corruption 3 yerine 2'de başlar. Cower ve Frenzy gerçekleşme zarlarında Sanita yerine Klang kullanabilirsin.</p>"
+    },
+    {
+     "key": "BEDEL",
+     "label": "Bedel",
+     "html": "<p>Takılı her 2 augment için Rede zarlarına -1.</p>"
+    }
+   ],
+   "synergies": [],
+   "flavorHtml": "<p>Makineye yaklaştıkça insanlardan uzaklaşırsın. Korku da, öfke de artık soğuk.</p>",
+   "searchText": "kalte seele metallkorp pasif klang 4, sanita 2 panzerung corruption'ın verdiği klang bonusu corruption 3 yerine 2'de başlar. cower ve frenzy gerçekleşme zarlarında sanita yerine klang kullanabilirsin. takılı her 2 augment için rede zarlarına -1. makineye yaklaştıkça insanlardan uzaklaşırsın. korku da, öfke de artık soğuk."
+  },
+  "kriegsmaschine": {
+   "key": "kriegsmaschine",
+   "name": "Kriegsmaschine",
+   "tree": "metallkorp",
+   "type": "Aktif",
+   "requirementText": "Klang 7, Werk 4, Sv 7",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "klang",
+     "min": 7
+    },
+    {
+     "kind": "stat",
+     "stat": "werk",
+     "min": 4
+    },
+    {
+     "kind": "level",
+     "min": 7
+    }
+   ],
+   "maxLevel": 1,
+   "prerequisite": "schnittstelle",
+   "branch": "B",
+   "branchName": "Waffenarm",
+   "levelEffects": [],
+   "sections": [
+    {
+     "key": "ETKİ",
+     "label": "Etki",
+     "html": "<p>Çatışma başına 1 kez, 2 tur boyunca tüm augmentlerini kontrol zarı atmadan aşırı yüklersin: Überladung bonusları kontrol zarı olmadan uygulanır ve her tur bir augment aksiyonunu fazladan yapabilirsin.</p>"
+    },
+    {
+     "key": "BEDEL",
+     "label": "Bedel",
+     "html": "<p>Süre bitince augmentli tüm uzuvların 1 kademe yara alır ve +1 Corruption.</p>"
+    }
+   ],
+   "synergies": [],
+   "flavorHtml": "<p>İki tur boyunca insan değilsin. Sonrasında, hiç olmadığın kadar insansın.</p>",
+   "searchText": "kriegsmaschine metallkorp aktif klang 7, werk 4, sv 7 waffenarm çatışma başına 1 kez, 2 tur boyunca tüm augmentlerini kontrol zarı atmadan aşırı yüklersin: überladung bonusları kontrol zarı olmadan uygulanır ve her tur bir augment aksiyonunu fazladan yapabilirsin. süre bitince augmentli tüm uzuvların 1 kademe yara alır ve +1 corruption. iki tur boyunca insan değilsin. sonrasında, hiç olmadığın kadar insansın."
+  },
+  "neuer-mensch": {
+   "key": "neuer-mensch",
+   "name": "Neuer Mensch",
+   "tree": "metallkorp",
+   "type": "Pasif",
+   "requirementText": "Klang 7, Korp 4, en az 2 augment, Sv 6",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "klang",
+     "min": 7
+    },
+    {
+     "kind": "stat",
+     "stat": "korp",
+     "min": 4
+    },
+    {
+     "kind": "augments",
+     "min": 2
+    },
+    {
+     "kind": "level",
+     "min": 6
+    }
+   ],
+   "maxLevel": 1,
+   "prerequisite": "kalte-seele",
+   "branch": "A",
+   "branchName": "Panzerung",
+   "levelEffects": [],
+   "sections": [
+    {
+     "key": "ETKİ",
+     "label": "Etki",
+     "html": "<p>Bir uzvunda ikinci bir augment slotu açılır (yalnızca bir uzuv, GM onayı ile).<br>3 veya daha fazla augment takılıyken Death Save Throw'da 1-2 Death, 3-6 Save sayılır.</p>"
+    },
+    {
+     "key": "BEDEL",
+     "label": "Bedel",
+     "html": "<p>Bu yetenek açıldıktan sonra takılan her yeni augment +1 Corruption verir.</p>"
+    }
+   ],
+   "synergies": [],
+   "flavorHtml": "<p>Yeni insan. Ne kadarının hâlâ sen olduğunu soran kalmadı.</p>",
+   "searchText": "neuer mensch metallkorp pasif klang 7, korp 4, en az 2 augment, sv 6 panzerung bir uzvunda ikinci bir augment slotu açılır (yalnızca bir uzuv, gm onayı ile). 3 veya daha fazla augment takılıyken death save throw'da 1-2 death, 3-6 save sayılır. bu yetenek açıldıktan sonra takılan her yeni augment +1 corruption verir. yeni insan. ne kadarının hâlâ sen olduğunu soran kalmadı."
+  },
+  "schnittstelle": {
+   "key": "schnittstelle",
+   "name": "Schnittstelle",
+   "tree": "metallkorp",
+   "type": "Pasif",
+   "requirementText": "Klang 5, Werk 3",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "klang",
+     "min": 5
+    },
+    {
+     "kind": "stat",
+     "stat": "werk",
+     "min": 3
+    }
+   ],
+   "maxLevel": 2,
+   "prerequisite": "uberladung",
+   "branch": "B",
+   "branchName": "Waffenarm",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Augmentli elini veya kolunu bir araca, tarete ya da makineye bağlayarak doğrudan kontrol edersin. Makine silahlarıyla yapılan atışlara +2."
+    },
+    {
+     "level": 2,
+     "html": "+3. Bağlıyken makinenin arızalarını hissedersin: o makineyle ilgili Werk zarlarında eşik bir kademe düşer."
+    }
+   ],
+   "sections": [
+    {
+     "key": "BEDEL",
+     "label": "Bedel",
+     "html": "<p>Bağlıyken makine hasar alırsa Sanita zarı (Kolay) atarsın; başarısızlıkta 1 tur Cower.</p>"
+    },
+    {
+     "key": "SİNERJİ",
+     "label": "Sinerji",
+     "html": "<p><strong><a href=\"@/kurallar/yetenekler/wunderwaffe#eiserner-kamerad\">Eiserner Kamerad</a></strong> ile: Otomatonu augmentinle yönetirsin; komut vermek aksiyon harcamaz.</p>"
+    }
+   ],
+   "synergies": [
+    "eiserner-kamerad"
+   ],
+   "flavorHtml": "<p>Kablo ve sinir arasındaki fark giderek kayboluyor.</p>",
+   "searchText": "schnittstelle metallkorp pasif klang 5, werk 3 waffenarm augmentli elini veya kolunu bir araca, tarete ya da makineye bağlayarak doğrudan kontrol edersin. makine silahlarıyla yapılan atışlara +2. +3. bağlıyken makinenin arızalarını hissedersin: o makineyle ilgili werk zarlarında eşik bir kademe düşer. bağlıyken makine hasar alırsa sanita zarı (kolay) atarsın; başarısızlıkta 1 tur cower. eiserner kamerad ile: otomatonu augmentinle yönetirsin; komut vermek aksiyon harcamaz. kablo ve sinir arasındaki fark giderek kayboluyor."
+  },
+  "stahlnerv": {
+   "key": "stahlnerv",
+   "name": "Stahlnerv",
+   "tree": "metallkorp",
+   "type": "Pasif",
+   "requirementText": "Yok",
+   "requirements": [],
+   "maxLevel": 3,
+   "prerequisite": null,
+   "branch": "Kök",
+   "branchName": "Kök",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Takılı her augmentin negatif stat etkilerinden 1 puanını yok sayarsın (augment başına)."
+    },
+    {
+     "level": 2,
+     "html": "2 puan."
+    },
+    {
+     "level": 3,
+     "html": "3 puan."
+    }
+   ],
+   "sections": [
+    {
+     "key": "NOT",
+     "label": "Not",
+     "html": "<p>Örnek: <a href=\"@/kurallar/augmentler#gletschkanon\">Gletschkanon</a>'un -5 Werk etkisi Seviye 3'te -2'ye iner.</p>"
+    }
+   ],
+   "synergies": [],
+   "flavorHtml": "<p>Sinirlerin çeliğe alıştı. Makine artık bedenine yabancı değil.</p>",
+   "searchText": "stahlnerv metallkorp pasif yok kök takılı her augmentin negatif stat etkilerinden 1 puanını yok sayarsın (augment başına). 2 puan. 3 puan. örnek: gletschkanon 'un -5 werk etkisi seviye 3'te -2'ye iner. sinirlerin çeliğe alıştı. makine artık bedenine yabancı değil."
+  },
+  "zweite-haut": {
+   "key": "zweite-haut",
+   "name": "Zweite Haut",
+   "tree": "metallkorp",
+   "type": "Pasif",
+   "requirementText": "Klang 3",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "klang",
+     "min": 3
+    }
+   ],
+   "maxLevel": 2,
+   "prerequisite": null,
+   "branch": "A",
+   "branchName": "Panzerung",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Augmentli uzuvların yara cezaları yarıya iner (aşağı yuvarla). Augmentli uzuv Kopuk olmaz; Kullanılamaz durumda kalır ve tamir edilebilir."
+    },
+    {
+     "level": 2,
+     "html": "Augmentli uzva isabet eden yaralar 1 kademe az ilerler."
+    }
+   ],
+   "sections": [],
+   "synergies": [],
+   "flavorHtml": "<p>Et kanar, metal sadece çizilir.</p>",
+   "searchText": "zweite haut metallkorp pasif klang 3 panzerung augmentli uzuvların yara cezaları yarıya iner (aşağı yuvarla). augmentli uzuv kopuk olmaz; kullanılamaz durumda kalır ve tamir edilebilir. augmentli uzva isabet eden yaralar 1 kademe az ilerler. et kanar, metal sadece çizilir."
+  },
+  "uberladung": {
+   "key": "uberladung",
+   "name": "Überladung",
+   "tree": "metallkorp",
+   "type": "Aktif",
+   "requirementText": "Klang 4",
+   "requirements": [
+    {
+     "kind": "stat",
+     "stat": "klang",
+     "min": 4
+    }
+   ],
+   "maxLevel": 3,
+   "prerequisite": null,
+   "branch": "B",
+   "branchName": "Waffenarm",
+   "levelEffects": [
+    {
+     "level": 1,
+     "html": "Augmentini aşırı yüklersin: bir sonraki augment aksiyonunun zarına "
+    },
+    {
+     "level": 2,
+     "html": "Kontrol zarı Orta eşikte atılır."
+    },
+    {
+     "level": 3,
+     "html": "Kontrol zarı Kolay eşikte atılır."
+    }
+   ],
+   "sections": [],
+   "synergies": [],
+   "flavorHtml": "<p>Sigortalar atana kadar. Belki biraz daha fazla.</p>",
+   "searchText": "überladung metallkorp aktif klang 4 waffenarm augmentini aşırı yüklersin: bir sonraki augment aksiyonunun zarına kontrol zarı orta eşikte atılır. kontrol zarı kolay eşikte atılır. sigortalar atana kadar. belki biraz daha fazla."
+  }
+ },
+ "perks": [
+  {
+   "key": "careful-runner",
+   "name": "Careful Runner",
+   "kind": "positive",
+   "points": 1,
+   "exclusive": [],
+   "html": "<p>Hızlı hareket ederken daha az düşersin ve çarparsın ancak karanlıkta ve göremediğin alanlarda hızlı hareket edemezsin.</p>",
+   "searchText": "careful runner hızlı hareket ederken daha az düşersin ve çarparsın ancak karanlıkta ve göremediğin alanlarda hızlı hareket edemezsin."
+  },
+  {
+   "key": "one-hander",
+   "name": "One-Hander",
+   "kind": "positive",
+   "points": 1,
+   "exclusive": [
+    "two-hander"
+   ],
+   "html": "<p>Tek elle kullanılan yakın dövüş silah zarları kolaylaşırken Çift elli kullanılan yakın dövüş silah zarları zorlaşır.</p>",
+   "searchText": "one-hander tek elle kullanılan yakın dövüş silah zarları kolaylaşırken çift elli kullanılan yakın dövüş silah zarları zorlaşır."
+  },
+  {
+   "key": "speed-demon",
+   "name": "Speed Demon",
+   "kind": "positive",
+   "points": 1,
+   "exclusive": [
+    "sunday-driver"
+   ],
+   "html": "<p>Çok hızlı sürersin</p>",
+   "searchText": "speed demon çok hızlı sürersin"
+  },
+  {
+   "key": "two-hander",
+   "name": "Two-Hander",
+   "kind": "positive",
+   "points": 1,
+   "exclusive": [
+    "one-hander"
+   ],
+   "html": "<p>Çift elle kullanılan yakın dövüş silah zarları kolaylaşırken Tek elli kullanılan yakın dövüş silah zarları zorlaşır.</p>",
+   "searchText": "two-hander çift elle kullanılan yakın dövüş silah zarları kolaylaşırken tek elli kullanılan yakın dövüş silah zarları zorlaşır."
+  },
+  {
+   "key": "kench",
+   "name": "Kench",
+   "kind": "positive",
+   "points": 2,
+   "exclusive": [
+    "empfi"
+   ],
+   "html": "<p>Miden kolayca rahatsızlanmaz. Gıda zehirlenmesi ihtimalin azalır.</p>",
+   "searchText": "kench miden kolayca rahatsızlanmaz. gıda zehirlenmesi ihtimalin azalır."
+  },
+  {
+   "key": "bladesmith",
+   "name": "Bladesmith",
+   "kind": "positive",
+   "points": 3,
+   "exclusive": [],
+   "html": "<p>Kısa bıçaklar kullanılırken atılan zarlar kolaylaşır.</p>",
+   "searchText": "bladesmith kısa bıçaklar kullanılırken atılan zarlar kolaylaşır."
+  },
+  {
+   "key": "eisblut",
+   "name": "Eisblut",
+   "kind": "positive",
+   "points": 3,
+   "exclusive": [
+    "veteran-of-47"
+   ],
+   "html": "<p>Damarlarında buz akar. Corruption 9 ile açılan Frenzy gerçekleşme zarlarını otomatik geçersin. Cower etkilenmez.</p>\n<p><em>NOT:</em> Adını Irkutsk Glacier Bastion'u yöneten Council of Iceblooded Veterans'tan alır.</p>",
+   "searchText": "eisblut damarlarında buz akar. corruption 9 ile açılan frenzy gerçekleşme zarlarını otomatik geçersin. cower etkilenmez. not: adını irkutsk glacier bastion'u yöneten council of iceblooded veterans'tan alır."
+  },
+  {
+   "key": "falscher",
+   "name": "Fälscher",
+   "kind": "positive",
+   "points": 3,
+   "exclusive": [],
+   "html": "<p>Belge, mühür ve kimlik sahteciliğinde ustasın. Sahte evrak hazırlama zarlarında eşik bir kademe düşer. Sahte belgen incelenirken karşı tarafın Sicht zarlarında eşik bir kademe yükselir.</p>",
+   "searchText": "fälscher belge, mühür ve kimlik sahteciliğinde ustasın. sahte evrak hazırlama zarlarında eşik bir kademe düşer. sahte belgen incelenirken karşı tarafın sicht zarlarında eşik bir kademe yükselir."
+  },
+  {
+   "key": "feldsanitater",
+   "name": "Feldsanitäter",
+   "kind": "positive",
+   "points": 3,
+   "exclusive": [
+    "blutscheu"
+   ],
+   "html": "<p>Sahra sıhhiyecisi gibi temiz çalışırsın. Uyguladığın sargılar kirlenmez: Sargılı (Temiz) durumu çamur, kan veya kir yüzünden Sargılı (Kirli) durumuna geçmez (suya ya da lağıma tamamen batma hariç).</p>",
+   "searchText": "feldsanitäter sahra sıhhiyecisi gibi temiz çalışırsın. uyguladığın sargılar kirlenmez: sargılı (temiz) durumu çamur, kan veya kir yüzünden sargılı (kirli) durumuna geçmez (suya ya da lağıma tamamen batma hariç)."
+  },
+  {
+   "key": "katze",
+   "name": "Katze",
+   "kind": "positive",
+   "points": 3,
+   "exclusive": [],
+   "html": "<p>Karanlıkta görme becerisini arttırır.</p>",
+   "searchText": "katze karanlıkta görme becerisini arttırır."
+  },
+  {
+   "key": "ortskundig",
+   "name": "Ortskundig",
+   "kind": "positive",
+   "points": 3,
+   "exclusive": [],
+   "html": "<p>Oyun başında bir bölge seç (ör. Sibirya, Kanada, Kuzey Almanya, Batı Avustralya). O bölgede yön bulma, kestirme yol ve yerel halkla iletişim zarlarında eşik bir kademe düşer.</p>",
+   "searchText": "ortskundig oyun başında bir bölge seç (ör. sibirya, kanada, kuzey almanya, batı avustralya). o bölgede yön bulma, kestirme yol ve yerel halkla iletişim zarlarında eşik bir kademe düşer."
+  },
+  {
+   "key": "schwarzmarkt",
+   "name": "Schwarzmarkt",
+   "kind": "positive",
+   "points": 3,
+   "exclusive": [],
+   "html": "<p>Karaborsada tanıdıkların var. Yasak veya kıt malları (Pervitin, mühimmat, augment parçası, ilaç) bulmak için atılan Rede zarlarında eşik bir kademe düşer; fiyatlar GM takdiriyle ucuzlar.</p>",
+   "searchText": "schwarzmarkt karaborsada tanıdıkların var. yasak veya kıt malları (pervitin, mühimmat, augment parçası, ilaç) bulmak için atılan rede zarlarında eşik bir kademe düşer; fiyatlar gm takdiriyle ucuzlar."
+  },
+  {
+   "key": "trilingual",
+   "name": "Trilingual",
+   "kind": "positive",
+   "points": 3,
+   "exclusive": [
+    "monolingual"
+   ],
+   "html": "<p>Karakter 3 dil bilerek oyuna başlar.</p>",
+   "searchText": "trilingual karakter 3 dil bilerek oyuna başlar."
+  },
+  {
+   "key": "adlerauge",
+   "name": "Adlerauge",
+   "kind": "positive",
+   "points": 4,
+   "exclusive": [
+    "kurzsichtig"
+   ],
+   "html": "<p>ADS time azalır. Kritik atış ihtimali artar.</p>",
+   "searchText": "adlerauge ads time azalır. kritik atış ihtimali artar."
+  },
+  {
+   "key": "extrovert",
+   "name": "Extrovert",
+   "kind": "positive",
+   "points": 4,
+   "exclusive": [
+    "introvert"
+   ],
+   "html": "<p>Tanımadığın birisiyle iletişim kurma becerin gelişir. +2 Rede</p>",
+   "searchText": "extrovert tanımadığın birisiyle iletişim kurma becerin gelişir. +2 rede"
+  },
+  {
+   "key": "gluckspilz",
+   "name": "Glückspilz",
+   "kind": "positive",
+   "points": 4,
+   "exclusive": [],
+   "html": "<p>Şanslı birisin. Seans başına 1 kez, attığın bir Nat1'i Inspiration harcamadan yeniden atabilirsin.</p>",
+   "searchText": "glückspilz şanslı birisin. seans başına 1 kez, attığın bir nat1'i inspiration harcamadan yeniden atabilirsin."
+  },
+  {
+   "key": "heimwerker",
+   "name": "Heimwerker",
+   "kind": "positive",
+   "points": 4,
+   "exclusive": [],
+   "html": "<p>Makineler ile uğraşılan mühendislik zarları kolaylaşır</p>",
+   "searchText": "heimwerker makineler ile uğraşılan mühendislik zarları kolaylaşır"
+  },
+  {
+   "key": "runenkundig",
+   "name": "Runenkundig",
+   "kind": "positive",
+   "points": 4,
+   "exclusive": [
+    "runenblind",
+    "gottesfurchtig"
+   ],
+   "html": "<p>Eski rünlerin dilini bilirsin. Siegel yeteneklerinde (Siegel der Leere, Siegel der Verdamm) atılan kara büyü zarlarında eşik bir kademe düşer.</p>",
+   "searchText": "runenkundig eski rünlerin dilini bilirsin. siegel yeteneklerinde (siegel der leere, siegel der verdamm) atılan kara büyü zarlarında eşik bir kademe düşer."
+  },
+  {
+   "key": "schnell",
+   "name": "Schnell",
+   "kind": "positive",
+   "points": 4,
+   "exclusive": [],
+   "html": "<p>Stres altında oyuncu daha hızlı hareket eder.</p>",
+   "searchText": "schnell stres altında oyuncu daha hızlı hareket eder."
+  },
+  {
+   "key": "tesla",
+   "name": "Tesla",
+   "kind": "positive",
+   "points": 4,
+   "exclusive": [],
+   "html": "<p>Elektronik ile uğraşılan mühendislik zarları kolaylaşır</p>",
+   "searchText": "tesla elektronik ile uğraşılan mühendislik zarları kolaylaşır"
+  },
+  {
+   "key": "cheetah",
+   "name": "Cheetah",
+   "kind": "positive",
+   "points": 5,
+   "exclusive": [],
+   "html": "<p>Doğuştan hızlı koşma ve parkur becerin var.<br>+2 agil</p>",
+   "searchText": "cheetah doğuştan hızlı koşma ve parkur becerin var. +2 agil"
+  },
+  {
+   "key": "follower-of-dreamer",
+   "name": "Follower of Dreamer",
+   "kind": "positive",
+   "points": 5,
+   "exclusive": [],
+   "html": "<p>+1 Inspiration Point</p>\n<p><em>NOT:</em> Bu trait, Kuyash tarafından yapılan bir diğer TTRPG evreni olan &quot;Umbra Caelis&quot;e atıftır.</p>",
+   "searchText": "follower of dreamer +1 inspiration point not: bu trait, kuyash tarafından yapılan bir diğer ttrpg evreni olan umbra caelis e atıftır."
+  },
+  {
+   "key": "metallvertraglich",
+   "name": "Metallverträglich",
+   "kind": "positive",
+   "points": 5,
+   "exclusive": [
+    "metallabstossung"
+   ],
+   "html": "<p>Bedenin metale kolay alışır. Oyuna +2 Klang ile başlarsın (başlangıçtaki +2 Klang'a ek olarak).</p>",
+   "searchText": "metallverträglich bedenin metale kolay alışır. oyuna +2 klang ile başlarsın (başlangıçtaki +2 klang'a ek olarak)."
+  },
+  {
+   "key": "ruthig",
+   "name": "Ruthig",
+   "kind": "positive",
+   "points": 5,
+   "exclusive": [
+    "laut"
+   ],
+   "html": "<p>Gizli hareket etmen kolaylaşır</p>",
+   "searchText": "ruthig gizli hareket etmen kolaylaşır"
+  },
+  {
+   "key": "beherzt",
+   "name": "Beherzt",
+   "kind": "positive",
+   "points": 6,
+   "exclusive": [
+    "scheu"
+   ],
+   "html": "<p>Corruption daha zor artar</p>",
+   "searchText": "beherzt corruption daha zor artar"
+  },
+  {
+   "key": "tdt-teich-der-toten",
+   "name": "TdT - Teich der Toten",
+   "kind": "positive",
+   "points": 7,
+   "exclusive": [
+    "delicate"
+   ],
+   "html": "<p>Rejenarasyon hızı yüksek miktarda artar</p>",
+   "searchText": "tdt - teich der toten rejenarasyon hızı yüksek miktarda artar"
+  },
+  {
+   "key": "adaptable",
+   "name": "Adaptable",
+   "kind": "positive",
+   "points": 8,
+   "exclusive": [
+    "unthermo"
+   ],
+   "html": "<p>Her duruma ve koşula adapte olabilirsin. Çevresel durum etkilerinden çok daha az etkilenirsin.</p>",
+   "searchText": "adaptable her duruma ve koşula adapte olabilirsin. çevresel durum etkilerinden çok daha az etkilenirsin."
+  },
+  {
+   "key": "ubermuscler",
+   "name": "Ubermuscler",
+   "kind": "positive",
+   "points": 8,
+   "exclusive": [
+    "zargana"
+   ],
+   "html": "<p>Aşırı ağır şeyleri kaldırabilirsin ve aşırı ağır silahları kullanırken daha az negatif etkiden etkilenirsin.</p>",
+   "searchText": "ubermuscler aşırı ağır şeyleri kaldırabilirsin ve aşırı ağır silahları kullanırken daha az negatif etkiden etkilenirsin."
+  },
+  {
+   "key": "ubermensch",
+   "name": "Ubermensch",
+   "kind": "positive",
+   "points": 10,
+   "exclusive": [
+    "zargana",
+    "delicate"
+   ],
+   "html": "<p>İnsanüstü bir vücuda sahipsin. Fiziksel aksiyon zarların kolaylaşır ve daha az hasar alırsın.</p>",
+   "searchText": "ubermensch insanüstü bir vücuda sahipsin. fiziksel aksiyon zarların kolaylaşır ve daha az hasar alırsın."
+  },
+  {
+   "key": "veteran-of-47",
+   "name": "Veteran of 47'",
+   "kind": "positive",
+   "points": 12,
+   "exclusive": [
+    "kriegszitterer",
+    "eisblut",
+    "okkultphobie"
+   ],
+   "html": "<p>II. Dünya Savaşında savaştın. Her türlü kaosa ve şoka hazırlıklısın. Psikolojik Durum etkilerinden etkilenmezsin.</p>",
+   "searchText": "veteran of 47' ii. dünya savaşında savaştın. her türlü kaosa ve şoka hazırlıklısın. psikolojik durum etkilerinden etkilenmezsin."
+  },
+  {
+   "key": "sunday-driver",
+   "name": "Sunday Driver",
+   "kind": "negative",
+   "points": 1,
+   "exclusive": [
+    "speed-demon"
+   ],
+   "html": "<p>Çok yavaş sürersin</p>",
+   "searchText": "sunday driver çok yavaş sürersin"
+  },
+  {
+   "key": "tiryaki",
+   "name": "Tiryaki",
+   "kind": "negative",
+   "points": 1,
+   "exclusive": [
+    "recovered"
+   ],
+   "html": "<p>Sigara bağımlılığıdır. Bağımlılık yükseldikçe +Corruption alınır.</p>",
+   "searchText": "tiryaki sigara bağımlılığıdır. bağımlılık yükseldikçe +corruption alınır."
+  },
+  {
+   "key": "analphabet",
+   "name": "Analphabet",
+   "kind": "negative",
+   "points": 2,
+   "exclusive": [],
+   "html": "<p>Okuma yazma bilmezsin. Yazılı belge, harita notu ve şifreli metinleri okuyamazsın. Aryan Cryptology yeteneğini alamazsın.</p>",
+   "searchText": "analphabet okuma yazma bilmezsin. yazılı belge, harita notu ve şifreli metinleri okuyamazsın. aryan cryptology yeteneğini alamazsın."
+  },
+  {
+   "key": "ayyas",
+   "name": "Ayyaş",
+   "kind": "negative",
+   "points": 2,
+   "exclusive": [
+    "recovered"
+   ],
+   "html": "<p>Alkol bağımlılığıdır. Bağımlılık yükseldikçe +Corruption alınır.</p>",
+   "searchText": "ayyaş alkol bağımlılığıdır. bağımlılık yükseldikçe +corruption alınır."
+  },
+  {
+   "key": "empfi",
+   "name": "Empfi",
+   "kind": "negative",
+   "points": 2,
+   "exclusive": [
+    "kench"
+   ],
+   "html": "<p>Miden kolayca rahatsızlanır. Gıda zehirlenmesi ihtimalin artar.</p>",
+   "searchText": "empfi miden kolayca rahatsızlanır. gıda zehirlenmesi ihtimalin artar."
+  },
+  {
+   "key": "kurzsichtig",
+   "name": "Kurzsichtig",
+   "kind": "negative",
+   "points": 2,
+   "exclusive": [
+    "adlerauge"
+   ],
+   "html": "<p>Miyopsun. Gözlüğün yokken veya kırıldığında uzak mesafe Sicht ve Aim zarlarına -2. Gözlük, kafaya isabet eden bir yarada kırılabilir.</p>",
+   "searchText": "kurzsichtig miyopsun. gözlüğün yokken veya kırıldığında uzak mesafe sicht ve aim zarlarına -2. gözlük, kafaya isabet eden bir yarada kırılabilir."
+  },
+  {
+   "key": "monolingual",
+   "name": "Monolingual",
+   "kind": "negative",
+   "points": 2,
+   "exclusive": [
+    "trilingual"
+   ],
+   "html": "<p>Karakter tek dil bilerek oyuna başlar.</p>",
+   "searchText": "monolingual karakter tek dil bilerek oyuna başlar."
+  },
+  {
+   "key": "verschuldet",
+   "name": "Verschuldet",
+   "kind": "negative",
+   "points": 2,
+   "exclusive": [],
+   "html": "<p>Borçlusun. Oyuna Reichsmark olmadan başlarsın ve peşinde bir alacaklı vardır (GM'in hikâye kancası).</p>",
+   "searchText": "verschuldet borçlusun. oyuna reichsmark olmadan başlarsın ve peşinde bir alacaklı vardır (gm'in hikâye kancası)."
+  },
+  {
+   "key": "blutscheu",
+   "name": "Blutscheu",
+   "kind": "negative",
+   "points": 3,
+   "exclusive": [
+    "feldsanitater"
+   ],
+   "html": "<p>Kan görmeye dayanamazsın. Ağır Yaralı veya daha kötü bir yara gördüğünde Sanita zarı (Kolay) atarsın; başarısızlıkta sonraki aksiyonuna -2. İlk yardım ve tıbbi müdahale zarlarına -2.</p>",
+   "searchText": "blutscheu kan görmeye dayanamazsın. ağır yaralı veya daha kötü bir yara gördüğünde sanita zarı (kolay) atarsın; başarısızlıkta sonraki aksiyonuna -2. ilk yardım ve tıbbi müdahale zarlarına -2."
+  },
+  {
+   "key": "ehrenkodex",
+   "name": "Ehrenkodex",
+   "kind": "negative",
+   "points": 3,
+   "exclusive": [
+    "pressured-pacifism"
+   ],
+   "html": "<p>Bir onur yasana bağlısın. Teslim olmuş veya silahsız birine zarar veremezsin; verirsen +2 Corruption alırsın.</p>",
+   "searchText": "ehrenkodex bir onur yasana bağlısın. teslim olmuş veya silahsız birine zarar veremezsin; verirsen +2 corruption alırsın."
+  },
+  {
+   "key": "gesucht",
+   "name": "Gesucht",
+   "kind": "negative",
+   "points": 3,
+   "exclusive": [],
+   "html": "<p>Aranıyorsun. Oyun başında GM bir faksiyon seçer; o faksiyonun bölgelerinde tanınma riski taşırsın ve o faksiyonun mensuplarına karşı Rede zarlarına -2.</p>",
+   "searchText": "gesucht aranıyorsun. oyun başında gm bir faksiyon seçer; o faksiyonun bölgelerinde tanınma riski taşırsın ve o faksiyonun mensuplarına karşı rede zarlarına -2."
+  },
+  {
+   "key": "klaustrophob",
+   "name": "Klaustrophob",
+   "kind": "negative",
+   "points": 3,
+   "exclusive": [],
+   "html": "<p>Dar alanlara dayanamazsın. Sığınak, tünel, denizaltı veya araç içi gibi kapalı ve dar mekânlarda tüm zarlara -1.</p>",
+   "searchText": "klaustrophob dar alanlara dayanamazsın. sığınak, tünel, denizaltı veya araç içi gibi kapalı ve dar mekânlarda tüm zarlara -1."
+  },
+  {
+   "key": "oaf",
+   "name": "Oaf",
+   "kind": "negative",
+   "points": 3,
+   "exclusive": [],
+   "html": "<p>Sakarlaşırsın. Hatalı hareketler yapabilirsin.</p>",
+   "searchText": "oaf sakarlaşırsın. hatalı hareketler yapabilirsin."
+  },
+  {
+   "key": "okkultphobie",
+   "name": "Okkultphobie",
+   "kind": "negative",
+   "points": 3,
+   "exclusive": [
+    "veteran-of-47"
+   ],
+   "html": "<p>Okültten dehşete düşersin. Bir ritüel, diriltilmiş bir ölü veya kara büyü etkisi gördüğünde Sanita zarı (Orta) atarsın; başarısızlıkta 1 tur boyunca Cower durumuna girersin.</p>",
+   "searchText": "okkultphobie okültten dehşete düşersin. bir ritüel, diriltilmiş bir ölü veya kara büyü etkisi gördüğünde sanita zarı (orta) atarsın; başarısızlıkta 1 tur boyunca cower durumuna girersin."
+  },
+  {
+   "key": "schlaflos",
+   "name": "Schlaflos",
+   "kind": "negative",
+   "points": 3,
+   "exclusive": [],
+   "html": "<p>Uyuyamıyorsun. Uzun dinlenmeden sonra Sanita zarı (Orta) atarsın; başarısızlıkta bir sonraki uzun dinlenmeye kadar tüm zarlara -1.</p>",
+   "searchText": "schlaflos uyuyamıyorsun. uzun dinlenmeden sonra sanita zarı (orta) atarsın; başarısızlıkta bir sonraki uzun dinlenmeye kadar tüm zarlara -1."
+  },
+  {
+   "key": "gottesfurchtig",
+   "name": "Gottesfürchtig",
+   "kind": "negative",
+   "points": 4,
+   "exclusive": [
+    "runenkundig",
+    "runenblind"
+   ],
+   "html": "<p>Derin bir inancın var ve okült güçlerden korkarsın. Kara büyü zarlarına -3. Her kara büyü kullanımında yeteneğin bedeline ek olarak +1 Corruption alırsın.</p>",
+   "searchText": "gottesfürchtig derin bir inancın var ve okült güçlerden korkarsın. kara büyü zarlarına -3. her kara büyü kullanımında yeteneğin bedeline ek olarak +1 corruption alırsın."
+  },
+  {
+   "key": "introvert",
+   "name": "Introvert",
+   "kind": "negative",
+   "points": 4,
+   "exclusive": [
+    "extrovert"
+   ],
+   "html": "<p>Tanımadığın birisiyle iletişim kurma becerin zayıftır. -2 Rede</p>",
+   "searchText": "introvert tanımadığın birisiyle iletişim kurma becerin zayıftır. -2 rede"
+  },
+  {
+   "key": "kriegszitterer",
+   "name": "Kriegszitterer",
+   "kind": "negative",
+   "points": 4,
+   "exclusive": [
+    "veteran-of-47"
+   ],
+   "html": "<p>Savaş travması bedeninde kaldı. Yakınında patlama veya top sesi olduğunda Sanita zarı (Orta) atarsın; başarısızlıkta 1 tur boyunca Cower durumuna girersin (Corruption seviyesinden bağımsız).</p>",
+   "searchText": "kriegszitterer savaş travması bedeninde kaldı. yakınında patlama veya top sesi olduğunda sanita zarı (orta) atarsın; başarısızlıkta 1 tur boyunca cower durumuna girersin (corruption seviyesinden bağımsız)."
+  },
+  {
+   "key": "laut",
+   "name": "Laut",
+   "kind": "negative",
+   "points": 4,
+   "exclusive": [
+    "ruthig"
+   ],
+   "html": "<p>Gizli hareket etmen çok zorlaşır.</p>",
+   "searchText": "laut gizli hareket etmen çok zorlaşır."
+  },
+  {
+   "key": "recovered",
+   "name": "Recovered",
+   "kind": "negative",
+   "points": 4,
+   "exclusive": [
+    "tiryaki",
+    "ayyas",
+    "such-tiger"
+   ],
+   "html": "<p>Amfetamin/Metamfetamin kökenli maddeler, alkol ve tütün kullanamazsın. Kullanman durumunda doğrudan +Corruption alırsın.</p>",
+   "searchText": "recovered amfetamin/metamfetamin kökenli maddeler, alkol ve tütün kullanamazsın. kullanman durumunda doğrudan +corruption alırsın."
+  },
+  {
+   "key": "delicate",
+   "name": "Delicate",
+   "kind": "negative",
+   "points": 5,
+   "exclusive": [
+    "tdt-teich-der-toten",
+    "ubermensch"
+   ],
+   "html": "<p>Narinsin. Yara alman kolaylaşır ve yaraların zor kapanır.</p>",
+   "searchText": "delicate narinsin. yara alman kolaylaşır ve yaraların zor kapanır."
+  },
+  {
+   "key": "metallabstossung",
+   "name": "Metallabstoßung",
+   "kind": "negative",
+   "points": 5,
+   "exclusive": [
+    "metallvertraglich"
+   ],
+   "html": "<p>Bedenin metali reddeder. Oyuna -2 Klang ile başlarsın. Her augment takılışında Korp zarı (Orta) atarsın; başarısızlıkta augmentin takıldığı uzuv 1 kademe yara alır.</p>",
+   "searchText": "metallabstoßung bedenin metali reddeder. oyuna -2 klang ile başlarsın. her augment takılışında korp zarı (orta) atarsın; başarısızlıkta augmentin takıldığı uzuv 1 kademe yara alır."
+  },
+  {
+   "key": "runenblind",
+   "name": "Runenblind",
+   "kind": "negative",
+   "points": 5,
+   "exclusive": [
+    "runenkundig",
+    "gottesfurchtig"
+   ],
+   "html": "<p>Rünler senin için anlamsız çizgilerden ibaret. Siegel yeteneklerini alamazsın; diğer kara büyü zarlarında eşik bir kademe yükselir.</p>",
+   "searchText": "runenblind rünler senin için anlamsız çizgilerden ibaret. siegel yeteneklerini alamazsın; diğer kara büyü zarlarında eşik bir kademe yükselir."
+  },
+  {
+   "key": "such-tiger",
+   "name": "Süch'tiger'",
+   "kind": "negative",
+   "points": 5,
+   "exclusive": [
+    "recovered"
+   ],
+   "html": "<p>Pervitin/Metamfetamin bağımlılığıdır. Bağımlılık yükseldikçe +Corruption alınır.</p>\n<p>Bağımlılık aktif değilken Krach statı Corruption/3 → aşağıya yuvarla şekilde artar.</p>\n<p>Bağımlılık aktif olduğunda Krach statı Corruption/3 → yukarı yuvarla şekilde azalır.</p>",
+   "searchText": "süch'tiger' pervitin/metamfetamin bağımlılığıdır. bağımlılık yükseldikçe +corruption alınır. bağımlılık aktif değilken krach statı corruption/3 → aşağıya yuvarla şekilde artar. bağımlılık aktif olduğunda krach statı corruption/3 → yukarı yuvarla şekilde azalır."
+  },
+  {
+   "key": "unthermo",
+   "name": "Unthermo",
+   "kind": "negative",
+   "points": 5,
+   "exclusive": [
+    "adaptable"
+   ],
+   "html": "<p>Sıcaklık değişikliklerinden çok etkilenirsin. Sıcak ve soğuk seni olumsuz etkiler</p>",
+   "searchText": "unthermo sıcaklık değişikliklerinden çok etkilenirsin. sıcak ve soğuk seni olumsuz etkiler"
+  },
+  {
+   "key": "scheu",
+   "name": "Scheu",
+   "kind": "negative",
+   "points": 6,
+   "exclusive": [
+    "beherzt"
+   ],
+   "html": "<p>Corruption daha kolay artar</p>",
+   "searchText": "scheu corruption daha kolay artar"
+  },
+  {
+   "key": "kriegsversehrt",
+   "name": "Kriegsversehrt",
+   "kind": "negative",
+   "points": 7,
+   "exclusive": [],
+   "html": "<p>Savaşta bir uzvunu kaybettin. Oyuna el, kol, ayak veya bacaklarından biri Kopuk olarak başlarsın (beden tablosuna işlenir). Kayıp uzuv bir augment ile değiştirilebilir.</p>",
+   "searchText": "kriegsversehrt savaşta bir uzvunu kaybettin. oyuna el, kol, ayak veya bacaklarından biri kopuk olarak başlarsın (beden tablosuna işlenir). kayıp uzuv bir augment ile değiştirilebilir."
+  },
+  {
+   "key": "zargana",
+   "name": "Zargana",
+   "kind": "negative",
+   "points": 7,
+   "exclusive": [
+    "ubermensch",
+    "ubermuscler"
+   ],
+   "html": "<p>Çok zayıf bir vücuda sahipsin. Fiziksel aksiyon zarların zorlaşır ve daha çok hasar alırsın.</p>",
+   "searchText": "zargana çok zayıf bir vücuda sahipsin. fiziksel aksiyon zarların zorlaşır ve daha çok hasar alırsın."
+  },
+  {
+   "key": "schizo",
+   "name": "Schizo",
+   "kind": "negative",
+   "points": 13,
+   "exclusive": [],
+   "html": "<p>Şizofrensin. Olmayan şeyleri görüyorsun ve onlar ile etkileşime girmeye çalışıyorsun.<br>-2 Rede, -2 Leis</p>",
+   "searchText": "schizo şizofrensin. olmayan şeyleri görüyorsun ve onlar ile etkileşime girmeye çalışıyorsun. -2 rede, -2 leis"
+  },
+  {
+   "key": "pressured-pacifism",
+   "name": "Pressured Pacifism",
+   "kind": "negative",
+   "points": 15,
+   "exclusive": [
+    "ehrenkodex"
+   ],
+   "html": "<p>Her başkasına zarar verdiğinde +Corruption alırsın. Öldürürsen +3 Corruption alırsın.</p>",
+   "searchText": "pressured pacifism her başkasına zarar verdiğinde +corruption alırsın. öldürürsen +3 corruption alırsın."
+  }
+ ],
+ "augments": [
+  {
+   "key": "federfuss",
+   "name": "Federfuß",
+   "tier": "T1",
+   "slots": [
+    "l-foot",
+    "r-foot"
+   ],
+   "mods": [
+    {
+     "stat": "agil",
+     "value": 1
+    },
+    {
+     "stat": "leis",
+     "value": 1
+    },
+    {
+     "stat": "korp",
+     "value": -1
+    },
+    {
+     "stat": "klang",
+     "value": -1
+    }
+   ],
+   "usageHtml": "<p>Koşarken gizlilik (Leis) zarlarına ceza almazsın. Düşme kaynaklı yaralar 1 kademe az ilerler.</p>",
+   "flavorHtml": "<p>Yaylı Gletschmetall ayak protezi. Kauçuk tabanı sayesinde metal olmasına rağmen neredeyse sessiz basar.</p>",
+   "extra": [],
+   "searchText": "federfuß koşarken gizlilik (leis) zarlarına ceza almazsın. düşme kaynaklı yaralar 1 kademe az ilerler. yaylı gletschmetall ayak protezi. kauçuk tabanı sayesinde metal olmasına rağmen neredeyse sessiz basar."
+  },
+  {
+   "key": "funkohr",
+   "name": "Funkohr",
+   "tier": "T1",
+   "slots": [
+    "head"
+   ],
+   "mods": [
+    {
+     "stat": "klang",
+     "value": -1
+    }
+   ],
+   "usageHtml": "<p>Kısa menzildeki açık telsiz frekanslarını dinleyebilirsin. Aynı augmente sahip karakterlerle sesli konuşmadan (fısıltı ile) haberleşebilirsin. Elektronik karıştırma veya EMP etkisinde 1 sahne boyunca Sanita zarlarına -2.</p>",
+   "flavorHtml": "<p>Kafatasına yerleştirilmiş minyatür telsiz alıcısı. Kullanıcı askerî frekansları kafasının içinde duyar.</p>",
+   "extra": [],
+   "searchText": "funkohr kısa menzildeki açık telsiz frekanslarını dinleyebilirsin. aynı augmente sahip karakterlerle sesli konuşmadan (fısıltı ile) haberleşebilirsin. elektronik karıştırma veya emp etkisinde 1 sahne boyunca sanita zarlarına -2. kafatasına yerleştirilmiş minyatür telsiz alıcısı. kullanıcı askerî frekansları kafasının içinde duyar."
+  },
+  {
+   "key": "glasauge",
+   "name": "Glasauge",
+   "tier": "T1",
+   "slots": [
+    "head"
+   ],
+   "mods": [
+    {
+     "stat": "sicht",
+     "value": 2
+    },
+    {
+     "stat": "klang",
+     "value": -1
+    }
+   ],
+   "usageHtml": "<p>Uzak mesafedeki ayrıntıları seçmek için atılan Sicht zarlarında eşik bir kademe düşer. Ani ve güçlü bir ışığa (flaş, patlama, projektör) maruz kalırsan 1 tur boyunca Sicht ve Aim zarlarına -5.</p>",
+   "flavorHtml": "<p>Cam ve bakır sargılardan yapılmış optik göz. Mercekleri elle çevrilerek uzağa odaklanabilir.</p>",
+   "extra": [],
+   "searchText": "glasauge uzak mesafedeki ayrıntıları seçmek için atılan sicht zarlarında eşik bir kademe düşer. ani ve güçlü bir ışığa (flaş, patlama, projektör) maruz kalırsan 1 tur boyunca sicht ve aim zarlarına -5. cam ve bakır sargılardan yapılmış optik göz. mercekleri elle çevrilerek uzağa odaklanabilir."
+  },
+  {
+   "key": "laufwerk",
+   "name": "Laufwerk",
+   "tier": "T1",
+   "slots": [
+    "l-leg",
+    "r-leg"
+   ],
+   "mods": [
+    {
+     "stat": "agil",
+     "value": 1
+    },
+    {
+     "stat": "leis",
+     "value": -1
+    },
+    {
+     "stat": "klang",
+     "value": -1
+    }
+   ],
+   "usageHtml": "<p>Koşma, zıplama ve tırmanma Agil zarlarında eşik bir kademe düşer. Akku 3 şarj taşır ve her sahne 1 şarj harcar. Akku boşken bu bonus kaybolur ve Agil zarlarına -2 uygulanır. Akku yalnızca şebeke elektriği olan bir yerde, uzun dinlenmede dolar.</p>",
+   "flavorHtml": "<p>Speer fabrikalarının seri üretim bacak iskeleti. Küçük bir Akku ile çalışan motorlar adımları güçlendirir, ancak her adımda hafifçe vızıldar.</p>",
+   "extra": [],
+   "searchText": "laufwerk koşma, zıplama ve tırmanma agil zarlarında eşik bir kademe düşer. akku 3 şarj taşır ve her sahne 1 şarj harcar. akku boşken bu bonus kaybolur ve agil zarlarına -2 uygulanır. akku yalnızca şebeke elektriği olan bir yerde, uzun dinlenmede dolar. speer fabrikalarının seri üretim bacak iskeleti. küçük bir akku ile çalışan motorlar adımları güçlendirir, ancak her adımda hafifçe vızıldar."
+  },
+  {
+   "key": "stahlfinger",
+   "name": "Stahlfinger",
+   "tier": "T1",
+   "slots": [
+    "l-hand",
+    "r-hand"
+   ],
+   "mods": [
+    {
+     "stat": "krach",
+     "value": 1
+    },
+    {
+     "stat": "werk",
+     "value": -1
+    },
+    {
+     "stat": "klang",
+     "value": -1
+    }
+   ],
+   "usageHtml": "<p>Bu elle tuttuğun bir nesneyi zorla düşürtülemezsin. Bu elle yapılan tutunma, sıkma ve koparma Krach zarlarında eşik bir kademe düşer. İnce el işçiliği gerektiren aksiyonlarda (kilit açma, tamir) bu el kullanılırsa ek -1.</p>",
+   "flavorHtml": "<p>Neustahlprogram'ın ilk sivil ürünlerinden biri. Fabrika kazalarında parmaklarını kaybeden işçiler için Gletschmetall'den dökülmüş, kaba ama sağlam parmaklar.</p>",
+   "extra": [],
+   "searchText": "stahlfinger bu elle tuttuğun bir nesneyi zorla düşürtülemezsin. bu elle yapılan tutunma, sıkma ve koparma krach zarlarında eşik bir kademe düşer. ince el işçiliği gerektiren aksiyonlarda (kilit açma, tamir) bu el kullanılırsa ek -1. neustahlprogram'ın ilk sivil ürünlerinden biri. fabrika kazalarında parmaklarını kaybeden işçiler için gletschmetall'den dökülmüş, kaba ama sağlam parmaklar."
+  },
+  {
+   "key": "akkutrager",
+   "name": "Akkuträger",
+   "tier": "T2",
+   "slots": [
+    "lower-torso"
+   ],
+   "mods": [
+    {
+     "stat": "agil",
+     "value": -1
+    },
+    {
+     "stat": "klang",
+     "value": -1
+    }
+   ],
+   "usageHtml": "<p>Akku kullanan diğer augmentlerinin toplam kapasitesine +3 şarj ekler. Alt gövde Ağır Yaralı veya daha kötü duruma gelirse d20 ≥ 11 atılır; başarısızlıkta batarya patlar, alt gövdeye 1 kademe ek yara işlenir ve tüm şarjlar boşalır.</p>",
+   "flavorHtml": "<p>Bel çevresine takılan Speer yapımı batarya kuşağı. Diğer Sturm augmentlerini besler.</p>",
+   "extra": [],
+   "searchText": "akkuträger akku kullanan diğer augmentlerinin toplam kapasitesine +3 şarj ekler. alt gövde ağır yaralı veya daha kötü duruma gelirse d20 ≥ 11 atılır; başarısızlıkta batarya patlar, alt gövdeye 1 kademe ek yara işlenir ve tüm şarjlar boşalır. bel çevresine takılan speer yapımı batarya kuşağı. diğer sturm augmentlerini besler."
+  },
+  {
+   "key": "klingenarm",
+   "name": "Klingenarm",
+   "tier": "T2",
+   "slots": [
+    "l-arm",
+    "r-arm"
+   ],
+   "mods": [
+    {
+     "stat": "krach",
+     "value": 1
+    },
+    {
+     "stat": "werk",
+     "value": -1
+    },
+    {
+     "stat": "klang",
+     "value": -1
+    }
+   ],
+   "usageHtml": "<p>Bıçak kapalıyken üstün arandığında bulunması Çok Zor bir Sicht zarı gerektirir. Bıçakla yapılan yakın dövüş saldırıları isabette yarayı 1 kademe fazla ilerletir. <a href=\"@/kurallar/yetenekler/spionage#silent-takedown\">Silent Takedown</a> bu kolla yapılırsa eşik bir kademe düşer.</p>",
+   "flavorHtml": "<p>Önkolun içine gizlenmiş, kasılmayla açılan Gletschmetall bıçak.</p>",
+   "extra": [],
+   "searchText": "klingenarm bıçak kapalıyken üstün arandığında bulunması çok zor bir sicht zarı gerektirir. bıçakla yapılan yakın dövüş saldırıları isabette yarayı 1 kademe fazla ilerletir. silent takedown bu kolla yapılırsa eşik bir kademe düşer. önkolun içine gizlenmiş, kasılmayla açılan gletschmetall bıçak."
+  },
+  {
+   "key": "panzerhaut",
+   "name": "Panzerhaut",
+   "tier": "T2",
+   "slots": [
+    "upper-torso"
+   ],
+   "mods": [
+    {
+     "stat": "korp",
+     "value": 2
+    },
+    {
+     "stat": "agil",
+     "value": -2
+    },
+    {
+     "stat": "leis",
+     "value": -1
+    },
+    {
+     "stat": "klang",
+     "value": -2
+    }
+   ],
+   "usageHtml": "<p>Üst gövdeye isabet eden yaralar 1 kademe az ilerler. Zırhlı hedef sayılırsın; <a href=\"@/kurallar/yetenekler/stahlkrieg#panzerknacker\">Panzerknacker</a> gibi zırha karşı etkiler sana karşı da geçerlidir. Suya düşersen yüzme zarları Çok Zor eşikte atılır.</p>",
+   "flavorHtml": "<p>Göğüs kafesinin üzerine perçinlenmiş Gletschmetall plaka. Tank zırhının insana uyarlanmış hâli.</p>",
+   "extra": [],
+   "searchText": "panzerhaut üst gövdeye isabet eden yaralar 1 kademe az ilerler. zırhlı hedef sayılırsın; panzerknacker gibi zırha karşı etkiler sana karşı da geçerlidir. suya düşersen yüzme zarları çok zor eşikte atılır. göğüs kafesinin üzerine perçinlenmiş gletschmetall plaka. tank zırhının insana uyarlanmış hâli."
+  },
+  {
+   "key": "sturmarm",
+   "name": "Sturmarm",
+   "tier": "T2",
+   "slots": [
+    "l-arm",
+    "r-arm"
+   ],
+   "mods": [
+    {
+     "stat": "krach",
+     "value": 3
+    },
+    {
+     "stat": "werk",
+     "value": -2
+    },
+    {
+     "stat": "klang",
+     "value": -2
+    }
+   ],
+   "usageHtml": "<p>Akku 3 şarj taşır. 1 şarj harcayarak bu kolla yapılan bir yakın dövüş saldırısında yarayı 1 kademe fazla ilerletebilir ya da bir kaba kuvvet aksiyonunu (kapı kırma, araç kaldırma) Uber yerine Çok Zor eşikte deneyebilirsin. Akku yalnızca şebeke elektriği olan bir yerde, uzun dinlenmede dolar.</p>",
+   "flavorHtml": "<p>Sturmmaschinen ordusunun hidrolik kolu. Speer'in makine askerlerinin parçalarından insan bedenine uyarlanmıştır.</p>",
+   "extra": [],
+   "searchText": "sturmarm akku 3 şarj taşır. 1 şarj harcayarak bu kolla yapılan bir yakın dövüş saldırısında yarayı 1 kademe fazla ilerletebilir ya da bir kaba kuvvet aksiyonunu (kapı kırma, araç kaldırma) uber yerine çok zor eşikte deneyebilirsin. akku yalnızca şebeke elektriği olan bir yerde, uzun dinlenmede dolar. sturmmaschinen ordusunun hidrolik kolu. speer'in makine askerlerinin parçalarından insan bedenine uyarlanmıştır."
+  },
+  {
+   "key": "geistauge",
+   "name": "Geistauge",
+   "tier": "T3",
+   "slots": [
+    "head"
+   ],
+   "mods": [
+    {
+     "stat": "wissen",
+     "value": 2
+    },
+    {
+     "stat": "sicht",
+     "value": 1
+    },
+    {
+     "stat": "sanita",
+     "value": -2
+    },
+    {
+     "stat": "klang",
+     "value": -2
+    }
+   ],
+   "usageHtml": "<p>Sahne başına 1 kez, yakındaki duvarların ve engellerin ardındaki canlıları görebilirsin. Kara büyü (Schwarzesonne) zarlarına +2. Her kullanımda d20 + Sanita ≥ Orta atılır; başarısızlıkta +1 Corruption.</p>",
+   "flavorHtml": "<p>Ezoterik rünlerle işlenmiş, göz çukuruna yerleştirilen kristal. Işığı değil, yaşam enerjisini görür.</p>",
+   "extra": [],
+   "searchText": "geistauge sahne başına 1 kez, yakındaki duvarların ve engellerin ardındaki canlıları görebilirsin. kara büyü (schwarzesonne) zarlarına +2. her kullanımda d20 + sanita ≥ orta atılır; başarısızlıkta +1 corruption. ezoterik rünlerle işlenmiş, göz çukuruna yerleştirilen kristal. işığı değil, yaşam enerjisini görür."
+  },
+  {
+   "key": "gletschkanon",
+   "name": "Gletschkanon",
+   "tier": "T3",
+   "slots": [
+    "l-arm",
+    "r-arm"
+   ],
+   "mods": [
+    {
+     "stat": "korp",
+     "value": 1
+    },
+    {
+     "stat": "krach",
+     "value": -1
+    },
+    {
+     "stat": "klang",
+     "value": -2
+    },
+    {
+     "stat": "werk",
+     "value": -5
+    },
+    {
+     "stat": "aim",
+     "value": -2
+    }
+   ],
+   "usageHtml": "",
+   "flavorHtml": "<p>Gletschmetall ile yaratılmış bu el topu, Gletsch/Buzmetal pili harcayarak çok güçlü bir enerji topu atabilir. Bu enerji topu karşısına çıkan çoğu metali ve canlıyı eritip geçer. Ancak kısa mesafede güçlüyken uzun mesafede atılan enerji topu etkinliğini kaybeder.</p>",
+   "extra": [],
+   "searchText": "gletschkanon gletschmetall ile yaratılmış bu el topu, gletsch/buzmetal pili harcayarak çok güçlü bir enerji topu atabilir. bu enerji topu karşısına çıkan çoğu metali ve canlıyı eritip geçer. ancak kısa mesafede güçlüyken uzun mesafede atılan enerji topu etkinliğini kaybeder."
+  },
+  {
+   "key": "schwarzes-herz",
+   "name": "Schwarzes Herz",
+   "tier": "T3",
+   "slots": [
+    "upper-torso"
+   ],
+   "mods": [
+    {
+     "stat": "korp",
+     "value": 2
+    },
+    {
+     "stat": "krach",
+     "value": 1
+    },
+    {
+     "stat": "sanita",
+     "value": -3
+    },
+    {
+     "stat": "klang",
+     "value": -3
+    }
+   ],
+   "usageHtml": "<p>Death Save Throw atman gerektiğinde zar atmadan Save sayılır. Seans başına 1 kez kullanılır ve her kullanımda +2 Corruption verir. Uzun dinlenmede bir uzvun yarası 1 kademe iyileşir; bunu yapmak için önceki sahnede bir canlının öldüğüne tanık olmuş olman gerekir.</p>",
+   "flavorHtml": "<p>Wewelsburg mahzenlerinde yapılmış, yaşam enerjisiyle atan siyah metal kalp. Elektrik istemez; başka bir şey ister.</p>",
+   "extra": [],
+   "searchText": "schwarzes herz death save throw atman gerektiğinde zar atmadan save sayılır. seans başına 1 kez kullanılır ve her kullanımda +2 corruption verir. uzun dinlenmede bir uzvun yarası 1 kademe iyileşir; bunu yapmak için önceki sahnede bir canlının öldüğüne tanık olmuş olman gerekir. wewelsburg mahzenlerinde yapılmış, yaşam enerjisiyle atan siyah metal kalp. elektrik istemez; başka bir şey ister."
+  }
+ ],
+ "campaigns": [
+  {
+   "key": "1173-week-reich",
+   "name": "1173 Week Reich",
+   "storyHtml": "<p>Hikaye, SS gözünden Alman iç savaşının başlangıcını ve 1955.5 - Fall Tod 'un başlangıcını Kanada'da müttefik kalıntıları ile savaşırken anlatır.</p>",
+   "length": "ORTA - 4-8 Session",
+   "difficulty": "BEGINNER",
+   "emblem": "/emblems/emb-RCH.png"
+  },
+  {
+   "key": "attero-dominatus",
+   "name": "Attero Dominatus",
+   "storyHtml": "<p>Nazi otoritesine karşı halk ayaklanması.</p>",
+   "length": "ORTA - 3-7 Session",
+   "difficulty": "HARSH",
+   "emblem": "/emblems/emb-ADM.png"
+  },
+  {
+   "key": "call-of-kyffhauser",
+   "name": "Call of Kyffhauser",
+   "storyHtml": "<p>Katolik merkezli Alman ayaklanmasının merkezi Kyffhauser'a ulaşmaya çalışan bir grup Viyanalı Alman.</p>",
+   "length": "UZUN - 5-9 Session",
+   "difficulty": "MODERATE",
+   "emblem": "/emblems/emb-CKY.png"
+  },
+  {
+   "key": "glacier-sanctuary",
+   "name": "Glacier Sanctuary",
+   "storyHtml": "<p>Bir grup paralı aşırı sağcı askerin hikayesi. Savaş ile beslenen ve savaşı besleyen bir grup savaşçı.</p>",
+   "length": "ORTA - 4-8 Session",
+   "difficulty": "UBER",
+   "emblem": "/emblems/emb-PMC.png"
+  },
+  {
+   "key": "imperial-vanguard",
+   "name": "Imperial Vanguard",
+   "storyHtml": "<p>Alman işgaline karşı tek başına direnen, Avustralyada organize olmuş özgürlükçü grup</p>",
+   "length": "KISA - 2-5 Session",
+   "difficulty": "BEGINNER",
+   "emblem": "/emblems/emb-ENG.png"
+  },
+  {
+   "key": "legion-of-walaska",
+   "name": "Legion of Walaska",
+   "storyHtml": "<p>Son Amerikan Birlikleri direnişi Batı Alaska, Doğu Sibirya'da sürüyor.</p>",
+   "length": "ORTA - 5-9 Session",
+   "difficulty": "UBER",
+   "emblem": "/emblems/emb-USF.png"
+  },
+  {
+   "key": "semper-fidelis",
+   "name": "Semper Fidelis",
+   "storyHtml": "<p>Nazi otoritesine karşı direnen bir grup Loyalist Alman Askerinin Zıırhlı birliklerle yaptığı direniş.</p>",
+   "length": "ORTA - 4-8 Session",
+   "difficulty": "MODERATE",
+   "emblem": "/emblems/emb-SFD.png"
+  },
+  {
+   "key": "wolfpack",
+   "name": "Wolfpack",
+   "storyHtml": "<p>Alman isyanının 3. bir tarafı olan Deniz Piyadeleri Kriegsmarine emrinde gerçekleştirilen barış harekatını konu alan Campaign.</p>",
+   "length": "ORTA - 5-9 Session",
+   "difficulty": "HARSH",
+   "emblem": "/emblems/emb-WLF.png"
+  }
+ ]
+}

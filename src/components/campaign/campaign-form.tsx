@@ -1,0 +1,108 @@
+"use client";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useAction } from "@/components/interactive";
+import { Button, Field, cx } from "@/components/ui";
+import { api } from "@/lib/client";
+import type { CampaignInfo } from "@/lib/shz/content-types";
+
+export interface CampaignValues {
+  name: string;
+  contentKey: string | null;
+  description: string;
+  startPerkPoints: number;
+  levelCap: number;
+  deathSaveEnabled: boolean;
+  status?: "ACTIVE" | "PAUSED" | "ARCHIVED";
+}
+
+export function CampaignForm({ id, initial, presets }: { id?: string; initial?: CampaignValues; presets: CampaignInfo[] }) {
+  const router = useRouter();
+  const { busy, run } = useAction();
+  const [v, setV] = useState<CampaignValues>(
+    initial ?? { name: "", contentKey: null, description: "", startPerkPoints: 2, levelCap: 10, deathSaveEnabled: true },
+  );
+  const set = <K extends keyof CampaignValues>(k: K, val: CampaignValues[K]) => setV((x) => ({ ...x, [k]: val }));
+
+  return (
+    <form
+      className="space-y-6"
+      onSubmit={async (e) => {
+        e.preventDefault();
+        if (id) {
+          await run(() => api(`/api/campaigns/${id}`, { method: "PATCH", body: v }), "Kampanya kaydedildi.");
+          router.refresh();
+        } else {
+          const r = await run(() => api<{ id: string }>("/api/campaigns", { body: v }));
+          if (r) router.push(`/kampanya/${r.id}`);
+        }
+      }}
+    >
+      <div>
+        <span className="label">Hikâye</span>
+        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+          {presets.map((p) => (
+            <button
+              type="button"
+              key={p.key}
+              onClick={() => {
+                set("contentKey", v.contentKey === p.key ? null : p.key);
+                if (!v.name) set("name", p.name);
+              }}
+              className={cx(
+                "flex items-start gap-3 rounded-lg border p-3 text-left transition",
+                v.contentKey === p.key ? "border-accent bg-accent/10" : "border-line bg-surface2/40 hover:border-accent/40",
+              )}
+            >
+              {p.emblem ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={`/schwarzesonne${p.emblem}`} alt="" className="h-10 w-10 shrink-0 object-contain" />
+              ) : (
+                <span className="text-xl">☀️</span>
+              )}
+              <span className="min-w-0">
+                <span className="block text-sm font-medium text-ink">{p.name}</span>
+                <span className="block text-[11px] text-muted">
+                  {p.difficulty} · {p.length}
+                </span>
+              </span>
+            </button>
+          ))}
+        </div>
+        <p className="mt-1.5 text-xs text-muted">İsteğe bağlı. Kendi hikâyeni anlatıyorsan boş bırak.</p>
+      </div>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Field label="Kampanya adı">
+          <input value={v.name} onChange={(e) => set("name", e.target.value)} required minLength={2} maxLength={80} className="input" />
+        </Field>
+        {id && (
+          <Field label="Durum">
+            <select value={v.status} onChange={(e) => set("status", e.target.value as CampaignValues["status"])} className="input">
+              <option value="ACTIVE">Aktif</option>
+              <option value="PAUSED">Duraklatıldı</option>
+              <option value="ARCHIVED">Arşiv</option>
+            </select>
+          </Field>
+        )}
+      </div>
+      <Field label="Açıklama" hint="Oyunculara görünen kısa tanıtım">
+        <textarea value={v.description} onChange={(e) => set("description", e.target.value)} maxLength={2000} rows={3} className="input" />
+      </Field>
+      <div className="grid gap-4 sm:grid-cols-3">
+        <Field label="Başlangıç perk puanı" hint="Önerilen +0 veya +2">
+          <input type="number" min={0} max={10} value={v.startPerkPoints} onChange={(e) => set("startPerkPoints", Number(e.target.value))} className="input" />
+        </Field>
+        <Field label="Seviye sınırı" hint="10 (uzun kampanyalarda 15'e kadar)">
+          <input type="number" min={1} max={15} value={v.levelCap} onChange={(e) => set("levelCap", Number(e.target.value))} className="input" />
+        </Field>
+        <label className="flex items-center gap-3 rounded-lg border border-line bg-surface2/40 px-3 py-2.5 sm:mt-5 sm:self-start">
+          <input type="checkbox" checked={v.deathSaveEnabled} onChange={(e) => set("deathSaveEnabled", e.target.checked)} className="h-4 w-4 accent-[rgb(186,168,240)]" />
+          <span className="text-sm">Death Save açık</span>
+        </label>
+      </div>
+      <Button type="submit" variant="primary" disabled={busy}>
+        {id ? "Kaydet" : "Kampanyayı oluştur"}
+      </Button>
+    </form>
+  );
+}

@@ -1,0 +1,34 @@
+import type { Metadata } from "next";
+import { PerkCard } from "@/components/content/cards";
+import { PageHeader } from "@/components/ui";
+import { content } from "@/lib/shz/content";
+
+export const metadata: Metadata = { title: "Perkler" };
+
+export default function PerksPage() {
+  const perks = content().perks;
+  const name = new Map(perks.map((p) => [p.key, p.name]));
+  return (
+    <div>
+      <PageHeader kicker="Karakter yaratma" title="Perkler">
+        Pozitif perkler perk puanı <strong className="text-ink">harcar</strong>, negatif perkler perk puanı <strong className="text-ink">kazandırır</strong>. Toplam puan negatife düşmeden
+        istediğin kadar perk alabilirsin; artan puan (Puan + 1) / 2 (aşağı yuvarla) olarak stat puanına dönüşür.
+      </PageHeader>
+      {(["positive", "negative"] as const).map((k) => (
+        <section key={k} className="mb-10">
+          <h2 className="mb-4 text-xl">{k === "positive" ? "Pozitif perkler" : "Negatif perkler"}</h2>
+          <div className="grid gap-3 lg:grid-cols-2">
+            {perks
+              .filter((p) => p.kind === k)
+              .map((p) => (
+                <div key={p.key}>
+                  <PerkCard perk={p} />
+                  {p.exclusive.length > 0 && <p className="mt-1 px-1 text-xs text-muted">Birlikte alınamaz: {p.exclusive.map((x) => name.get(x)).join(", ")}</p>}
+                </div>
+              ))}
+          </div>
+        </section>
+      ))}
+    </div>
+  );
+}

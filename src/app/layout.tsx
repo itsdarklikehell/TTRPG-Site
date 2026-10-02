@@ -1,45 +1,30 @@
-import type { Metadata } from "next";
-import { Cinzel, Inter, JetBrains_Mono } from "next/font/google";
-import Providers from "./providers";
+import "@fontsource/ibm-plex-sans/400.css";
+import "@fontsource/ibm-plex-sans/500.css";
+import "@fontsource/ibm-plex-sans/600.css";
+import "@fontsource/ibm-plex-serif/500.css";
+import "@fontsource/ibm-plex-serif/600.css";
+import "@fontsource/ibm-plex-mono/400.css";
+import "@fontsource/ibm-plex-mono/500.css";
 import "./globals.css";
-
-const cinzel = Cinzel({
-  subsets: ["latin"],
-  variable: "--font-cinzel",
-  display: "swap",
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-jetbrains",
-  display: "swap",
-});
+import type { Metadata, Viewport } from "next";
+import { headers } from "next/headers";
+import { ToastProvider } from "@/components/interactive";
 
 export const metadata: Metadata = {
-  title: "Umbra Caelis — TTRPG",
-  description: "Web tabanlı TTRPG oyun yönetim platformu",
+  title: { default: "Schwarzesonne", template: "%s · Schwarzesonne" },
+  description: "Schwarzesonne TTRPG: kampanyalar, karakterler ve oyun odası.",
+  robots: { index: false, follow: false },
+  icons: { icon: "/schwarzesonne/favicon.svg" },
 };
+export const viewport: Viewport = { themeColor: "#0b0a0e", width: "device-width", initialScale: 1 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  // CSP nonce'u için her istek dinamik işlenir.
+  await headers();
   return (
     <html lang="tr">
-      <head>
-        <link rel="icon" href="/icons/ui/logo.svg" type="image/svg+xml" />
-      </head>
-      <body
-        className={`${cinzel.variable} ${inter.variable} ${jetbrainsMono.variable} font-body antialiased bg-void text-zinc-200`}
-      >
-        <Providers>{children}</Providers>
+      <body>
+        <ToastProvider>{children}</ToastProvider>
       </body>
     </html>
   );

@@ -2,72 +2,123 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ─── Dark-only Theme ──────────────────────────────── */
+/* Seri renkleri: siyah / lavanta / beyaz */
 :root {
-  --background: #09090b;
-  --foreground: #e4e4e7;
+  --bg: 11 10 14;
+  --surface: 20 18 25;
+  --surface-2: 29 26 36;
+  --line: 44 40 54;
+  --ink: 240 236 248;
+  --muted: 157 149 175;
+  --accent: 186 168 240;
+  --accent-strong: 156 133 228;
+  --on-accent: 20 16 30;
+  --danger: 228 108 96;
+  --ok: 122 196 154;
+  --warn: 226 180 92;
+  color-scheme: dark;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+}
 body {
-  color: var(--foreground);
-  background: var(--background);
+  @apply bg-bg text-ink font-sans antialiased;
+  font-size: 15px;
+  line-height: 1.6;
+}
+::selection {
+  background: rgb(var(--accent) / 0.35);
+}
+:focus-visible {
+  outline: 2px solid rgb(var(--accent));
+  outline-offset: 2px;
+}
+h1,
+h2,
+h3 {
+  @apply font-serif;
+  letter-spacing: 0.01em;
 }
 
-/* ─── Gothic Heading Utility ───────────────────────── */
+/* İnce kaydırma çubukları */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(var(--line)) transparent;
+}
+
 @layer components {
-  .heading-gothic {
-    font-family: var(--font-cinzel), serif;
-    letter-spacing: 0.05em;
+  .card {
+    @apply rounded-xl border border-line bg-surface shadow-card;
   }
-
-  .nav-gothic {
-    font-family: var(--font-cinzel), serif;
-    letter-spacing: 0.08em;
-    font-size: 0.8125rem;
+  .kicker {
+    @apply text-[11px] font-semibold uppercase tracking-[0.16em] text-accent;
   }
-
-  /* ─── Ornamental Divider ───────────────────────── */
-  .divider-ornament {
-    @apply flex items-center gap-4 text-zinc-600;
+  .input {
+    @apply w-full rounded-lg border border-line bg-bg/60 px-3 py-2 text-ink placeholder:text-muted/60 transition;
+    @apply focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/25;
   }
-
-  .divider-ornament::before,
-  .divider-ornament::after {
-    content: "";
-    @apply h-px flex-1 bg-border;
+  .label {
+    @apply mb-1 block text-xs font-medium uppercase tracking-wider text-muted;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1 rounded-full border border-line bg-surface2 px-2.5 py-0.5 text-xs text-ink/90;
   }
 }
 
-/* ─── Focus Ring ───────────────────────────────────── */
-@layer base {
-  *:focus-visible {
-    @apply outline-2 outline-offset-2 outline-lavender-400;
-  }
+/* Kural metinleri (vault'tan üretilen HTML) */
+.prose-shz {
+  @apply text-[15px] leading-relaxed text-ink/90;
 }
-
-/* ─── Scrollbar (Dark) ─────────────────────────────── */
-@layer base {
-  ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: #09090b;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: #27272a;
-    border-radius: 4px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: #3f3f46;
-  }
+.prose-shz p {
+  @apply mb-3;
 }
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+.prose-shz h3 {
+  @apply mb-2 mt-7 text-lg text-ink;
+}
+.prose-shz h4 {
+  @apply mb-1.5 mt-5 font-serif text-base text-ink;
+}
+.prose-shz h4.label {
+  @apply mb-1 mt-5 font-sans text-xs font-semibold uppercase tracking-wider text-muted;
+}
+.prose-shz a {
+  @apply text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent;
+}
+.prose-shz strong {
+  @apply font-semibold text-ink;
+}
+.prose-shz ul {
+  @apply mb-3 list-disc space-y-1 pl-5;
+}
+.prose-shz .formula {
+  @apply my-2 mb-4 overflow-x-auto rounded-lg bg-surface2 px-4 py-3 font-mono text-[13px];
+}
+.prose-shz table.kv {
+  @apply my-2 mb-4 w-full max-w-md border-collapse text-sm;
+}
+.prose-shz table.kv th {
+  @apply whitespace-nowrap border-b border-line py-1.5 pr-4 text-left font-medium;
+}
+.prose-shz table.kv td {
+  @apply border-b border-line py-1.5 font-mono text-[13px];
+}
+.prose-shz .chips {
+  @apply my-3 flex flex-wrap gap-1.5;
+}
+.prose-shz .chip {
+  @apply inline-flex rounded-full border border-line bg-surface2 px-2.5 py-0.5 text-xs;
+}
+.prose-shz ol.corr {
+  @apply my-3 grid gap-1.5;
+}
+.prose-shz ol.corr li {
+  @apply grid grid-cols-[38px_1fr] items-start gap-3 rounded-lg border border-line bg-surface2/60 px-3 py-2;
+}
+.prose-shz ol.corr .lvl {
+  @apply grid h-7 w-7 place-items-center rounded-md bg-accent/15 font-mono text-sm font-semibold text-accent;
+}
+.prose-shz > :last-child,
+.prose-shz p:last-child {
+  @apply mb-0;
 }

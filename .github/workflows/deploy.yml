@@ -1,26 +1,77 @@
-name: Deploy to VPS
+name: Deploy
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
 
 jobs:
-  deploy:
+  check:
+    name: Kontrol (tip, test, build)
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.0.3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: root
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            cd /opt/TTRPG-Site
-            git pull origin main
-            npm install
-            export DATABASE_URL=$(node -e "const c=require('./server/ecosystem.config.cjs'); console.log(c.apps[0].env.DATABASE_URL)")
-            DATABASE_URL=$DATABASE_URL npx prisma db push --accept-data-loss
-            npm run build
-            cd server && npm install && cd ..
-            pm2 restart all
+          node-version: 22
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+        env:
+          NEXT_TELEMETRY_DISABLED: 1
+      - name: Bağımlılık güvenlik taraması (yüksek ve kritik)
+        run: npm audit --omit=dev --audit-level=high
+
+  deploy:
+    name: Sunucuya yükle
+    needs: check
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: SSH ayarları
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+
+      - name: Dosyaları gönder
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT || '22' }}
+        run: |
+          RELEASE="$(date -u +%Y%m%d-%H%M%S)-${GITHUB_SHA::7}"
+          echo "RELEASE=$RELEASE" >> "$GITHUB_ENV"
+          rsync -az --delete \
+            --exclude '.git' --exclude 'node_modules' --exclude '.next' --exclude '.env*' \
+            -e "ssh -i ~/.ssh/deploy_key -p $SSH_PORT -o StrictHostKeyChecking=yes" \
+            ./ "shzdeploy@$SSH_HOST:/opt/schwarzesonne/releases/$RELEASE/"
+
+      - name: Kur ve yeniden başlat
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT || '22' }}
+        run: |
+          ssh -i ~/.ssh/deploy_key -p "$SSH_PORT" -o StrictHostKeyChecking=yes "shzdeploy@$SSH_HOST" \
+            "bash /opt/schwarzesonne/releases/$RELEASE/deploy/deploy.sh $RELEASE"
+
+      - name: Anahtarı sil
+        if: always()
+        run: rm -f ~/.ssh/deploy_key

@@ -1,127 +1,86 @@
-import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { and, eq, inArray, sql } from "drizzle-orm";
+import { z } from "zod";
+import { db } from "@/db";
+import { characterLogs, characters } from "@/db/schema";
+import { bad, conflict, route, zId } from "@/lib/api";
+import { campaignAccess } from "@/lib/access";
+import { notifyCampaign } from "@/lib/realtime-bus";
+import { AGE_MAX, AGE_MIN, BODY_PART_KEYS, STAT_KEYS } from "@/lib/shz/constants";
+import { getPerk, getTree, rulesData } from "@/lib/shz/content";
+import { buildCreation } from "@/lib/shz/rules";
 
-// POST — Karakter oluştur
-export async function POST(req: NextRequest) {
-  const session = await getServerSession(authOptions);
-  if (!session?.user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+const statMap = z.partialRecord(z.enum(STAT_KEYS), z.number().int().min(0).max(10));
 
-  const { sessionId, name } = await req.json();
+export const POST = route(
+  {
+    limit: 20,
+    body: z.object({
+      campaignId: zId,
+      name: z.string().trim().min(2).max(60),
+      age: z.number().int().min(AGE_MIN).max(AGE_MAX),
+      nationality: z.string().trim().min(2).max(60),
+      alignment: z.string().trim().min(2).max(60),
+      background: z.string().trim().max(4000).default(""),
+      appearance: z.string().trim().max(1000).default(""),
+      creation: z.object({
+        tree: z.string().max(60),
+        freeStats: statMap,
+        perks: z.array(z.string().max(80)).max(30),
+        perkStats: statMap,
+        startAugment: z.object({ key: z.string().max(80), part: z.enum(BODY_PART_KEYS as [string, ...string[]]) }).nullable(),
+        firstAbility: z.string().max(80).nullable(),
+      }),
+    }),
+  },
+  async ({ body, user }) => {
+    const { campaign, isGM } = await campaignAccess(body.campaignId, user);
+    if (campaign.status === "ARCHIVED") throw bad("Bu kampanya arşivlenmiş.");
+    const r = buildCreation(body.creation, campaign.startPerkPoints, rulesData());
+    if (!r.ok) throw bad(r.problems[0]);
 
-  if (!sessionId || !name?.trim()) {
-    return NextResponse.json(
-      { error: "sessionId ve name gerekli." },
-      { status: 400 }
-    );
-  }
-
-  // Verify user is a player in this session
-  const gameSession = await prisma.session.findUnique({
-    where: { id: sessionId },
-    include: { players: { select: { userId: true } } },
-  });
-
-  if (!gameSession) {
-    return NextResponse.json({ error: "Session bulunamadı." }, { status: 404 });
-  }
-
-  const isGm = gameSession.gmId === session.user.id;
-  const isPlayer = gameSession.players.some(
-    (p) => p.userId === session.user.id
-  );
-
-  if (!isGm && !isPlayer) {
-    return NextResponse.json({ error: "Bu session'a erişiminiz yok." }, { status: 403 });
-  }
-
-  // Check if user already has a character in this session
-  const existing = await prisma.character.findUnique({
-    where: { sessionId_userId: { sessionId, userId: session.user.id } },
-  });
-
-  if (existing) {
-    return NextResponse.json(
-      { error: "Bu session'da zaten bir karakteriniz var." },
-      { status: 409 }
-    );
-  }
-
-  const character = await prisma.character.create({
-    data: {
-      sessionId,
-      userId: session.user.id,
-      name: name.trim(),
-      // Default stats
-      stats: {
-        create: [
-          { name: "HP", baseValue: 100, currentValue: 100, maxValue: 100, isPublic: true },
-          { name: "Mana", baseValue: 50, currentValue: 50, maxValue: 50, isPublic: true },
-          { name: "STR", baseValue: 10, currentValue: 10, isPublic: false },
-          { name: "DEX", baseValue: 10, currentValue: 10, isPublic: false },
-          { name: "INT", baseValue: 10, currentValue: 10, isPublic: false },
-          { name: "WIS", baseValue: 10, currentValue: 10, isPublic: false },
-          { name: "CON", baseValue: 10, currentValue: 10, isPublic: false },
-          { name: "CHA", baseValue: 10, currentValue: 10, isPublic: false },
-        ],
-      },
-      wallet: {
-        create: { balances: {} },
-      },
-    },
-    include: { stats: true, wallet: true },
-  });
-
-  return NextResponse.json(character, { status: 201 });
-}
-
-// GET — Session'daki karakterleri listele
-export async function GET(req: NextRequest) {
-  const session = await getServerSession(authOptions);
-  if (!session?.user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const sessionId = req.nextUrl.searchParams.get("sessionId");
-  if (!sessionId) {
-    return NextResponse.json({ error: "sessionId gerekli." }, { status: 400 });
-  }
-
-  const gameSession = await prisma.session.findUnique({
-    where: { id: sessionId },
-    select: { gmId: true },
-  });
-
-  if (!gameSession) {
-    return NextResponse.json({ error: "Session bulunamadı." }, { status: 404 });
-  }
-
-  const isGm = gameSession.gmId === session.user.id;
-
-  const characters = await prisma.character.findMany({
-    where: { sessionId },
-    include: {
-      user: { select: { username: true } },
-      stats: true,
-      wallet: true,
-    },
-  });
-
-  // Filter private data: only owner and GM can see private stats
-  const filtered = characters.map((char) => ({
-    ...char,
-    stats:
-      isGm || char.userId === session.user.id
-        ? char.stats
-        : char.stats.filter((s) => s.isPublic),
-    privateData:
-      isGm || char.userId === session.user.id ? char.privateData : {},
-    wallet:
-      isGm || char.userId === session.user.id ? char.wallet : null,
-  }));
-
-  return NextResponse.json(filtered);
-}
+    // Aynı oyuncunun eşzamanlı isteklerini sıraya sok (kampanya başına tek karakter kuralı).
+    const c = await db.transaction(async (tx) => {
+      await tx.execute(sql`select pg_advisory_xact_lock(hashtext(${campaign.id + ":" + user.id}))`);
+      if (!isGM) {
+        const mine = await tx
+          .select({ id: characters.id })
+          .from(characters)
+          .where(and(eq(characters.campaignId, campaign.id), eq(characters.userId, user.id), inArray(characters.status, ["PENDING", "ACTIVE"])));
+        if (mine.length) throw conflict("Bu kampanyada zaten aktif ya da onay bekleyen bir karakterin var.");
+      }
+      const [row] = await tx
+        .insert(characters)
+        .values({
+          campaignId: campaign.id,
+          userId: user.id,
+          status: isGM ? "ACTIVE" : "PENDING",
+          name: body.name,
+          age: body.age,
+          nationality: body.nationality,
+          alignment: body.alignment,
+          background: body.background,
+          appearance: body.appearance,
+          level: 0,
+          abilityPoints: r.abilityPoints,
+          freeStatPoints: 0,
+          stats: r.stats,
+          trees: [body.creation.tree],
+          abilities: r.abilities,
+          perks: [...new Set(body.creation.perks)],
+          body: r.body,
+          corruption: r.corruption,
+        })
+        .returning({ id: characters.id });
+      return row;
+    });
+    const tree = getTree(body.creation.tree);
+    await db.insert(characterLogs).values({
+      characterId: c.id,
+      actorId: user.id,
+      kind: "create",
+      text: `Karakter oluşturuldu: ${tree?.name ?? "?"} ağacı; perkler: ${body.creation.perks.map((k) => getPerk(k)?.name ?? k).join(", ") || "yok"}.`,
+    });
+    notifyCampaign(campaign.id, "approvals:changed", {});
+    return { id: c.id };
+  },
+);

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Umbra Caelis</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>☀️</text></svg>">
+<style>
+  :root { --bg:#0b0a0e; --surface:#141219; --line:#2c2836; --ink:#f0ecf8; --muted:#9d95af; --accent:#baa8f0; --on:#14101e; color-scheme: dark; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100%; }
+  body { background: var(--bg); color: var(--ink); font: 16px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif; display: grid; place-items: center; min-height: 100dvh; padding: 24px 16px;
+    background-image: radial-gradient(60rem 30rem at 50% -10%, rgb(186 168 240 / .13), transparent 60%); }
+  main { width: 100%; max-width: 560px; text-align: center; }
+  .kicker { font-size: 11px; letter-spacing: .32em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; }
+  h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 600; font-size: clamp(2rem, 7vw, 3rem); letter-spacing: .14em; margin: 0; }
+  .card { margin-top: 40px; border: 1px solid var(--line); background: var(--surface); border-radius: 16px; padding: 28px 24px; }
+  .sun { font-size: 56px; line-height: 1; font-family: "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif; }
+  h2 { font-family: Georgia, serif; letter-spacing: .12em; margin: 14px 0 4px; font-size: 1.5rem; }
+  .tag { display: inline-block; background: var(--accent); color: var(--on); font-size: 11px; font-weight: 700; letter-spacing: .3em; text-transform: uppercase; padding: 2px 8px; }
+  p.lead { color: var(--muted); margin: 16px auto 24px; max-width: 420px; }
+  .actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  a.btn { display: inline-flex; align-items: center; height: 44px; padding: 0 22px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 15px; }
+  a.primary { background: var(--accent); color: var(--on); }
+  a.primary:hover { filter: brightness(1.08); }
+  a.ghost { border: 1px solid var(--line); color: var(--ink); }
+  a.ghost:hover { border-color: var(--accent); }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  footer { margin-top: 28px; font-size: 12px; color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+  <p class="kicker">Umbra Caelis</p>
+  <h1>UMBRA CAELIS</h1>
+  <section class="card">
+    <div class="sun" aria-hidden="true">☀️</div>
+    <h2>SCHWARZESONNE</h2>
+    <span class="tag">TTRPG</span>
+    <p class="lead">1955, Alman iç savaşı. Kampanyalar, karakter kağıtları ve oyun odası.</p>
+    <div class="actions">
+      <a class="btn primary" href="/schwarzesonne/giris">SHZ Giriş</a>
+      <a class="btn ghost" href="/schwarzesonne/kurallar">Kurallar</a>
+    </div>
+  </section>
+  <footer>Kayıt yalnızca GM davetiyle.</footer>
+</main>
+</body>
+</html>
