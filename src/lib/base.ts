@@ -10,3 +10,8 @@ export function withBase(p: string) {
 export function resolveContentLinks(html: string) {
   return html.replace(/href="@\//g, `href="${BASE_PATH}/`);
 }
+
+/** Karakter portresinin adresi; sürüm 0 ise portre yoktur. */
+export function portraitUrl(characterId: string, version: number | null | undefined) {
+  return version ? withBase(`/api/characters/${characterId}/portrait?v=${version}`) : null;
+}

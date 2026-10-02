@@ -1,4 +1,5 @@
 import { asc, eq } from "drizzle-orm";
+import { Portrait } from "@/components/portrait";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -110,11 +111,11 @@ export default async function CampaignPage({ params }: { params: Promise<{ id: s
               <div className="grid gap-3 sm:grid-cols-2">
                 {visible.map(({ ch, owner }) => (
                   <Link key={ch.id} href={`/karakter/${ch.id}`} className="card flex items-center gap-4 p-4 transition hover:border-accent/40">
-                    <div className="grid h-12 w-12 shrink-0 place-items-center rounded-lg border border-line bg-surface2 font-mono text-lg text-accent">{ch.level}</div>
+                    <Portrait id={ch.id} version={ch.portraitVersion} name={ch.name} className="h-14 w-11" />
                     <div className="min-w-0 flex-1">
                       <p className="truncate font-serif text-base text-ink">{ch.name}</p>
                       <p className="truncate text-xs text-muted">
-                        {owner} · {ch.trees.map((t) => getTree(t)?.name ?? t).join(" / ")}
+                        Sv {ch.level} · {owner} · {ch.trees.map((t) => getTree(t)?.name ?? t).join(" / ")}
                       </p>
                     </div>
                     <StatusBadge status={ch.status} />

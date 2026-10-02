@@ -39,7 +39,7 @@ type Ctx<B, A extends Auth> = {
  *  - hata mesajlarının sızmasını önleyen tek tip hata cevabı
  */
 export function route<S extends z.ZodType = z.ZodType<undefined>, A extends Auth = "user">(
-  opts: { auth?: A; body?: S; limit?: number },
+  opts: { auth?: A; body?: S; limit?: number; maxBody?: number },
   handler: (ctx: Ctx<z.infer<S>, A>) => Promise<unknown>,
 ) {
   return async (req: NextRequest, segment: { params: Promise<Params> }) => {
@@ -63,7 +63,7 @@ export function route<S extends z.ZodType = z.ZodType<undefined>, A extends Auth
       if (opts.body) {
         if (!(req.headers.get("content-type") ?? "").includes("application/json")) throw bad("JSON bekleniyor.");
         const raw = await req.text();
-        if (raw.length > MAX_BODY) throw new ApiError(413, "İstek çok büyük.");
+        if (raw.length > (opts.maxBody ?? MAX_BODY)) throw new ApiError(413, "İstek çok büyük.");
         let parsed: unknown;
         try {
           parsed = JSON.parse(raw);

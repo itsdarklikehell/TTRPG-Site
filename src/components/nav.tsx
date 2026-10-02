@@ -9,7 +9,7 @@ export function Brand() {
       <SunLogo className="h-8 w-8 text-accent" />
       <span className="leading-tight">
         <span className="block font-serif text-[15px] font-semibold tracking-[0.06em] text-ink">SCHWARZESONNE</span>
-        <span className="block text-[10px] uppercase tracking-[0.22em] text-accent">Umbra Caelis</span>
+        <span lang="en" className="block text-[10px] uppercase tracking-[0.22em] text-accent">Umbra Caelis</span>
       </span>
     </Link>
   );
@@ -20,11 +20,13 @@ export function TopNav({ user }: { user: SessionUser | null }) {
     ? [
         { href: "/panel", label: "Panel" },
         { href: "/kurallar", label: "Kurallar" },
+        { href: "/yardim", label: "Yardım" },
         ...(user.role === "GM" ? [{ href: "/yonetim", label: "Yönetim" }] : []),
         { href: "/hesap", label: "Hesap" },
       ]
     : [
         { href: "/kurallar", label: "Kurallar" },
+        { href: "/yardim", label: "Yardım" },
         { href: "/giris", label: "Giriş" },
       ];
   return (

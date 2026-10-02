@@ -35,7 +35,7 @@ export default async function RoomPage({ params }: { params: Promise<{ id: strin
       gm={gm!}
       members={members}
       initialChars={JSON.parse(JSON.stringify(chars))}
-      augments={data.augments}
+      data={data}
     />
   );
 }

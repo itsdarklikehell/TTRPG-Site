@@ -21,10 +21,7 @@ export default function PerksPage() {
             {perks
               .filter((p) => p.kind === k)
               .map((p) => (
-                <div key={p.key}>
-                  <PerkCard perk={p} />
-                  {p.exclusive.length > 0 && <p className="mt-1 px-1 text-xs text-muted">Birlikte alınamaz: {p.exclusive.map((x) => name.get(x)).join(", ")}</p>}
-                </div>
+                <PerkCard key={p.key} perk={p} exclusiveNames={p.exclusive.map((x) => name.get(x) ?? x)} />
               ))}
           </div>
         </section>

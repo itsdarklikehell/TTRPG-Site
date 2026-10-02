@@ -14,7 +14,6 @@ export const metadata: Metadata = {
   title: { default: "Schwarzesonne", template: "%s · Schwarzesonne" },
   description: "Schwarzesonne TTRPG: kampanyalar, karakterler ve oyun odası.",
   robots: { index: false, follow: false },
-  icons: { icon: "/schwarzesonne/favicon.svg" },
 };
 export const viewport: Viewport = { themeColor: "#0b0a0e", width: "device-width", initialScale: 1 };
 

@@ -66,6 +66,7 @@ const schemas = {
     requestId: z.string().max(64).optional(),
   }),
   reroll: z.object({ campaignId: zId, rollId: zId }),
+  deleteMessage: z.object({ campaignId: zId, messageId: zId }),
   request: z.object({
     campaignId: zId,
     characterIds: z.array(zId).min(1).max(20),
@@ -299,6 +300,19 @@ export function attachRealtime(io: Server) {
           } else io.to(room(p.campaignId)).emit("message", view);
         },
         { max: 12, ms: 10_000 },
+      ),
+
+      delete: guard(
+        schemas.deleteMessage,
+        async function deleteMessage(s, p) {
+          const isGM = joined(s, p.campaignId);
+          const m = await db.query.messages.findFirst({ where: and(eq(messages.id, p.messageId), eq(messages.campaignId, p.campaignId)) });
+          if (!m) fail("Mesaj bulunamadı.");
+          if (!isGM && m!.userId !== s.data.user.id) fail("Yalnızca kendi mesajını silebilirsin.");
+          await db.delete(messages).where(eq(messages.id, m!.id));
+          io.to(room(p.campaignId)).emit("message:deleted", { id: m!.id });
+        },
+        { max: 30, ms: 10_000 },
       ),
 
       roll: guard(schemas.roll, async function roll(s, p) {

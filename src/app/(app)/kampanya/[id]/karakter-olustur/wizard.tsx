@@ -1,13 +1,15 @@
 "use client";
+import { Check, Lock } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
-import { AbilityCard, AugmentCard, Html, PerkCard } from "@/components/content/cards";
+import { AbilityCard, AugmentCard, Html, PerkCard, branchLabel } from "@/components/content/cards";
+import { TreeIcon } from "@/components/content/icons";
 import { useAction } from "@/components/interactive";
 import { Badge, Button, Card, Field, cx } from "@/components/ui";
 import { api } from "@/lib/client";
-import { AGE_MAX, AGE_MIN, STAT_HINTS, STAT_KEYS, STAT_LABELS, bodyPartLabel, type StatKey } from "@/lib/shz/constants";
+import { AGE_MAX, AGE_MIN, START_FREE_STATS, STAT_HINTS, STAT_KEYS, STAT_LABELS, STAT_MAX, bodyPartLabel } from "@/lib/shz/constants";
 import type { RulesData } from "@/lib/shz/content";
-import { buildCreation, emptyStats, learnState, type Stats } from "@/lib/shz/rules";
+import { buildCreation, learnState, type Stats } from "@/lib/shz/rules";
 
 const STEPS = ["Kimlik", "Ekspertiz", "Perkler", "Statlar", "İlk yetenek", "Özet"] as const;
 
@@ -18,62 +20,48 @@ interface Identity {
   alignment: string;
   background: string;
   appearance: string;
+  secretNotes: string;
 }
 
 export function Wizard({ campaignId, startPerkPoints, data }: { campaignId: string; startPerkPoints: number; data: RulesData }) {
   const router = useRouter();
   const { busy, run } = useAction();
   const [step, setStep] = useState(0);
-  const [id, setId] = useState<Identity>({ name: "", age: 30, nationality: "", alignment: "", background: "", appearance: "" });
+  const [id, setId] = useState<Identity>({ name: "", age: 30, nationality: "", alignment: "", background: "", appearance: "", secretNotes: "" });
   const [tree, setTree] = useState("");
   const [aug, setAug] = useState<{ key: string; part: string } | null>(null);
   const [perks, setPerks] = useState<string[]>([]);
-  const [free, setFree] = useState<Partial<Stats>>({});
-  const [perkStats, setPerkStats] = useState<Partial<Stats>>({});
+  const [points, setPoints] = useState<Partial<Stats>>({});
   const [first, setFirst] = useState<string | null>(null);
   const [perkFilter, setPerkFilter] = useState("");
+  const [perkTab, setPerkTab] = useState<"positive" | "negative" | "selected">("positive");
 
   const T = data.trees.find((t) => t.key === tree);
   const result = useMemo(
-    () => buildCreation({ tree, freeStats: free, perks, perkStats, startAugment: aug, firstAbility: first }, startPerkPoints, data),
-    [tree, free, perks, perkStats, aug, first, startPerkPoints, data],
+    () => buildCreation({ tree, points, perks, startAugment: aug, firstAbility: first }, startPerkPoints, data),
+    [tree, points, perks, aug, first, startPerkPoints, data],
   );
   const budget = result.budget;
-  const freeUsed = Object.values(free).reduce((a, b) => a + (b ?? 0), 0);
-  const perkUsed = Object.values(perkStats).reduce((a, b) => a + (b ?? 0), 0);
+  const totalPoints = START_FREE_STATS + budget.convertible;
+  const used = Object.values(points).reduce((a, b) => a + (b ?? 0), 0);
+  const treeCap = budget.convertible;
+  const perkName = useMemo(() => new Map(data.perks.map((p) => [p.key, p.name])), [data.perks]);
 
   const idOk = id.name.trim().length >= 2 && id.nationality.trim().length >= 2 && id.alignment.trim().length >= 2 && id.age >= AGE_MIN && id.age <= AGE_MAX;
-  const stepOk = [
-    idOk,
-    !!T && (T.startBonus.kind !== "augment" || !!aug),
-    budget.problems.length === 0,
-    freeUsed === 2 && perkUsed === budget.convertible,
-    true,
-    result.ok && idOk,
-  ];
+  const stepOk = [idOk, !!T && (T.startBonus.kind !== "augment" || !!aug), budget.problems.length === 0, used === totalPoints && (!T || (points[T.stat] ?? 0) <= treeCap), true, result.ok && idOk];
 
-  // Perk seçimi değişince dönüşen puan dağılımını sıfırla (fazla kalmasın).
+  // Perk ya da ağaç değişince stat dağılımı geçersiz kalabilir: sıfırla.
   const togglePerk = (k: string) => {
     setPerks((p) => (p.includes(k) ? p.filter((x) => x !== k) : [...p, k]));
-    setPerkStats({});
+    setPoints({});
     setFirst(null);
   };
   const chooseTree = (k: string) => {
     setTree(k);
     setAug(null);
-    setFree({});
+    setPoints({});
     setFirst(null);
   };
-
-  const baseStats = useMemo(() => {
-    const s = emptyStats();
-    s.klang = 2;
-    if (T) {
-      s[T.stat] += 2;
-      if (T.startBonus.kind === "stat") s[T.startBonus.stat] += T.startBonus.amount;
-    }
-    return s;
-  }, [T]);
 
   const charForAbilities = {
     level: 0,
@@ -86,16 +74,20 @@ export function Wizard({ campaignId, startPerkPoints, data }: { campaignId: stri
     inspiration: 0,
     abilityPoints: 1,
   };
+  const q = perkFilter.toLocaleLowerCase("tr-TR");
+  const visiblePerks = data.perks.filter(
+    (p) => (perkTab === "selected" ? perks.includes(p.key) : p.kind === perkTab) && (!q || p.searchText.includes(q)),
+  );
 
   return (
     <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
       <div className="min-w-0">
-        <ol className="mb-6 flex gap-1 overflow-x-auto">
+        <ol className="mb-6 flex gap-1 overflow-x-auto pb-1">
           {STEPS.map((s, i) => (
             <li key={s} className="shrink-0">
               <button
                 type="button"
-                onClick={() => i <= step || stepOk.slice(0, i).every(Boolean) ? setStep(i) : undefined}
+                onClick={() => (i <= step || stepOk.slice(0, i).every(Boolean) ? setStep(i) : undefined)}
                 className={cx(
                   "flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs transition",
                   i === step ? "border-accent bg-accent/15 text-ink" : stepOk[i] && i < step ? "border-ok/40 text-ok" : "border-line text-muted",
@@ -119,40 +111,77 @@ export function Wizard({ campaignId, startPerkPoints, data }: { campaignId: stri
               <Field label="Milliyet" hint="Irk ve milliyet RP içinde iletişimi etkileyebilir">
                 <input className="input" value={id.nationality} maxLength={60} onChange={(e) => setId({ ...id, nationality: e.target.value })} />
               </Field>
-              <Field label="Alignment / taraf" hint="Karakterin genel faction bilgisi">
+              <Field label="Taraf" hint="Alignment: karakterin genel faction bilgisi (ör. Wehrmacht sadıkı, direnişçi)">
                 <input className="input" value={id.alignment} maxLength={60} onChange={(e) => setId({ ...id, alignment: e.target.value })} />
               </Field>
             </div>
-            <Field label="Geçmiş" hint="Kısa bir hikâye: nereden geliyor, ne istiyor?">
+            <Field label="Geçmiş" hint="Partideki herkesin bilebileceği hikâye: nereden geliyor, ne istiyor?">
               <textarea className="input" rows={5} maxLength={4000} value={id.background} onChange={(e) => setId({ ...id, background: e.target.value })} />
             </Field>
             <Field label="Görünüş">
               <textarea className="input" rows={2} maxLength={1000} value={id.appearance} onChange={(e) => setId({ ...id, appearance: e.target.value })} />
             </Field>
+            <div className="rounded-xl border border-accent/30 bg-accent/[0.05] p-4">
+              <Field
+                label="GM'e özel notlar ve gizli geçmiş"
+                hint="Yalnızca sen ve GM görürsünüz. Sırlar, gizli bağlantılar, karakterin bilmediğin bir geçmişi, GM'den istediğin hikâye kancaları…"
+              >
+                <textarea className="input" rows={4} maxLength={6000} value={id.secretNotes} onChange={(e) => setId({ ...id, secretNotes: e.target.value })} />
+              </Field>
+            </div>
+            <p className="text-xs text-muted">Karakter portresini karakter oluşturduktan sonra karakter kağıdından ekleyebilirsin.</p>
           </Card>
         )}
 
         {step === 1 && (
           <div className="space-y-4">
             <p className="text-sm text-muted">
-              Başlangıç ekspertiz ağacın, sembol stat'ına <strong className="text-ink">+2</strong> verir ve ağacın kendi başlangıç bonusunu kazandırır. İkinci ağacı oyun içinde yetenek
+              Başlangıç ekspertiz ağacın, sembol stat&apos;ına <strong className="text-ink">+2</strong> verir ve ağacın kendi başlangıç bonusunu kazandırır. İkinci ağacı oyun içinde yetenek
               puanıyla açabilirsin.
             </p>
-            <div className="grid gap-3 sm:grid-cols-2">
-              {data.trees.map((t) => (
-                <button
-                  type="button"
-                  key={t.key}
-                  onClick={() => chooseTree(t.key)}
-                  className={cx("card p-4 text-left transition", tree === t.key ? "border-accent bg-accent/[0.08]" : "hover:border-accent/40")}
-                >
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="font-serif text-lg text-ink">{t.name}</span>
-                    <Badge tone="accent">{STAT_LABELS[t.stat]}</Badge>
-                  </div>
-                  <p className="mt-1 text-sm text-muted">{t.startBonusText}</p>
-                </button>
-              ))}
+            <div className="grid gap-3 md:grid-cols-2">
+              {data.trees.map((t) => {
+                const abs = t.abilities.map((k) => data.abilities[k]);
+                const branches = [...new Map(abs.filter((a) => a.branch !== "Kök").map((a) => [a.branch, a])).values()];
+                const root = abs.find((a) => a.branch === "Kök");
+                const on = tree === t.key;
+                return (
+                  <button
+                    type="button"
+                    key={t.key}
+                    onClick={() => chooseTree(t.key)}
+                    aria-pressed={on}
+                    className={cx("card relative flex flex-col gap-3 p-5 text-left transition", on ? "border-accent bg-accent/[0.08] ring-1 ring-accent/50" : "hover:border-accent/40")}
+                  >
+                    {on && (
+                      <span className="absolute right-3 top-3 grid h-6 w-6 place-items-center rounded-full bg-accent text-onAccent">
+                        <Check className="h-4 w-4" />
+                      </span>
+                    )}
+                    <div className="flex items-center gap-4">
+                      <TreeIcon treeKey={t.key} className="h-14 w-14" />
+                      <div>
+                        <p className="font-serif text-xl text-ink">{t.name}</p>
+                        <p className="text-xs text-muted">
+                          Ağaç stat&apos;ı: <span className="text-accent">{STAT_LABELS[t.stat]}</span> (+2)
+                        </p>
+                      </div>
+                    </div>
+                    <p className="rounded-lg bg-surface2/60 px-3 py-2 text-sm text-ink/90">
+                      <span className="mr-1 text-[10px] font-semibold uppercase tracking-widest text-muted">İlk ağaç bonusu</span>
+                      {t.startBonusText.replace(/^.*?açılırsa\s*/i, "").replace(/oyuncu oyuna/i, "Oyuna")}
+                    </p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {root && <span className="chip">Kök · {root.name}</span>}
+                      {branches.map((b) => (
+                        <span key={b.branch} className="chip">
+                          {branchLabel(b)}
+                        </span>
+                      ))}
+                    </div>
+                  </button>
+                );
+              })}
             </div>
             {T?.startBonus.kind === "augment" && (
               <Card className="p-5">
@@ -195,76 +224,119 @@ export function Wizard({ campaignId, startPerkPoints, data }: { campaignId: stri
               </span>
               <span className={cx("ml-auto rounded-md px-2 py-1 font-mono", budget.left < 0 ? "bg-danger/15 text-danger" : "bg-accent/15 text-accent")}>Kalan {budget.left}</span>
               <span className="w-full text-xs text-muted">
-                Toplam puan negatife düşmeden istediğin kadar perk alabilirsin. Artan puan (Puan + 1) / 2 olarak stat puanına dönüşür: şu an <strong>{budget.convertible}</strong>.
+                Toplam puan negatife düşmeden istediğin kadar perk alabilirsin. Kalan puan (Puan + 1) / 2 olarak stat puanına dönüşür: şu an <strong className="text-ink">{budget.convertible}</strong>{" "}
+                stat puanı.
               </span>
             </Card>
-            <input className="input" placeholder="Perk ara…" value={perkFilter} onChange={(e) => setPerkFilter(e.target.value)} />
-            {(["positive", "negative"] as const).map((kind) => (
-              <section key={kind}>
-                <h3 className="mb-2 mt-4 font-serif text-lg">{kind === "positive" ? "Pozitif perkler" : "Negatif perkler"}</h3>
-                <div className="grid gap-3 md:grid-cols-2">
-                  {data.perks
-                    .filter((p) => p.kind === kind && (!perkFilter || p.searchText.includes(perkFilter.toLocaleLowerCase("tr-TR"))))
-                    .map((p) => {
-                      const on = perks.includes(p.key);
-                      const blockedBy = p.exclusive.find((x) => perks.includes(x));
-                      return (
-                        <PerkCard
-                          key={p.key}
-                          perk={p}
-                          selected={on}
-                          disabled={!!blockedBy && !on}
-                          action={
-                            <Button size="sm" variant={on ? "primary" : "secondary"} disabled={!!blockedBy && !on} onClick={() => togglePerk(p.key)} title={blockedBy ? "Seçili bir perkle birlikte alınamaz" : undefined}>
-                              {on ? "Seçildi" : "Seç"}
-                            </Button>
-                          }
-                        />
-                      );
-                    })}
-                </div>
-              </section>
-            ))}
+            <div className="flex flex-wrap items-center gap-2">
+              <div role="tablist" className="inline-flex rounded-lg border border-line bg-surface p-1">
+                {(
+                  [
+                    ["positive", `Pozitif (${data.perks.filter((p) => p.kind === "positive").length})`],
+                    ["negative", `Negatif (${data.perks.filter((p) => p.kind === "negative").length})`],
+                    ["selected", `Seçilenler (${perks.length})`],
+                  ] as const
+                ).map(([k, label]) => (
+                  <button
+                    key={k}
+                    type="button"
+                    role="tab"
+                    aria-selected={perkTab === k}
+                    onClick={() => setPerkTab(k)}
+                    className={cx(
+                      "rounded-md px-3 py-1.5 text-sm transition",
+                      perkTab === k ? (k === "negative" ? "bg-danger/20 text-ink" : k === "positive" ? "bg-ok/20 text-ink" : "bg-accent/20 text-ink") : "text-muted hover:text-ink",
+                    )}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+              <input className="input max-w-xs flex-1" placeholder="Perk ara…" value={perkFilter} onChange={(e) => setPerkFilter(e.target.value)} />
+            </div>
+            <p className="text-xs text-muted">
+              {perkTab === "positive" ? "Pozitif perkler perk puanı harcar." : perkTab === "negative" ? "Negatif perkler perk puanı kazandırır ama karakterine dezavantaj getirir." : "Seçtiğin perkler."}{" "}
+              Turuncu etiketler birlikte alınamayan perkleri gösterir.
+            </p>
+            <div className="grid gap-3 md:grid-cols-2">
+              {visiblePerks.map((p) => {
+                const on = perks.includes(p.key);
+                const blockedBy = p.exclusive.find((x) => perks.includes(x));
+                return (
+                  <PerkCard
+                    key={p.key}
+                    perk={p}
+                    selected={on}
+                    disabled={!!blockedBy && !on}
+                    blockedBy={blockedBy ? perkName.get(blockedBy) : null}
+                    exclusiveNames={p.exclusive.map((x) => perkName.get(x) ?? x)}
+                    action={
+                      <Button
+                        size="sm"
+                        variant={on ? "primary" : "secondary"}
+                        disabled={!!blockedBy && !on}
+                        onClick={() => togglePerk(p.key)}
+                        title={blockedBy ? `${perkName.get(blockedBy)} ile birlikte alınamaz` : undefined}
+                      >
+                        {on ? "Seçildi" : blockedBy ? <Lock className="h-3.5 w-3.5" /> : "Seç"}
+                      </Button>
+                    }
+                  />
+                );
+              })}
+              {!visiblePerks.length && <p className="text-sm text-muted">Gösterilecek perk yok.</p>}
+            </div>
           </div>
         )}
 
         {step === 3 && (
           <Card className="p-5">
-            <div className="mb-4 flex flex-wrap gap-3 text-sm">
-              <Badge tone={freeUsed === 2 ? "ok" : "accent"}>Serbest puan: {freeUsed}/2</Badge>
-              <Badge tone={perkUsed === budget.convertible ? "ok" : "accent"}>
-                Perk&apos;ten dönüşen: {perkUsed}/{budget.convertible}
-              </Badge>
+            <div className="mb-4 grid gap-3 sm:grid-cols-3">
+              <div className="rounded-lg border border-line bg-surface2/50 px-3 py-2">
+                <p className="text-[10px] uppercase tracking-wider text-muted">Varsayılan</p>
+                <p className="font-mono text-xl">{START_FREE_STATS}</p>
+              </div>
+              <div className="rounded-lg border border-line bg-surface2/50 px-3 py-2">
+                <p className="text-[10px] uppercase tracking-wider text-muted">Perklerden</p>
+                <p className="font-mono text-xl">{budget.convertible}</p>
+              </div>
+              <div className={cx("rounded-lg border px-3 py-2", used === totalPoints ? "border-ok/50 bg-ok/10" : "border-accent/50 bg-accent/10")}>
+                <p className="text-[10px] uppercase tracking-wider text-muted">Kalan</p>
+                <p className="font-mono text-xl">
+                  {totalPoints - used} / {totalPoints}
+                </p>
+              </div>
             </div>
             <p className="mb-4 text-sm text-muted">
-              Serbest 2 puan ağaç stat&apos;ın ({T ? STAT_LABELS[T.stat] : "—"}) dışındaki statlara verilir. Perk&apos;ten dönüşen puanlar herhangi bir stat&apos;a verilebilir. Klang herkese +2
-              başlar.
+              Puanları istediğin statlara dağıt. Ağaç stat&apos;ın ({T ? STAT_LABELS[T.stat] : "—"}) zaten +2 aldığı için ona en fazla perklerden gelen puan kadar ({treeCap}) ekleyebilirsin. Klang
+              herkese +2 başlar.
             </p>
             <div className="divide-y divide-line">
               {STAT_KEYS.map((k) => {
                 const isTree = T?.stat === k;
+                const v = points[k] ?? 0;
+                const canInc = used < totalPoints && result.stats[k] < STAT_MAX && (!isTree || v < treeCap);
                 return (
-                  <div key={k} className="grid grid-cols-[1fr_auto_auto_auto] items-center gap-3 py-2.5">
+                  <div key={k} className="grid grid-cols-[1fr_auto_auto] items-center gap-4 py-2.5">
                     <div>
                       <span className="text-ink">{STAT_LABELS[k]}</span>
-                      {isTree && <Badge tone="accent" className="ml-2">Ağaç</Badge>}
+                      {isTree && (
+                        <Badge tone="accent" className="ml-2">
+                          Ağaç
+                        </Badge>
+                      )}
                       <span className="block text-xs text-muted">{STAT_HINTS[k]}</span>
                     </div>
-                    <Stepper
-                      label="Serbest"
-                      value={free[k] ?? 0}
-                      canInc={!isTree && freeUsed < 2}
-                      onChange={(v) => setFree((f) => ({ ...f, [k]: v }))}
-                    />
-                    <Stepper
-                      label="Perk"
-                      value={perkStats[k] ?? 0}
-                      canInc={perkUsed < budget.convertible}
-                      onChange={(v) => setPerkStats((f) => ({ ...f, [k]: v }))}
-                    />
-                    <span className="w-10 text-right font-mono text-lg text-ink" title={`Taban ${baseStats[k]}`}>
-                      {result.stats[k]}
-                    </span>
+                    <div className="flex items-center gap-1">
+                      <button type="button" className="h-8 w-8 rounded-md border border-line text-muted hover:text-ink disabled:opacity-30" disabled={v <= 0} onClick={() => setPoints((f) => ({ ...f, [k]: v - 1 }))} aria-label={`${STAT_LABELS[k]} azalt`}>
+                        −
+                      </button>
+                      <span className={cx("w-7 text-center font-mono text-sm", v > 0 ? "text-accent" : "text-muted")}>{v > 0 ? `+${v}` : 0}</span>
+                      <button type="button" className="h-8 w-8 rounded-md border border-line text-muted hover:text-ink disabled:opacity-30" disabled={!canInc} onClick={() => setPoints((f) => ({ ...f, [k]: v + 1 }))} aria-label={`${STAT_LABELS[k]} artır`}>
+                        +
+                      </button>
+                    </div>
+                    <span className="w-10 text-right font-mono text-lg text-ink">{result.stats[k]}</span>
                   </div>
                 );
               })}
@@ -274,9 +346,7 @@ export function Wizard({ campaignId, startPerkPoints, data }: { campaignId: stri
 
         {step === 4 && (
           <div className="space-y-4">
-            <p className="text-sm text-muted">
-              Seviye 0&apos;da 1 yetenek puanın var. Şartlarını karşıladığın bir yeteneği şimdi alabilir ya da puanı saklayıp oyun içinde harcayabilirsin.
-            </p>
+            <p className="text-sm text-muted">Seviye 0&apos;da 1 yetenek puanın var. Şartlarını karşıladığın bir yeteneği şimdi alabilir ya da puanı saklayıp oyun içinde harcayabilirsin.</p>
             <Button variant={first === null ? "primary" : "secondary"} onClick={() => setFirst(null)}>
               Şimdi seçme, puanı sakla
             </Button>
@@ -317,17 +387,20 @@ export function Wizard({ campaignId, startPerkPoints, data }: { campaignId: stri
                 {id.age} yaş · {id.nationality} · {id.alignment}
               </p>
             </div>
-            <div>
-              <p className="kicker mb-1">Ekspertiz</p>
-              <p>
-                {T?.name} <span className="text-muted">({T && STAT_LABELS[T.stat]})</span>
-                {aug && ` · Augment: ${data.augments.find((a) => a.key === aug.key)?.name} (${bodyPartLabel(aug.part)})`}
-              </p>
-              {T && <Html html={T.introHtml} className="mt-1 text-sm text-muted" />}
+            <div className="flex items-start gap-3">
+              {T && <TreeIcon treeKey={T.key} />}
+              <div>
+                <p className="kicker mb-1">Ekspertiz</p>
+                <p>
+                  {T?.name} <span className="text-muted">({T && STAT_LABELS[T.stat]})</span>
+                  {aug && ` · Augment: ${data.augments.find((a) => a.key === aug.key)?.name} (${bodyPartLabel(aug.part)})`}
+                </p>
+                {T && <Html html={T.introHtml} className="mt-1 text-sm text-muted" />}
+              </div>
             </div>
             <div>
               <p className="kicker mb-1">Perkler</p>
-              <p className="text-sm">{perks.map((k) => data.perks.find((p) => p.key === k)?.name).join(", ") || "Yok"}</p>
+              <p className="text-sm">{perks.map((k) => perkName.get(k)).join(", ") || "Yok"}</p>
             </div>
             <div>
               <p className="kicker mb-1">İlk yetenek</p>
@@ -347,11 +420,7 @@ export function Wizard({ campaignId, startPerkPoints, data }: { campaignId: stri
               onClick={async () => {
                 const r = await run(() =>
                   api<{ id: string }>("/api/characters", {
-                    body: {
-                      campaignId,
-                      ...id,
-                      creation: { tree, freeStats: free, perks, perkStats, startAugment: aug, firstAbility: first },
-                    },
+                    body: { campaignId, ...id, creation: { tree, points, perks, startAugment: aug, firstAbility: first } },
                   }),
                 );
                 if (r) router.push(`/karakter/${r.id}`);
@@ -377,11 +446,16 @@ export function Wizard({ campaignId, startPerkPoints, data }: { campaignId: stri
       <aside className="lg:sticky lg:top-24 lg:self-start">
         <Card className="p-5">
           <p className="kicker mb-3">Özet</p>
-          <p className="font-serif text-lg">{id.name || "İsimsiz"}</p>
-          <p className="mb-4 text-xs text-muted">
-            Seviye 0 · {T?.name ?? "ağaç seçilmedi"} · Corruption {result.corruption}
-          </p>
-          <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
+          <div className="flex items-center gap-3">
+            {T && <TreeIcon treeKey={T.key} className="h-10 w-10" />}
+            <div className="min-w-0">
+              <p className="truncate font-serif text-lg">{id.name || "İsimsiz"}</p>
+              <p className="text-xs text-muted">
+                Seviye 0 · {T?.name ?? "ağaç seçilmedi"} · Corruption {result.corruption}
+              </p>
+            </div>
+          </div>
+          <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
             {STAT_KEYS.map((k) => (
               <div key={k} className="flex justify-between border-b border-line/50 py-1">
                 <span className={cx(T?.stat === k ? "text-accent" : "text-muted")}>{STAT_LABELS[k]}</span>
@@ -407,19 +481,3 @@ export function Wizard({ campaignId, startPerkPoints, data }: { campaignId: stri
     </div>
   );
 }
-
-function Stepper({ label, value, onChange, canInc }: { label: string; value: number; onChange: (v: number) => void; canInc: boolean }) {
-  return (
-    <div className="flex items-center gap-1" title={label}>
-      <span className="mr-1 hidden text-[10px] uppercase tracking-wider text-muted sm:inline">{label}</span>
-      <button type="button" className="h-7 w-7 rounded-md border border-line text-muted hover:text-ink disabled:opacity-30" disabled={value <= 0} onClick={() => onChange(value - 1)}>
-        −
-      </button>
-      <span className="w-5 text-center font-mono text-sm">{value}</span>
-      <button type="button" className="h-7 w-7 rounded-md border border-line text-muted hover:text-ink disabled:opacity-30" disabled={!canInc} onClick={() => onChange(value + 1)}>
-        +
-      </button>
-    </div>
-  );
-}
-

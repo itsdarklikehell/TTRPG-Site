@@ -3,6 +3,7 @@ import { resolveContentLinks } from "@/lib/base";
 import { STAT_LABELS, bodyPartLabel } from "@/lib/shz/constants";
 import type { Ability, Augment, Perk } from "@/lib/shz/content-types";
 import { Badge, cx } from "../ui";
+import { PerkIcon } from "./icons";
 
 export function Html({ html, className }: { html: string; className?: string }) {
   if (!html) return null;
@@ -88,21 +89,48 @@ export function AbilityCard({
   );
 }
 
-export function PerkCard({ perk: p, action, selected, disabled }: { perk: Perk; action?: ReactNode; selected?: boolean; disabled?: boolean }) {
+export function PerkCard({
+  perk: p,
+  action,
+  selected,
+  disabled,
+  exclusiveNames,
+  blockedBy,
+}: {
+  perk: Perk;
+  action?: ReactNode;
+  selected?: boolean;
+  disabled?: boolean;
+  exclusiveNames?: string[];
+  blockedBy?: string | null;
+}) {
   const pos = p.kind === "positive";
   return (
-    <article id={p.key} className={cx("card scroll-mt-24 p-4 transition", selected && "border-accent/70 bg-accent/[0.07]", disabled && "opacity-50")}>
+    <article id={p.key} className={cx("card scroll-mt-24 p-4 transition", selected && "border-accent/70 bg-accent/[0.07]", disabled && "opacity-55")}>
       <div className="flex items-start gap-3">
-        <span
-          className={cx("grid h-8 min-w-8 shrink-0 place-items-center rounded-md px-1.5 font-mono text-sm font-semibold", pos ? "bg-ok/15 text-ok" : "bg-danger/15 text-danger")}
-          title={pos ? "Perk puanı harcar" : "Perk puanı kazandırır"}
-        >
-          {pos ? "−" : "+"}
-          {p.points}
-        </span>
+        <PerkIcon perkKey={p.key} kind={p.kind} />
         <div className="min-w-0 flex-1">
-          <h3 className="font-serif text-base leading-snug text-ink">{p.name}</h3>
+          <div className="flex flex-wrap items-center gap-2">
+            <h3 className="font-serif text-base leading-snug text-ink">{p.name}</h3>
+            <span
+              className={cx("rounded px-1.5 py-0.5 font-mono text-[11px] font-semibold", pos ? "bg-ok/15 text-ok" : "bg-danger/15 text-danger")}
+              title={pos ? "Perk puanı harcar" : "Perk puanı kazandırır"}
+            >
+              {pos ? "−" : "+"}
+              {p.points}
+            </span>
+          </div>
           <Html html={p.html} className="mt-1 text-sm text-ink/80" />
+          {exclusiveNames && exclusiveNames.length > 0 && (
+            <p className={cx("mt-2 flex flex-wrap items-center gap-1.5 text-[11px]", blockedBy ? "text-danger" : "text-warn")}>
+              <span className="font-semibold uppercase tracking-wider">Birlikte alınamaz:</span>
+              {exclusiveNames.map((n) => (
+                <span key={n} className={cx("rounded border px-1.5 py-0.5", n === blockedBy ? "border-danger/60 bg-danger/10" : "border-warn/40")}>
+                  {n}
+                </span>
+              ))}
+            </p>
+          )}
         </div>
         {action}
       </div>

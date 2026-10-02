@@ -17,13 +17,20 @@ test("içerik: 7 ağaç, her biri 8 yetenek, 30/30 perk", () => {
 });
 
 test("yaratma: ağaç +2, Klang 2, sınıf bonusu, 2 serbest puan ağaç stat'ına gidemez", () => {
-  const ok = buildCreation({ tree: "ubermann", freeStats: { aim: 1, sanita: 1 }, perks: [], perkStats: {}, startAugment: null, firstAbility: null }, 0, data);
+  const ok = buildCreation({ tree: "ubermann", points: { aim: 1, sanita: 1 }, perks: [], startAugment: null, firstAbility: null }, 0, data);
   assert.ok(ok.ok, ok.problems.join());
   assert.equal(ok.stats.korp, 2);
   assert.equal(ok.stats.krach, 1);
   assert.equal(ok.stats.klang, 2);
-  const bad = buildCreation({ tree: "ubermann", freeStats: { korp: 2 }, perks: [], perkStats: {}, startAugment: null, firstAbility: null }, 0, data);
+  const bad = buildCreation({ tree: "ubermann", points: { korp: 2 }, perks: [], startAugment: null, firstAbility: null }, 0, data);
   assert.ok(!bad.ok);
+  // perklerden gelen puan ağaç stat'ına gidebilir
+  const neg = data.perks.find((p) => p.kind === "negative" && p.points === 3)!; // +3 -> (3+1)/2 = 2
+  const mixed = buildCreation({ tree: "ubermann", points: { korp: 2, aim: 2 }, perks: [neg.key], startAugment: null, firstAbility: null }, 0, data);
+  assert.ok(mixed.ok, mixed.problems.join());
+  assert.equal(mixed.stats.korp, 4);
+  const over = buildCreation({ tree: "ubermann", points: { korp: 3, aim: 1 }, perks: [neg.key], startAugment: null, firstAbility: null }, 0, data);
+  assert.ok(!over.ok);
 });
 
 test("perk bütçesi: negatife düşemez, artan (p+1)/2 aşağı", () => {
@@ -44,12 +51,12 @@ test("perk dışlaması", () => {
 });
 
 test("Metallkorp başlangıç augment'i ve Klang etkisi", () => {
-  const r = buildCreation({ tree: "metallkorp", freeStats: { korp: 1, werk: 1 }, perks: [], perkStats: {}, startAugment: { key: "glasauge", part: "head" }, firstAbility: null }, 0, data);
+  const r = buildCreation({ tree: "metallkorp", points: { korp: 1, werk: 1 }, perks: [], startAugment: { key: "glasauge", part: "head" }, firstAbility: null }, 0, data);
   assert.ok(r.ok, r.problems.join());
   const eff = effectiveStats({ stats: r.stats, body: r.body, corruption: 0 }, data);
   assert.equal(eff.klang.value, 3); // 2 + 2 ağaç − 1 Glasauge
   assert.equal(eff.sicht.value, 2);
-  const wrong = buildCreation({ tree: "metallkorp", freeStats: { korp: 1, werk: 1 }, perks: [], perkStats: {}, startAugment: { key: "glasauge", part: "l-arm" }, firstAbility: null }, 0, data);
+  const wrong = buildCreation({ tree: "metallkorp", points: { korp: 1, werk: 1 }, perks: [], startAugment: { key: "glasauge", part: "l-arm" }, firstAbility: null }, 0, data);
   assert.ok(!wrong.ok);
 });
 

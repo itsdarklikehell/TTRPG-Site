@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { db } from "@/db";
 import { characterLogs, users } from "@/db/schema";
+import { Portrait } from "@/components/portrait";
 import { Badge, Card, PageHeader, StatusBadge } from "@/components/ui";
 import { characterAccess, ownerCharacter } from "@/lib/access";
 import { pageUser } from "@/lib/auth/session";
@@ -23,6 +24,9 @@ export default async function CharacterPage({ params }: { params: Promise<{ id: 
     const c = a.character;
     return (
       <div className="max-w-3xl">
+        <div className="mb-6">
+          <Portrait id={c.id} version={c.portraitVersion} name={c.name} className="h-[150px] w-[120px]" />
+        </div>
         <PageHeader kicker={a.campaign.name} title={c.name} actions={<StatusBadge status={c.status} />}>
           {owner?.displayName} · Seviye {c.level} · {c.nationality} · {c.alignment}
         </PageHeader>

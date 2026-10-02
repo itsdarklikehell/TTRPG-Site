@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import { BodyDiagram, WoundLegend } from "@/components/body-diagram";
 import { AbilityCard, Html, PerkCard } from "@/components/content/cards";
 import { Modal, Tabs, useAction, useHashTab } from "@/components/interactive";
+import { Portrait, PortraitEditor } from "@/components/portrait";
 import { Badge, Button, Card, Field, StatusBadge, cx } from "@/components/ui";
 import type { Character, InventoryItem } from "@/db/schema";
 import { api } from "@/lib/client";
@@ -70,6 +71,12 @@ export function Sheet({
   return (
     <div>
       <header className="mb-6 flex flex-wrap items-start justify-between gap-4 border-b border-line pb-6">
+        <div className="flex min-w-0 items-start gap-5">
+        {isGM || isOwner ? (
+          <PortraitEditor id={c.id} version={c.portraitVersion} name={c.name} onChange={() => router.refresh()} />
+        ) : (
+          <Portrait id={c.id} version={c.portraitVersion} name={c.name} className="h-[150px] w-[120px]" />
+        )}
         <div className="min-w-0">
           <p className="kicker mb-2">
             <Link href={`/kampanya/${campaign.id}`} className="hover:underline">
@@ -90,6 +97,7 @@ export function Sheet({
               </Badge>
             ))}
           </div>
+        </div>
         </div>
         <div className="flex flex-wrap gap-2">
           <Link href={`/kampanya/${campaign.id}/oda`} className="inline-flex h-10 items-center rounded-lg bg-accent px-4 text-sm font-semibold text-onAccent hover:bg-accent/90">
@@ -211,6 +219,7 @@ export function Sheet({
                 </div>
               )}
             </Card>
+            <AugmentsCard c={c} data={data} />
             {(c.background || c.appearance) && (
               <Card className="space-y-3 p-5">
                 {c.background && (
@@ -227,6 +236,7 @@ export function Sheet({
                 )}
               </Card>
             )}
+            <SecretNotes c={c} canEdit={isGM || isOwner} act={act} />
           </div>
         </div>
       )}
@@ -606,7 +616,7 @@ function GMEditor({ open, onClose, c, data, act }: { open: boolean; onClose: () 
     reason: "",
   });
   const num = (k: "level" | "abilityPoints" | "freeStatPoints" | "corruption" | "inspiration", min: number, max: number) => (
-    <Field label={{ level: "Seviye", abilityPoints: "Yetenek puanı", freeStatPoints: "Serbest stat", corruption: "Corruption", inspiration: "Inspiration" }[k]}>
+    <Field lang={k === "corruption" || k === "inspiration" ? "en" : undefined} label={{ level: "Seviye", abilityPoints: "Yetenek puanı", freeStatPoints: "Serbest stat", corruption: "Corruption", inspiration: "Inspiration" }[k]}>
       <input type="number" className="input" min={min} max={max} value={v[k]} onChange={(e) => setV({ ...v, [k]: Number(e.target.value) })} />
     </Field>
   );
@@ -759,5 +769,55 @@ function GMLists({ c, data, act }: { c: Ch; data: RulesData; act: (fn: () => Pro
         Listeleri kaydet
       </Button>
     </div>
+  );
+}
+
+// ------------------------------------------------------------------ augmentler (genel)
+function AugmentsCard({ c, data }: { c: Ch; data: RulesData }) {
+  const augs = installedAugments(c.body, data);
+  return (
+    <Card className="p-5">
+      <h2 className="mb-3 font-serif text-lg">Takılı augmentler</h2>
+      {augs.length === 0 ? (
+        <p className="text-sm text-muted">Takılı augment yok.</p>
+      ) : (
+        <div className="space-y-3">
+          {augs.map(({ part, augment: a }) => (
+            <div key={part} className="rounded-lg border border-line bg-surface2/40 p-3">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="font-serif text-base text-ink">{a.name}</span>
+                {a.tier && <Badge tone={a.tier === "T3" ? "danger" : a.tier === "T2" ? "warn" : "accent"}>{a.tier}</Badge>}
+                <span className="text-xs text-muted">{bodyPartLabel(part)}</span>
+              </div>
+              <div className="mt-1.5 flex flex-wrap gap-1.5">
+                {a.mods.map((m) => (
+                  <span key={m.stat} className={cx("rounded px-1.5 py-0.5 font-mono text-[11px]", m.value > 0 ? "bg-ok/15 text-ok" : "bg-danger/15 text-danger")}>
+                    {m.value > 0 ? "+" : "−"}
+                    {Math.abs(m.value)} {STAT_LABELS[m.stat]}
+                  </span>
+                ))}
+              </div>
+              {a.usageHtml && <Html html={a.usageHtml} className="mt-2 text-sm" />}
+            </div>
+          ))}
+        </div>
+      )}
+    </Card>
+  );
+}
+
+// ------------------------------------------------------------------ gizli notlar
+function SecretNotes({ c, canEdit, act }: { c: Ch; canEdit: boolean; act: (fn: () => Promise<unknown>, ok?: string) => Promise<void> }) {
+  const [v, setV] = useState(c.secretNotes);
+  if (!canEdit) return null;
+  return (
+    <Card className="border-accent/30 p-5">
+      <h2 className="font-serif text-lg">GM&apos;e özel notlar ve gizli geçmiş</h2>
+      <p className="mb-3 text-xs text-muted">Yalnızca sen ve GM görürsünüz. Diğer oyuncular bu alanı göremez.</p>
+      <textarea className="input min-h-[120px]" value={v} maxLength={6000} onChange={(e) => setV(e.target.value)} placeholder="Sırlar, gizli bağlantılar, GM'den istediğin hikâye kancaları…" />
+      <Button size="sm" className="mt-3" disabled={v === c.secretNotes} onClick={() => act(() => api(`/api/characters/${c.id}/sheet`, { method: "PATCH", body: { secretNotes: v } }), "Kaydedildi.")}>
+        Kaydet
+      </Button>
+    </Card>
   );
 }

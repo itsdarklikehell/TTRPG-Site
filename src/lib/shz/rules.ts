@@ -216,9 +216,9 @@ export function perkBudget(keys: string[], start: number, data: Pick<RulesInput,
 // ------------------------------------------------------------------ karakter yaratma
 export interface CreationInput {
   tree: string;
-  freeStats: Partial<Stats>;
+  /** Dağıtılan puanlar: 2 serbest + perklerden dönüşen. Ağaç stat'ına yalnızca perk puanı gidebilir. */
+  points: Partial<Stats>;
   perks: string[];
-  perkStats: Partial<Stats>;
   startAugment?: { key: string; part: string } | null;
   firstAbility?: string | null;
 }
@@ -261,27 +261,23 @@ export function buildCreation(input: CreationInput, startPerkPoints: number, dat
     } else if (input.startAugment) problems.push("Bu ağaç başlangıç augment'i vermez");
   }
 
-  for (const [k, v] of Object.entries(input.freeStats)) {
+  const budget = perkBudget(input.perks, startPerkPoints, data);
+  problems.push(...budget.problems);
+  for (const [k, v] of Object.entries(input.points)) {
     if (!(STAT_KEYS as readonly string[]).includes(k) || !Number.isInteger(v) || (v ?? 0) < 0) {
       problems.push("Geçersiz stat dağılımı");
       continue;
     }
-    if (tree && k === tree.stat && (v ?? 0) > 0) problems.push(`Serbest 2 puan ağaç stat'ına (${STAT_LABELS[tree.stat]}) verilemez`);
     stats[k as StatKey] += v ?? 0;
   }
-  if (sumPoints(input.freeStats) !== START_FREE_STATS) problems.push(`Tam olarak ${START_FREE_STATS} serbest stat puanı dağıtılmalı`);
-
-  const budget = perkBudget(input.perks, startPerkPoints, data);
-  problems.push(...budget.problems);
-  for (const [k, v] of Object.entries(input.perkStats)) {
-    if (!(STAT_KEYS as readonly string[]).includes(k) || !Number.isInteger(v) || (v ?? 0) < 0) {
-      problems.push("Geçersiz perk stat dağılımı");
-      continue;
-    }
-    stats[k as StatKey] += v ?? 0;
-  }
-  if (sumPoints(input.perkStats) !== budget.convertible)
-    problems.push(`Perk puanından dönüşen ${budget.convertible} stat puanı dağıtılmalı`);
+  const total = START_FREE_STATS + budget.convertible;
+  if (sumPoints(input.points) !== total) problems.push(`Tam olarak ${total} stat puanı dağıtılmalı (${START_FREE_STATS} serbest + ${budget.convertible} perklerden)`);
+  if (tree && (input.points[tree.stat] ?? 0) > budget.convertible)
+    problems.push(
+      budget.convertible
+        ? `Ağaç stat'ına (${STAT_LABELS[tree.stat]}) en fazla ${budget.convertible} puan verilebilir (yalnızca perklerden gelen puanlar)`
+        : `Serbest puanlar ağaç stat'ına (${STAT_LABELS[tree.stat]}) verilemez`,
+    );
 
   for (const k of STAT_KEYS) if (stats[k] > STAT_MAX) problems.push(`${STAT_LABELS[k]} ${STAT_MAX}'u geçemez`);
 

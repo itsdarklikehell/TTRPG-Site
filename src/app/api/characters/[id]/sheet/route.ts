@@ -14,6 +14,7 @@ export const PATCH = route(
       background: z.string().trim().max(4000).optional(),
       appearance: z.string().trim().max(1000).optional(),
       notes: z.string().max(8000).optional(),
+      secretNotes: z.string().max(6000).optional(),
       money: z.number().int().min(-1_000_000).max(100_000_000).optional(),
       inventory: z
         .array(

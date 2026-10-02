@@ -66,6 +66,7 @@ export function publicCharacter(c: Character) {
     age: c.age,
     appearance: c.appearance,
     trees: c.trees,
+    portraitVersion: c.portraitVersion,
   };
 }
 
@@ -73,4 +74,9 @@ export function publicCharacter(c: Character) {
 export function ownerCharacter(c: Character) {
   const { gmNotes: _gm, ...rest } = c;
   return rest;
+}
+
+/** Portre adresi (sürüm değişince önbellek kırılır). Yoksa null. */
+export function portraitPath(c: Pick<Character, "id" | "portraitVersion">) {
+  return c.portraitVersion > 0 ? `/api/characters/${c.id}/portrait?v=${c.portraitVersion}` : null;
 }

@@ -109,10 +109,12 @@ export function Empty({ title, children, action }: { title: string; children?: R
   );
 }
 
-export function Field({ label, hint, children, error }: { label: string; hint?: ReactNode; children: ReactNode; error?: string | null }) {
+export function Field({ label, hint, children, error, lang }: { label: string; hint?: ReactNode; children: ReactNode; error?: string | null; lang?: string }) {
   return (
     <label className="block">
-      <span className="label">{label}</span>
+      <span className="label" lang={lang}>
+        {label}
+      </span>
       {children}
       {hint && !error && <span className="mt-1 block text-xs text-muted">{hint}</span>}
       {error && <span className="mt-1 block text-xs text-danger">{error}</span>}

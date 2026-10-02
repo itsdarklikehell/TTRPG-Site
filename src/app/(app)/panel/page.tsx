@@ -1,4 +1,5 @@
 import { and, desc, eq, inArray, or } from "drizzle-orm";
+import { Portrait } from "@/components/portrait";
 import { SunLogo } from "@/components/logo";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -99,13 +100,11 @@ export default async function Panel() {
               <div className="grid gap-3 sm:grid-cols-2">
                 {chars.map(({ c, campaignName }) => (
                   <Link key={c.id} href={`/karakter/${c.id}`} className="card flex items-center gap-4 p-4 transition hover:border-accent/40">
-                    <div className="grid h-12 w-12 shrink-0 place-items-center rounded-lg border border-line bg-surface2 font-mono text-lg text-accent">
-                      {c.level}
-                    </div>
+                    <Portrait id={c.id} version={c.portraitVersion} name={c.name} className="h-14 w-11" />
                     <div className="min-w-0 flex-1">
                       <p className="truncate font-serif text-base text-ink">{c.name}</p>
                       <p className="truncate text-xs text-muted">
-                        {campaignName} · {c.trees.map((t) => getTree(t)?.name ?? t).join(" / ")}
+                        Sv {c.level} · {campaignName} · {c.trees.map((t) => getTree(t)?.name ?? t).join(" / ")}
                       </p>
                     </div>
                     <StatusBadge status={c.status} />

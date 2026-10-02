@@ -190,10 +190,26 @@ function Users({ selfId }: { selfId: string }) {
   const { run } = useAction();
   const [list, setList] = useState<UserRow[]>([]);
   const load = useCallback(() => api<{ users: UserRow[] }>("/api/users").then((r) => setList(r.users)), []);
+  const [reset, setReset] = useState<{ name: string; password: string } | null>(null);
   useEffect(() => {
     load().catch(() => {});
   }, [load]);
   return (
+    <>
+    {reset && (
+      <div className="mb-4 rounded-lg border border-accent/40 bg-accent/10 p-4 text-sm">
+        <p>
+          <strong>{reset.name}</strong> için geçici şifre (yalnızca şimdi gösterilir, oyuncuya ilet; giriş yapınca Hesap sayfasından değiştirsin):
+        </p>
+        <p className="mt-2 font-mono text-base">{reset.password}</p>
+        <div className="mt-2 flex gap-2">
+          <CopyButton text={reset.password} />
+          <button type="button" className="text-xs text-muted hover:text-ink" onClick={() => setReset(null)}>
+            Kapat
+          </button>
+        </div>
+      </div>
+    )}
     <Card className="overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
@@ -223,6 +239,16 @@ function Users({ selfId }: { selfId: string }) {
                     <>
                       <Button
                         size="sm"
+                        variant="ghost"
+                        onClick={async () => {
+                          const r = await run(() => api<{ password?: string }>(`/api/users/${u.id}`, { method: "PATCH", body: { resetPassword: true } }));
+                          if (r?.password) setReset({ name: u.displayName, password: r.password });
+                        }}
+                      >
+                        Şifre sıfırla
+                      </Button>
+                      <Button
+                        size="sm"
                         variant={u.disabled ? "secondary" : "danger"}
                         onClick={() => run(() => api(`/api/users/${u.id}`, { method: "PATCH", body: { disabled: !u.disabled } }), u.disabled ? "Hesap açıldı." : "Hesap devre dışı bırakıldı.").then(load)}
                       >
@@ -237,5 +263,6 @@ function Users({ selfId }: { selfId: string }) {
         </table>
       </div>
     </Card>
+    </>
   );
 }

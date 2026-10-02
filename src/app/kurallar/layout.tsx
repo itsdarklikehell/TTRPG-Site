@@ -1,4 +1,5 @@
 import { TopNav } from "@/components/nav";
+import { RoomReturn } from "@/components/room-return";
 import { currentUser } from "@/lib/auth/session";
 import { content } from "@/lib/shz/content";
 import { RulesNav } from "./rules-nav";
@@ -25,6 +26,7 @@ export default async function RulesLayout({ children }: { children: React.ReactN
         <RulesNav groups={groups} />
         <main className="min-w-0">{children}</main>
       </div>
+      {user && <RoomReturn />}
     </>
   );
 }

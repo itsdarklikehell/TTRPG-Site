@@ -1,18 +1,24 @@
 "use client";
+import { Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { io, type Socket } from "socket.io-client";
+import { BodyDiagram } from "@/components/body-diagram";
+import { AbilityCard, PerkCard } from "@/components/content/cards";
+import { TreeIcon } from "@/components/content/icons";
 import { Modal, Tabs, useToast } from "@/components/interactive";
+import { Portrait } from "@/components/portrait";
 import { Badge, Button, cx } from "@/components/ui";
 import type { Character, RollDetail } from "@/db/schema";
 import { BASE_PATH } from "@/lib/base";
 import { api } from "@/lib/client";
 import { BODY_PARTS, CORRUPTION_EFFECTS, STAT_KEYS, STAT_LABELS, THRESHOLDS, type BodyPartKey, type StatKey } from "@/lib/shz/constants";
+import type { RulesData } from "@/lib/shz/content";
 import type { Augment } from "@/lib/shz/content-types";
-import { checkModifiers, normalizeBody, outcomeLabel, woundPenalty } from "@/lib/shz/rules";
+import { checkModifiers, effectiveStats, installedAugments, normalizeBody, outcomeLabel, woundPenalty } from "@/lib/shz/rules";
 
 type FullChar = Omit<Character, "createdAt" | "updatedAt">;
-type PublicChar = Pick<FullChar, "id" | "userId" | "name" | "status" | "level" | "nationality" | "alignment" | "age" | "appearance" | "trees">;
+type PublicChar = Pick<FullChar, "id" | "userId" | "name" | "status" | "level" | "nationality" | "alignment" | "age" | "appearance" | "trees" | "portraitVersion">;
 type Entry = { view: "gm" | "owner"; character: FullChar } | { view: "public"; character: PublicChar };
 
 interface Msg {
@@ -60,7 +66,7 @@ export function Room({
   gm,
   members,
   initialChars,
-  augments,
+  data,
 }: {
   campaign: { id: string; name: string; deathSaveEnabled: boolean };
   me: { id: string; displayName: string };
@@ -68,9 +74,20 @@ export function Room({
   gm: { id: string; displayName: string };
   members: { id: string; displayName: string }[];
   initialChars: Entry[];
-  augments: Augment[];
+  data: RulesData;
 }) {
+  const augments = data.augments;
   const toast = useToast();
+  const [viewing, setViewing] = useState<string | null>(null);
+
+  // Başka sayfalara geçince "Oyun odasına dön" düğmesi için hatırla.
+  useEffect(() => {
+    try {
+      sessionStorage.setItem("shz:lastRoom", JSON.stringify({ id: campaign.id, name: campaign.name }));
+    } catch {
+      /* depolama kapalı */
+    }
+  }, [campaign.id, campaign.name]);
   const sock = useRef<Socket | null>(null);
   const [connected, setConnected] = useState(false);
   const [chars, setChars] = useState<Entry[]>(initialChars);
@@ -122,6 +139,7 @@ export function Room({
     s.on("connect_error", () => setConnected(false));
     s.on("message", (m: Msg) => m.campaignId === campaign.id && setMsgs((x) => (x.some((y) => y.id === m.id) ? x : [...x.slice(-299), m])));
     s.on("roll", (r: RollV & { campaignId: string }) => r.campaignId === campaign.id && setRolls((x) => (x.some((y) => y.id === r.id) ? x : [...x.slice(-199), r])));
+    s.on("message:deleted", ({ id }: { id: string }) => setMsgs((x) => x.filter((m) => m.id !== id)));
     s.on("roll:rerolled", ({ id }: { id: string }) => setRolls((x) => x.map((r) => (r.id === id ? { ...r, rerolled: true } : r))));
     s.on("presence", (p: { campaignId: string; online: string[] }) => p.campaignId === campaign.id && setOnline(p.online));
     s.on("roll:request", (q: RollReq) => setRequests((x) => [...x, q]));
@@ -143,7 +161,8 @@ export function Room({
   const myChars = chars.filter((e): e is Extract<Entry, { view: "gm" | "owner" }> => e.view !== "public" && (isGM || e.character.userId === me.id) && e.character.status === "ACTIVE");
   const myRequests = requests.filter((q) => q.characters.some((c) => myChars.some((m) => m.character.id === c.id && (isGM ? c.userId === me.id : true))));
 
-  const party = <Party chars={chars} online={online} isGM={isGM} me={me.id} gm={gm} members={members} campaign={campaign} />;
+  const party = <Party chars={chars} online={online} isGM={isGM} me={me.id} gm={gm} members={members} campaign={campaign} onOpen={setViewing} />;
+  const viewed = chars.find((e) => e.character.id === viewing) ?? null;
   const dice = (
     <DicePanel
       myChars={myChars.map((e) => e.character)}
@@ -201,6 +220,7 @@ export function Room({
         <div className={cx("min-h-0 lg:flex", mobileTab === "akis" ? "flex" : "hidden")}>{feedEl}</div>
         <div className={cx("overflow-y-auto border-line lg:block lg:border-l", mobileTab === "zar" ? "block" : "hidden")}>{dice}</div>
       </div>
+      <CharacterQuick entry={viewed} data={data} onClose={() => setViewing(null)} />
     </div>
   );
 }
@@ -214,6 +234,7 @@ function Party({
   gm,
   members,
   campaign,
+  onOpen,
 }: {
   chars: Entry[];
   online: string[];
@@ -222,6 +243,7 @@ function Party({
   gm: { id: string; displayName: string };
   members: { id: string; displayName: string }[];
   campaign: { id: string };
+  onOpen: (id: string) => void;
 }) {
   const toast = useToast();
   const quick = async (id: string, body: Record<string, unknown>) => {
@@ -244,10 +266,13 @@ function Party({
         return (
           <div key={c.id} className={cx("rounded-xl border bg-surface p-3", c.userId === me ? "border-accent/40" : "border-line")}>
             <div className="flex items-start justify-between gap-2">
-              <div className="min-w-0">
-                <Link href={`/karakter/${c.id}`} className="block truncate font-serif text-[15px] text-ink hover:text-accent">
+              <button type="button" onClick={() => onOpen(c.id)} className="shrink-0" title="Karakteri görüntüle">
+                <Portrait id={c.id} version={c.portraitVersion} name={c.name} className="h-12 w-10" />
+              </button>
+              <div className="min-w-0 flex-1">
+                <button type="button" onClick={() => onOpen(c.id)} className="block max-w-full truncate text-left font-serif text-[15px] text-ink hover:text-accent">
                   {c.name}
-                </Link>
+                </button>
                 <p className="text-[11px] text-muted">
                   Sv {c.level} · {members.find((m) => m.id === c.userId)?.displayName ?? (c.userId === gm.id ? gm.displayName : "")}
                 </p>
@@ -317,6 +342,13 @@ function MiniBtn({ onClick, children }: { onClick: () => void; children: React.R
 }
 
 // ------------------------------------------------------------------ akış
+type ChatTab = "ic" | "ooc" | "fisilti";
+
+/** Fısıltının karşı tarafı (GM açısından oyuncu, oyuncu açısından GM). */
+function whisperPeer(m: Msg, me: string) {
+  return m.userId === me ? m.recipientId : m.userId;
+}
+
 function Feed({
   items,
   me,
@@ -344,11 +376,35 @@ function Feed({
   const end = useRef<HTMLDivElement>(null);
   const box = useRef<HTMLDivElement>(null);
   const [text, setText] = useState("");
-  const [channel, setChannel] = useState<"IC" | "OOC" | "WHISPER">("IC");
+  const [tab, setTab] = useState<ChatTab>("ic");
   const [asChar, setAsChar] = useState<string>(myChars[0]?.id ?? "");
-  const [to, setTo] = useState<string>(members[0]?.id ?? "");
+  const [peer, setPeer] = useState<string>(isGM ? (members[0]?.id ?? "") : gm.id);
   const [sending, setSending] = useState(false);
+  const [seen, setSeen] = useState<Record<string, number>>({});
 
+  // Sekmelere göre ayrılmış akışlar
+  const inTab = useCallback(
+    (it: FeedItem, t: ChatTab, p?: string) => {
+      if (it.t === "r") return t === "ic";
+      const ch = it.m.channel;
+      if (t === "ic") return ch === "IC" || ch === "SYSTEM";
+      if (t === "ooc") return ch === "OOC";
+      return ch === "WHISPER" && (!p || whisperPeer(it.m, me) === p);
+    },
+    [me],
+  );
+  const view = items.filter((it) => inTab(it, tab, tab === "fisilti" ? peer : undefined));
+  const countOf = (t: ChatTab, p?: string) => items.filter((it) => inTab(it, t, p) && !(it.t === "m" && it.m.userId === me)).length;
+  const keyOf = (t: ChatTab, p?: string) => (t === "fisilti" ? `f:${p}` : t);
+  const unread = (t: ChatTab, p?: string) => Math.max(0, countOf(t, p) - (seen[keyOf(t, p)] ?? 0));
+  const whisperUnread = isGM ? members.reduce((a, m) => a + unread("fisilti", m.id), 0) : unread("fisilti", gm.id);
+
+  useEffect(() => {
+    // Açık sekmeyi okunmuş say
+    const k = keyOf(tab, tab === "fisilti" ? peer : undefined);
+    const n = countOf(tab, tab === "fisilti" ? peer : undefined);
+    if (seen[k] !== n) setSeen((s) => ({ ...s, [k]: n }));
+  });
   useEffect(() => {
     if (!asChar && myChars[0]) setAsChar(myChars[0].id);
   }, [myChars, asChar]);
@@ -356,34 +412,87 @@ function Feed({
     const b = box.current;
     if (!b) return;
     if (b.scrollHeight - b.scrollTop - b.clientHeight < 240) end.current?.scrollIntoView({ block: "end" });
-  }, [items.length]);
-  useEffect(() => end.current?.scrollIntoView({ block: "end" }), []);
+  }, [view.length]);
+  useEffect(() => end.current?.scrollIntoView({ block: "end" }), [tab, peer]);
 
+  const channel = tab === "ic" ? "IC" : tab === "ooc" ? "OOC" : "WHISPER";
   const send = async () => {
     const t = text.trim();
     if (!t) return;
+    if (channel === "WHISPER" && isGM && !peer) return toast("Fısıldayacağın oyuncuyu seç.", "error");
     setSending(true);
     const r = await emit("chat", {
       campaignId,
       channel,
       text: t,
       characterId: channel === "IC" && asChar ? asChar : null,
-      recipientId: channel === "WHISPER" && isGM ? to : null,
+      recipientId: channel === "WHISPER" && isGM ? peer : null,
     });
     setSending(false);
     if (!r.ok) return toast(r.error, "error");
     setText("");
   };
+  const remove = async (id: string) => {
+    const r = await emit("delete", { campaignId, messageId: id });
+    if (!r.ok) toast(r.error, "error");
+  };
 
   const nameOf = (id: string | null) => (id === gm.id ? gm.displayName : members.find((m) => m.id === id)?.displayName ?? "?");
+  const tabBtn = (t: ChatTab, label: string, n: number) => (
+    <button
+      key={t}
+      type="button"
+      role="tab"
+      aria-selected={tab === t}
+      onClick={() => setTab(t)}
+      className={cx("-mb-px flex items-center gap-1.5 border-b-2 px-3 py-2.5 text-sm transition", tab === t ? "border-accent text-ink" : "border-transparent text-muted hover:text-ink")}
+    >
+      {label}
+      {n > 0 && tab !== t && <span className="rounded-full bg-accent px-1.5 text-[10px] font-semibold leading-4 text-onAccent">{n > 99 ? "99+" : n}</span>}
+    </button>
+  );
 
   return (
     <div className="flex min-h-0 w-full flex-col">
+      <div role="tablist" className="flex shrink-0 gap-1 border-b border-line px-2 sm:px-4">
+        {tabBtn("ic", "Sahne (IC)", unread("ic"))}
+        {tabBtn("ooc", "Masa (OOC)", unread("ooc"))}
+        {tabBtn("fisilti", "Fısıltılar", whisperUnread)}
+      </div>
+      {tab === "fisilti" && isGM && (
+        <div className="flex shrink-0 gap-1.5 overflow-x-auto border-b border-line px-3 py-2 sm:px-5">
+          {members.length === 0 && <span className="text-xs text-muted">Kampanyada oyuncu yok.</span>}
+          {members.map((m) => {
+            const n = unread("fisilti", m.id);
+            return (
+              <button
+                key={m.id}
+                type="button"
+                onClick={() => setPeer(m.id)}
+                className={cx("flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1 text-xs", peer === m.id ? "border-accent bg-accent/15 text-ink" : "border-line text-muted hover:text-ink")}
+              >
+                {m.displayName}
+                {n > 0 && peer !== m.id && <span className="rounded-full bg-accent px-1.5 text-[10px] font-semibold leading-4 text-onAccent">{n}</span>}
+              </button>
+            );
+          })}
+        </div>
+      )}
       <div ref={box} className="min-h-0 flex-1 space-y-2 overflow-y-auto px-4 py-4 sm:px-6">
-        {items.length === 0 && <p className="py-10 text-center text-sm text-muted">Henüz bir şey yok. İlk sözü söyle ya da zar at.</p>}
-        {items.map((it) =>
+        {view.length === 0 && (
+          <p className="py-10 text-center text-sm text-muted">
+            {tab === "ic"
+              ? "Sahne boş. Karakterinle konuş ya da zar at."
+              : tab === "ooc"
+                ? "Oyun dışı sohbet burada."
+                : isGM
+                  ? `${nameOf(peer)} ile özel konuşma. Bunu yalnızca ikiniz görürsünüz.`
+                  : "GM ile özel konuşma. Bunu yalnızca sen ve GM görürsünüz."}
+          </p>
+        )}
+        {view.map((it) =>
           it.t === "m" ? (
-            <MessageRow key={`m${it.m.id}`} m={it.m} me={me} nameOf={nameOf} />
+            <MessageRow key={`m${it.m.id}`} m={it.m} me={me} nameOf={nameOf} canDelete={isGM || it.m.userId === me} onDelete={() => remove(it.m.id)} />
           ) : (
             <RollCard
               key={`r${it.r.id}`}
@@ -449,36 +558,23 @@ function Feed({
           send();
         }}
       >
-        <div className="mb-2 flex flex-wrap items-center gap-2 text-xs">
-          {(["IC", "OOC", "WHISPER"] as const).map((ch) => (
-            <button
-              key={ch}
-              type="button"
-              onClick={() => setChannel(ch)}
-              className={cx("rounded-full border px-2.5 py-1", channel === ch ? "border-accent bg-accent/15 text-ink" : "border-line text-muted hover:text-ink")}
-            >
-              {ch === "IC" ? "Karakter (IC)" : ch === "OOC" ? "Oyun dışı (OOC)" : isGM ? "Fısıltı" : "GM'e fısılda"}
-            </button>
-          ))}
-          {channel === "IC" && myChars.length > 0 && (
-            <select value={asChar} onChange={(e) => setAsChar(e.target.value)} className="input h-7 w-auto py-0 text-xs">
-              {isGM && <option value="">GM / anlatıcı</option>}
-              {myChars.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}
-                </option>
-              ))}
-            </select>
+        <div className="mb-2 flex flex-wrap items-center gap-2 text-xs text-muted">
+          {tab === "ic" && myChars.length > 0 && (
+            <>
+              <span>Konuşan:</span>
+              <select value={asChar} onChange={(e) => setAsChar(e.target.value)} className="input h-7 w-auto py-0 text-xs">
+                {isGM && <option value="">GM / anlatıcı</option>}
+                {myChars.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+            </>
           )}
-          {channel === "WHISPER" && isGM && (
-            <select value={to} onChange={(e) => setTo(e.target.value)} className="input h-7 w-auto py-0 text-xs">
-              {members.map((m) => (
-                <option key={m.id} value={m.id}>
-                  → {m.displayName}
-                </option>
-              ))}
-            </select>
-          )}
+          {tab === "ic" && myChars.length === 0 && <span>{isGM ? "Anlatıcı olarak yazıyorsun." : "Konuşmak için onaylanmış bir karakterin olmalı."}</span>}
+          {tab === "ooc" && <span>Oyun dışı not: herkes görür.</span>}
+          {tab === "fisilti" && <span>{isGM ? `Yalnızca ${nameOf(peer)} görür.` : "Yalnızca GM görür."}</span>}
         </div>
         <div className="flex gap-2">
           <textarea
@@ -492,7 +588,7 @@ function Feed({
             }}
             rows={1}
             maxLength={2000}
-            placeholder={channel === "IC" ? "Karakterin ne söylüyor / yapıyor?" : channel === "OOC" ? "Masaya bir not…" : "Gizli mesaj…"}
+            placeholder={tab === "ic" ? "Karakterin ne söylüyor / yapıyor?" : tab === "ooc" ? "Masaya bir not…" : "Gizli mesaj…"}
             className="input min-h-[42px] resize-none"
           />
           <Button type="submit" variant="primary" disabled={sending || !text.trim()}>
@@ -508,33 +604,80 @@ function time(s: string) {
   return new Date(s).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" });
 }
 
-function MessageRow({ m, me, nameOf }: { m: Msg; me: string; nameOf: (id: string | null) => string }) {
+function DeleteBtn({ onDelete }: { onDelete: () => void }) {
+  const [ask, setAsk] = useState(false);
+  return ask ? (
+    <span className="ml-2 inline-flex items-center gap-1 text-[11px]">
+      <button type="button" className="rounded bg-danger/20 px-1.5 text-danger hover:bg-danger/30" onClick={onDelete}>
+        Sil
+      </button>
+      <button type="button" className="rounded px-1.5 text-muted hover:text-ink" onClick={() => setAsk(false)}>
+        Vazgeç
+      </button>
+    </span>
+  ) : (
+    <button
+      type="button"
+      onClick={() => setAsk(true)}
+      className="ml-1 rounded p-0.5 text-muted opacity-0 transition hover:text-danger focus:opacity-100 group-hover:opacity-100"
+      title="Mesajı sil"
+      aria-label="Mesajı sil"
+    >
+      <Trash2 className="h-3.5 w-3.5" />
+    </button>
+  );
+}
+
+function MessageRow({
+  m,
+  me,
+  nameOf,
+  canDelete,
+  onDelete,
+}: {
+  m: Msg;
+  me: string;
+  nameOf: (id: string | null) => string;
+  canDelete: boolean;
+  onDelete: () => void;
+}) {
+  const del = canDelete ? <DeleteBtn onDelete={onDelete} /> : null;
   if (m.channel === "SYSTEM")
     return (
-      <div className="flex justify-center py-1">
+      <div className="group flex items-center justify-center py-1">
         <span className="rounded-full border border-line bg-surface2/60 px-3 py-1 text-center text-xs text-muted">{m.content}</span>
+        {del}
       </div>
     );
-  if (m.channel === "WHISPER")
+  if (m.channel === "WHISPER") {
+    const mine = m.userId === me;
     return (
-      <div className="rounded-lg border border-accent/40 bg-accent/[0.06] px-3 py-2 text-sm">
-        <p className="mb-0.5 text-[11px] text-accent">
-          Fısıltı · {m.userId === me ? `sen → ${nameOf(m.recipientId)}` : `${m.userName} → ${m.recipientId === me ? "sana" : nameOf(m.recipientId)}`} · {time(m.createdAt)}
-        </p>
-        <p className="whitespace-pre-wrap break-words">{m.content}</p>
+      <div className={cx("group flex", mine ? "justify-end" : "justify-start")}>
+        <div className={cx("max-w-[85%] rounded-2xl px-3.5 py-2 text-sm", mine ? "rounded-br-sm bg-accent/20" : "rounded-bl-sm border border-line bg-surface2")}>
+          <p className="mb-0.5 text-[11px] text-muted">
+            {mine ? "Sen" : nameOf(m.userId)} · {time(m.createdAt)}
+            {del}
+          </p>
+          <p className="whitespace-pre-wrap break-words">{m.content}</p>
+        </div>
       </div>
     );
+  }
   if (m.channel === "OOC")
     return (
-      <p className="px-1 text-sm text-muted">
-        <span className="text-ink/70">{m.userName}</span> <span className="text-[10px]">{time(m.createdAt)}</span>
-        <span className="ml-2 whitespace-pre-wrap break-words">(( {m.content} ))</span>
-      </p>
+      <div className="group rounded-lg px-2 py-1 hover:bg-surface2/40">
+        <p className="text-[11px] text-muted">
+          <span className="font-medium text-ink/80">{m.userName}</span> · {time(m.createdAt)}
+          {del}
+        </p>
+        <p className="whitespace-pre-wrap break-words text-sm text-ink/90">{m.content}</p>
+      </div>
     );
   return (
-    <div className="px-1 py-1">
+    <div className="group rounded-lg px-2 py-1 hover:bg-surface2/30">
       <p className="text-[11px] text-muted">
         <span className="font-serif text-[15px] text-accent">{m.characterName ?? `${m.userName} (anlatıcı)`}</span> · {time(m.createdAt)}
+        {del}
       </p>
       <p className="whitespace-pre-wrap break-words font-serif text-[15px] text-ink">{m.content}</p>
     </div>
@@ -852,5 +995,98 @@ function RequestModal({ open, onClose, chars, emit, campaignId }: { open: boolea
         </div>
       </div>
     </Modal>
+  );
+}
+
+// ------------------------------------------------------------------ karakter görünümü (oda içinde)
+function CharacterQuick({ entry, data, onClose }: { entry: Entry | null; data: RulesData; onClose: () => void }) {
+  const c = entry?.character;
+  const full = entry && entry.view !== "public" ? (entry.character as FullChar) : null;
+  return (
+    <Modal open={!!entry} onClose={onClose} title={c?.name ?? ""} wide>
+      {c && (
+        <div className="space-y-5">
+          <div className="flex gap-4">
+            <Portrait id={c.id} version={c.portraitVersion} name={c.name} className="h-[125px] w-[100px]" />
+            <div className="min-w-0 space-y-1.5 text-sm">
+              <p className="text-muted">
+                Seviye {c.level} · {c.age} yaş · {c.nationality} · {c.alignment}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {c.trees.map((t) => (
+                  <span key={t} className="flex items-center gap-1.5 rounded-full border border-accent/40 bg-accent/10 py-0.5 pl-0.5 pr-2.5 text-xs text-accent">
+                    <TreeIcon treeKey={t} className="h-6 w-6 rounded-full" />
+                    {data.trees.find((x) => x.key === t)?.name}
+                  </span>
+                ))}
+              </div>
+              {c.appearance && <p className="text-ink/80">{c.appearance}</p>}
+              <Link href={`/karakter/${c.id}`} target="_blank" className="inline-block text-xs text-accent hover:underline">
+                Tam karakter kağıdını yeni sekmede aç ↗
+              </Link>
+            </div>
+          </div>
+          {full ? <QuickFull c={full} data={data} /> : <p className="text-sm text-muted">Diğer oyuncuların karakter kağıtlarının yalnızca bu kısmı görünür.</p>}
+        </div>
+      )}
+    </Modal>
+  );
+}
+
+function QuickFull({ c, data }: { c: FullChar; data: RulesData }) {
+  const eff = effectiveStats(c, data);
+  const body = normalizeBody(c.body);
+  const augs = installedAugments(c.body, data);
+  const owned = Object.entries(c.abilities).filter(([, v]) => v > 0);
+  return (
+    <div className="space-y-5">
+      <div className="grid grid-cols-3 gap-2 sm:grid-cols-6">
+        {STAT_KEYS.map((k) => (
+          <div key={k} className="rounded-lg border border-line bg-surface2/50 px-2 py-1.5 text-center">
+            <p lang="de" className="text-[10px] uppercase tracking-wider text-muted">{STAT_LABELS[k]}</p>
+            <p className={cx("font-mono text-lg", eff[k].value < 0 && "text-danger")}>{eff[k].value}</p>
+          </div>
+        ))}
+      </div>
+      <div className="grid gap-5 sm:grid-cols-[180px_1fr]">
+        <BodyDiagram body={body} className="mx-auto max-w-[160px]" />
+        <div className="space-y-2 text-sm">
+          <p>
+            <span className="text-muted">Corruption:</span> <span className="font-mono">{c.corruption}</span> ·{" "}
+            <span className="text-muted">Inspiration:</span> <span className="font-mono">{c.inspiration}</span> ·{" "}
+            <span className="text-muted">Death Save:</span> {c.deathSave.available ? "var" : "yok"}
+          </p>
+          {BODY_PARTS.filter((p) => body[p.key].wound !== "saglam").map((p) => (
+            <p key={p.key} className="text-danger/90">
+              {p.label}: −{woundPenalty(body[p.key])}
+            </p>
+          ))}
+          {augs.map(({ part, augment }) => (
+            <p key={part}>
+              <span className="text-accent">{augment.name}</span> <span className="text-muted">({BODY_PARTS.find((b) => b.key === part)?.label})</span>
+            </p>
+          ))}
+        </div>
+      </div>
+      {owned.length > 0 && (
+        <div>
+          <p className="kicker mb-2">Yetenekler</p>
+          <div className="grid gap-2 md:grid-cols-2">
+            {owned.map(([k, lv]) => (data.abilities[k] ? <AbilityCard key={k} ability={data.abilities[k]} level={lv} /> : null))}
+          </div>
+        </div>
+      )}
+      {c.perks.length > 0 && (
+        <div>
+          <p className="kicker mb-2">Perkler</p>
+          <div className="grid gap-2 md:grid-cols-2">
+            {c.perks.map((k) => {
+              const p = data.perks.find((x) => x.key === k);
+              return p ? <PerkCard key={k} perk={p} /> : null;
+            })}
+          </div>
+        </div>
+      )}
+    </div>
   );
 }

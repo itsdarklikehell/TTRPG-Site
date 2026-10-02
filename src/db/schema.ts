@@ -4,6 +4,7 @@
 import { randomUUID } from "node:crypto";
 import {
   boolean,
+  customType,
   index,
   integer,
   jsonb,
@@ -176,6 +177,10 @@ export const characters = pgTable(
     money: integer("money").notNull().default(0),
     inventory: jsonb("inventory").$type<InventoryItem[]>().notNull().default([]),
     notes: text("notes").notNull().default(""),
+    /** Oyuncunun yalnızca GM ile paylaştığı gizli geçmiş / lore. Diğer oyuncular görmez. */
+    secretNotes: text("secret_notes").notNull().default(""),
+    /** Portre yüklüyse sürüm damgası (önbellek kırmak için). */
+    portraitVersion: integer("portrait_version").notNull().default(0),
     gmNotes: text("gm_notes").notNull().default(""),
     createdAt: created(),
     // milisaniye hassasiyeti: koşullu güncellemelerde (yarış koruması) JS Date ile birebir eşleşir
@@ -260,3 +265,14 @@ export type Character = typeof characters.$inferSelect;
 export type Message = typeof messages.$inferSelect;
 export type Roll = typeof rolls.$inferSelect;
 
+
+const bytea = customType<{ data: Buffer; driverData: Buffer }>({ dataType: () => "bytea" });
+
+/** Karakter portresi: sunucuda yeniden kodlanmış WebP (en fazla 512 px). */
+export const portraits = pgTable("portraits", {
+  characterId: text("character_id")
+    .primaryKey()
+    .references(() => characters.id, { onDelete: "cascade" }),
+  data: bytea("data").notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+});

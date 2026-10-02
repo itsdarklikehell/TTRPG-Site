@@ -307,7 +307,7 @@ cat > /etc/nginx/sites-available/umbracaelis <<NGINX
 include /etc/nginx/snippets/cloudflare-realip.conf;
 
 limit_req_zone \$binary_remote_addr zone=shz_auth:10m rate=10r/m;
-limit_req_zone \$binary_remote_addr zone=shz_app:10m rate=30r/s;
+limit_req_zone \$binary_remote_addr zone=shz_app:10m rate=60r/s;
 limit_conn_zone \$binary_remote_addr zone=shz_conn:10m;
 
 map \$http_upgrade \$shz_connection_upgrade { default upgrade; '' close; }
@@ -410,7 +410,7 @@ server {
     }
 
     location ^~ /schwarzesonne/ {
-        limit_req zone=shz_app burst=80 nodelay;
+        limit_req zone=shz_app burst=300 nodelay;
         limit_req_status 429;
         proxy_pass http://127.0.0.1:3000;
         proxy_http_version 1.1;
