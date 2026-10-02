@@ -711,7 +711,7 @@ function GMEditor({ open, onClose, c, data, act }: { open: boolean; onClose: () 
           </label>
         </div>
         <div>
-          <span className="label">Ham statlar (augment ve corruption hariç)</span>
+          <span className="label">Ham statlar (perk, augment ve corruption hariç; eksi değer girilebilir)</span>
           <div className="grid grid-cols-3 gap-2 sm:grid-cols-6">
             {STAT_KEYS.map((k) => (
               <label key={k} className="block">
@@ -719,7 +719,7 @@ function GMEditor({ open, onClose, c, data, act }: { open: boolean; onClose: () 
                 <input
                   type="number"
                   className="input py-1.5"
-                  min={k === "klang" ? -20 : 0}
+                  min={-20}
                   max={10}
                   value={v.stats[k]}
                   onChange={(e) => setV({ ...v, stats: { ...v.stats, [k]: Number(e.target.value) } })}

@@ -56,7 +56,6 @@ export const PATCH = route(
     if (body.stats) {
       const next = { ...c.stats };
       for (const [k, v] of Object.entries(body.stats) as [keyof typeof next, number][]) {
-        if (k !== "klang" && v < 0) throw bad(`${STAT_LABELS[k]} 0'ın altına inemez.`);
         if (next[k] !== v) log.push(`${STAT_LABELS[k]} ${next[k]} → ${v}`);
         next[k] = v;
       }
