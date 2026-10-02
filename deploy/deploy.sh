@@ -12,7 +12,12 @@ REL="$BASE/releases/$NAME"
 [ -d "$REL" ] || { echo "Sürüm klasörü yok: $REL"; exit 1; }
 cd "$REL"
 
-PREV="$(readlink -f "$BASE/current" 2>/dev/null || true)"
+# Önceki sürüm: yalnızca "current" gerçekten bir sürüm klasörünü gösteren bir bağlantıysa.
+PREV=""
+if [ -L "$BASE/current" ]; then
+  PREV="$(readlink -f "$BASE/current" || true)"
+  case "$PREV" in "$BASE"/releases/*) [ -d "$PREV" ] && [ "$PREV" != "$REL" ] || PREV="" ;; *) PREV="" ;; esac
+fi
 ln -sfn "$BASE/shared/.env" .env
 
 echo "==> Paketler"
@@ -41,8 +46,11 @@ npx tsx scripts/migrate.ts
 
 echo "==> Build"
 NEXT_TELEMETRY_DISABLED=1 npm run build
-# Çalışan uygulama yalnızca önbelleğe yazabilir.
+echo "==> İzinler"
+# Uygulama "shz" kullanıcısıyla çalışır: her şeyi okuyabilmeli, yalnızca önbelleğe yazabilmeli.
 mkdir -p .next/cache
+chgrp -R shz "$REL"
+chmod -R g+rX,g-w,o-rwx "$REL"
 chmod -R g+rwX .next/cache
 
 echo "==> Giriş sayfası"
@@ -59,7 +67,7 @@ for _ in $(seq 1 40); do
 done
 if [ -z "$ok" ]; then
   echo "!! Sağlık kontrolü başarısız, önceki sürüme dönülüyor"
-  if [ -n "$PREV" ] && [ -d "$PREV" ]; then
+  if [ -n "$PREV" ]; then
     ln -sfn "$PREV" "$BASE/current.new" && mv -Tf "$BASE/current.new" "$BASE/current"
     sudo /usr/bin/systemctl restart schwarzesonne
   fi
