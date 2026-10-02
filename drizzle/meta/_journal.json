@@ -15,6 +15,13 @@
       "when": 1790952937284,
       "tag": "0001_character_extras",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790956961218,
+      "tag": "0002_member_mute",
+      "breakpoints": true
     }
   ]
 }

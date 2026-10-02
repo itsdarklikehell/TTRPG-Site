@@ -21,7 +21,7 @@ export default async function RoomPage({ params }: { params: Promise<{ id: strin
     .filter((c) => c.status === "ACTIVE" || (c.userId === user.id && c.status !== "REJECTED"))
     .map((c) => (isGM ? { view: "gm" as const, character: c } : c.userId === user.id ? { view: "owner" as const, character: ownerCharacter(c) } : { view: "public" as const, character: publicCharacter(c) }));
   const members = await db
-    .select({ id: users.id, displayName: users.displayName })
+    .select({ id: users.id, displayName: users.displayName, chatMuted: campaignMembers.chatMuted, rollMuted: campaignMembers.rollMuted })
     .from(campaignMembers)
     .innerJoin(users, eq(users.id, campaignMembers.userId))
     .where(eq(campaignMembers.campaignId, id));
@@ -36,6 +36,7 @@ export default async function RoomPage({ params }: { params: Promise<{ id: strin
       members={members}
       initialChars={JSON.parse(JSON.stringify(chars))}
       data={data}
+      needsCharacter={!isGM && !rows.some((c) => c.userId === user.id && (c.status === "ACTIVE" || c.status === "PENDING"))}
     />
   );
 }

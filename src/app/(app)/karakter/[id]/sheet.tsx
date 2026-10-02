@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import { BodyDiagram, WoundLegend } from "@/components/body-diagram";
 import { AbilityCard, Html, PerkCard } from "@/components/content/cards";
 import { Modal, Tabs, useAction, useHashTab } from "@/components/interactive";
+import { CorruptionEffects } from "@/components/corruption";
 import { Portrait, PortraitEditor } from "@/components/portrait";
 import { Badge, Button, Card, Field, StatusBadge, cx } from "@/components/ui";
 import type { Character, InventoryItem } from "@/db/schema";
@@ -108,6 +109,7 @@ export function Sheet({
               GM düzenle
             </Button>
           )}
+          {(isGM || isOwner) && <DeleteCharacter id={c.id} name={c.name} campaignId={campaign.id} />}
         </div>
       </header>
 
@@ -289,11 +291,7 @@ export function CorruptionBar({ value }: { value: number }) {
           />
         ))}
       </div>
-      {value > 0 && (
-        <p className="mt-2 text-xs text-muted">
-          <span className="text-ink">Corruption {value}:</span> {CORRUPTION_EFFECTS[value]}
-        </p>
-      )}
+      {value > 0 && <CorruptionEffects value={value} className="mt-3" />}
     </div>
   );
 }
@@ -819,5 +817,47 @@ function SecretNotes({ c, canEdit, act }: { c: Ch; canEdit: boolean; act: (fn: (
         Kaydet
       </Button>
     </Card>
+  );
+}
+
+// ------------------------------------------------------------------ silme
+function DeleteCharacter({ id, name, campaignId }: { id: string; name: string; campaignId: string }) {
+  const router = useRouter();
+  const { busy, run } = useAction();
+  const [open, setOpen] = useState(false);
+  const [confirm, setConfirm] = useState("");
+  return (
+    <>
+      <Button variant="danger" onClick={() => setOpen(true)}>
+        Karakteri sil
+      </Button>
+      <Modal open={open} onClose={() => setOpen(false)} title="Karakteri sil">
+        <div className="space-y-4">
+          <p className="text-sm text-ink/90">
+            <strong>{name}</strong> kalıcı olarak silinecek: statlar, yetenekler, envanter, notlar, portre ve kayıt. Bu işlem geri alınamaz. Oyun odasındaki eski mesajlar ve zarlar
+            kalır.
+          </p>
+          <Field label="Onaylamak için karakterin adını yaz">
+            <input className="input" value={confirm} onChange={(e) => setConfirm(e.target.value)} placeholder={name} autoComplete="off" />
+          </Field>
+          <div className="flex justify-end gap-2">
+            <Button onClick={() => setOpen(false)}>Vazgeç</Button>
+            <Button
+              variant="danger"
+              disabled={busy || confirm.trim() !== name}
+              onClick={async () => {
+                const ok = await run(() => api(`/api/characters/${id}`, { method: "DELETE", body: { confirmName: confirm.trim() } }), "Karakter silindi.");
+                if (ok) {
+                  router.replace(`/kampanya/${campaignId}`);
+                  router.refresh();
+                }
+              }}
+            >
+              Kalıcı olarak sil
+            </Button>
+          </div>
+        </div>
+      </Modal>
+    </>
   );
 }

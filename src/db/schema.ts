@@ -117,6 +117,10 @@ export const campaignMembers = pgTable(
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
     joinedAt: timestamp("joined_at", { withTimezone: true }).notNull().defaultNow(),
+    /** GM tarafından sohbette susturuldu */
+    chatMuted: boolean("chat_muted").notNull().default(false),
+    /** GM tarafından zar atmada susturuldu */
+    rollMuted: boolean("roll_muted").notNull().default(false),
   },
   (t) => [primaryKey({ columns: [t.campaignId, t.userId] }), index("members_user_idx").on(t.userId)],
 );

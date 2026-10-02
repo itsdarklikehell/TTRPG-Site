@@ -1,9 +1,10 @@
 "use client";
-import { Trash2 } from "lucide-react";
+import { Dices, MessageCircleOff, Trash2, UserPlus } from "lucide-react";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { io, type Socket } from "socket.io-client";
 import { BodyDiagram } from "@/components/body-diagram";
+import { CorruptionEffects } from "@/components/corruption";
 import { AbilityCard, PerkCard } from "@/components/content/cards";
 import { TreeIcon } from "@/components/content/icons";
 import { Modal, Tabs, useToast } from "@/components/interactive";
@@ -67,15 +68,37 @@ export function Room({
   members,
   initialChars,
   data,
+  needsCharacter,
 }: {
   campaign: { id: string; name: string; deathSaveEnabled: boolean };
   me: { id: string; displayName: string };
   isGM: boolean;
   gm: { id: string; displayName: string };
-  members: { id: string; displayName: string }[];
+  members: Member[];
   initialChars: Entry[];
   data: RulesData;
+  needsCharacter: boolean;
 }) {
+  const [memberList, setMemberList] = useState<Member[]>(members);
+  const myMute = memberList.find((m) => m.id === me.id) ?? { chatMuted: false, rollMuted: false };
+  const [askChar, setAskChar] = useState(false);
+  useEffect(() => {
+    if (!needsCharacter) return;
+    try {
+      if (sessionStorage.getItem(`shz:askChar:${campaign.id}`)) return;
+    } catch {
+      /* depolama kapalı */
+    }
+    setAskChar(true);
+  }, [needsCharacter, campaign.id]);
+  const closeAsk = () => {
+    setAskChar(false);
+    try {
+      sessionStorage.setItem(`shz:askChar:${campaign.id}`, "1");
+    } catch {
+      /* yok say */
+    }
+  };
   const augments = data.augments;
   const toast = useToast();
   const [viewing, setViewing] = useState<string | null>(null);
@@ -139,6 +162,13 @@ export function Room({
     s.on("connect_error", () => setConnected(false));
     s.on("message", (m: Msg) => m.campaignId === campaign.id && setMsgs((x) => (x.some((y) => y.id === m.id) ? x : [...x.slice(-299), m])));
     s.on("roll", (r: RollV & { campaignId: string }) => r.campaignId === campaign.id && setRolls((x) => (x.some((y) => y.id === r.id) ? x : [...x.slice(-199), r])));
+    s.on("mute:changed", (p: { userId: string; chatMuted: boolean; rollMuted: boolean }) =>
+      setMemberList((list) => list.map((m) => (m.id === p.userId ? { ...m, chatMuted: p.chatMuted, rollMuted: p.rollMuted } : m))),
+    );
+    s.on("character:deleted", ({ characterId }: { characterId: string }) => {
+      setChars((list) => list.filter((e) => e.character.id !== characterId));
+      setViewing((v) => (v === characterId ? null : v));
+    });
     s.on("message:deleted", ({ id }: { id: string }) => setMsgs((x) => x.filter((m) => m.id !== id)));
     s.on("roll:rerolled", ({ id }: { id: string }) => setRolls((x) => x.map((r) => (r.id === id ? { ...r, rerolled: true } : r))));
     s.on("presence", (p: { campaignId: string; online: string[] }) => p.campaignId === campaign.id && setOnline(p.online));
@@ -161,7 +191,9 @@ export function Room({
   const myChars = chars.filter((e): e is Extract<Entry, { view: "gm" | "owner" }> => e.view !== "public" && (isGM || e.character.userId === me.id) && e.character.status === "ACTIVE");
   const myRequests = requests.filter((q) => q.characters.some((c) => myChars.some((m) => m.character.id === c.id && (isGM ? c.userId === me.id : true))));
 
-  const party = <Party chars={chars} online={online} isGM={isGM} me={me.id} gm={gm} members={members} campaign={campaign} onOpen={setViewing} />;
+  const party = (
+    <Party chars={chars} online={online} isGM={isGM} me={me.id} gm={gm} members={memberList} campaign={campaign} onOpen={setViewing} onMuted={(m) => setMemberList((l) => l.map((x) => (x.id === m.id ? m : x)))} />
+  );
   const viewed = chars.find((e) => e.character.id === viewing) ?? null;
   const dice = (
     <DicePanel
@@ -172,6 +204,7 @@ export function Room({
       emit={emit}
       deathSaveEnabled={campaign.deathSaveEnabled}
       campaignId={campaign.id}
+      rollMuted={!isGM && myMute.rollMuted}
     />
   );
   const feedEl = (
@@ -186,6 +219,8 @@ export function Room({
       campaignId={campaign.id}
       requests={myRequests}
       onRequestDone={(id) => setRequests((x) => x.filter((q) => q.id !== id))}
+      chatMuted={!isGM && myMute.chatMuted}
+      rollMuted={!isGM && myMute.rollMuted}
     />
   );
 
@@ -221,6 +256,24 @@ export function Room({
         <div className={cx("overflow-y-auto border-line lg:block lg:border-l", mobileTab === "zar" ? "block" : "hidden")}>{dice}</div>
       </div>
       <CharacterQuick entry={viewed} data={data} onClose={() => setViewing(null)} />
+      <Modal open={askChar} onClose={closeAsk} title="Masaya hoş geldin">
+        <div className="space-y-4">
+          <div className="flex items-start gap-3">
+            <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-accent/15 text-accent">
+              <UserPlus className="h-5 w-5" />
+            </span>
+            <p className="text-sm text-ink/90">
+              Bu kampanyada henüz bir karakterin yok. Şimdi karakter oluşturmak ister misin? Sihirbaz seni adım adım yönlendirir; karakterin GM onayından sonra masaya katılır.
+            </p>
+          </div>
+          <div className="flex flex-wrap justify-end gap-2">
+            <Button onClick={closeAsk}>Şimdilik izle</Button>
+            <Link href={`/kampanya/${campaign.id}/karakter-olustur`} onClick={closeAsk} className="inline-flex h-10 items-center rounded-lg bg-accent px-4 text-sm font-semibold text-onAccent hover:bg-accent/90">
+              Karakter oluştur
+            </Link>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }
@@ -235,17 +288,27 @@ function Party({
   members,
   campaign,
   onOpen,
+  onMuted,
 }: {
   chars: Entry[];
   online: string[];
   isGM: boolean;
   me: string;
   gm: { id: string; displayName: string };
-  members: { id: string; displayName: string }[];
+  members: Member[];
   campaign: { id: string };
   onOpen: (id: string) => void;
+  onMuted: (m: Member) => void;
 }) {
   const toast = useToast();
+  const setMute = async (u: Member, body: { chatMuted?: boolean; rollMuted?: boolean }) => {
+    try {
+      const r = await api<{ chatMuted: boolean; rollMuted: boolean }>(`/api/campaigns/${campaign.id}/members/${u.id}`, { method: "PATCH", body });
+      onMuted({ ...u, chatMuted: r.chatMuted, rollMuted: r.rollMuted });
+    } catch (e) {
+      toast((e as Error).message, "error");
+    }
+  };
   const quick = async (id: string, body: Record<string, unknown>) => {
     try {
       await api(`/api/characters/${id}/gm`, { method: "PATCH", body });
@@ -320,16 +383,50 @@ function Party({
       <div className="pt-2">
         <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-widest text-muted">Masada</p>
         <ul className="space-y-1 text-sm">
-          {[gm, ...members].map((u) => (
+          <li className="flex items-center gap-2">
+            <span className={cx("h-1.5 w-1.5 rounded-full", online.includes(gm.id) ? "bg-ok" : "bg-line")} />
+            <span className={cx(online.includes(gm.id) ? "text-ink" : "text-muted")}>{gm.displayName}</span>
+            <span className="text-[10px] font-semibold text-accent">GM</span>
+          </li>
+          {members.map((u) => (
             <li key={u.id} className="flex items-center gap-2">
-              <span className={cx("h-1.5 w-1.5 rounded-full", online.includes(u.id) ? "bg-ok" : "bg-line")} />
-              <span className={cx(online.includes(u.id) ? "text-ink" : "text-muted")}>{u.displayName}</span>
-              {u.id === gm.id && <span className="text-[10px] font-semibold text-accent">GM</span>}
+              <span className={cx("h-1.5 w-1.5 shrink-0 rounded-full", online.includes(u.id) ? "bg-ok" : "bg-line")} />
+              <span className={cx("min-w-0 flex-1 truncate", online.includes(u.id) ? "text-ink" : "text-muted")}>{u.displayName}</span>
+              {isGM ? (
+                <span className="flex shrink-0 gap-1">
+                  <MuteBtn active={u.chatMuted} title={u.chatMuted ? "Sohbet susturmasını kaldır" : "Sohbette sustur"} onClick={() => setMute(u, { chatMuted: !u.chatMuted })}>
+                    <MessageCircleOff className="h-3.5 w-3.5" />
+                  </MuteBtn>
+                  <MuteBtn active={u.rollMuted} title={u.rollMuted ? "Zar susturmasını kaldır" : "Zar atmada sustur"} onClick={() => setMute(u, { rollMuted: !u.rollMuted })}>
+                    <Dices className="h-3.5 w-3.5" />
+                  </MuteBtn>
+                </span>
+              ) : (
+                <span className="flex shrink-0 gap-1 text-danger">
+                  {u.chatMuted && <MessageCircleOff className="h-3.5 w-3.5" aria-label="Sohbette susturuldu" />}
+                  {u.rollMuted && <Dices className="h-3.5 w-3.5" aria-label="Zar atmada susturuldu" />}
+                </span>
+              )}
             </li>
           ))}
         </ul>
       </div>
     </div>
+  );
+}
+
+function MuteBtn({ active, title, onClick, children }: { active: boolean; title: string; onClick: () => void; children: React.ReactNode }) {
+  return (
+    <button
+      type="button"
+      title={title}
+      aria-label={title}
+      aria-pressed={active}
+      onClick={onClick}
+      className={cx("grid h-6 w-6 place-items-center rounded border transition", active ? "border-danger/60 bg-danger/15 text-danger" : "border-line text-muted hover:text-ink")}
+    >
+      {children}
+    </button>
   );
 }
 
@@ -343,6 +440,7 @@ function MiniBtn({ onClick, children }: { onClick: () => void; children: React.R
 
 // ------------------------------------------------------------------ akış
 type ChatTab = "ic" | "ooc" | "fisilti";
+type Member = { id: string; displayName: string; chatMuted: boolean; rollMuted: boolean };
 
 /** Fısıltının karşı tarafı (GM açısından oyuncu, oyuncu açısından GM). */
 function whisperPeer(m: Msg, me: string) {
@@ -360,6 +458,8 @@ function Feed({
   campaignId,
   requests,
   onRequestDone,
+  chatMuted,
+  rollMuted,
 }: {
   items: FeedItem[];
   me: string;
@@ -371,6 +471,8 @@ function Feed({
   campaignId: string;
   requests: RollReq[];
   onRequestDone: (id: string) => void;
+  chatMuted: boolean;
+  rollMuted: boolean;
 }) {
   const toast = useToast();
   const end = useRef<HTMLDivElement>(null);
@@ -523,6 +625,7 @@ function Feed({
                       key={c.id}
                       size="sm"
                       variant="primary"
+                      disabled={rollMuted}
                       onClick={async () => {
                         const r = await emit("roll", {
                           campaignId,
@@ -576,6 +679,9 @@ function Feed({
           {tab === "ooc" && <span>Oyun dışı not: herkes görür.</span>}
           {tab === "fisilti" && <span>{isGM ? `Yalnızca ${nameOf(peer)} görür.` : "Yalnızca GM görür."}</span>}
         </div>
+        {chatMuted && tab !== "fisilti" && (
+          <p className="mb-2 rounded-md border border-danger/40 bg-danger/10 px-3 py-1.5 text-xs text-danger">GM seni sohbette susturdu. Yine de GM&apos;e fısıldayabilirsin.</p>
+        )}
         <div className="flex gap-2">
           <textarea
             value={text}
@@ -591,7 +697,7 @@ function Feed({
             placeholder={tab === "ic" ? "Karakterin ne söylüyor / yapıyor?" : tab === "ooc" ? "Masaya bir not…" : "Gizli mesaj…"}
             className="input min-h-[42px] resize-none"
           />
-          <Button type="submit" variant="primary" disabled={sending || !text.trim()}>
+          <Button type="submit" variant="primary" disabled={sending || !text.trim() || (chatMuted && tab !== "fisilti")}>
             Gönder
           </Button>
         </div>
@@ -743,6 +849,7 @@ function DicePanel({
   emit,
   deathSaveEnabled,
   campaignId,
+  rollMuted,
 }: {
   myChars: FullChar[];
   allChars: FullChar[];
@@ -751,6 +858,7 @@ function DicePanel({
   emit: (ev: string, p: unknown) => Promise<Ack>;
   deathSaveEnabled: boolean;
   campaignId: string;
+  rollMuted: boolean;
 }) {
   const toast = useToast();
   const choices = isGM ? allChars : myChars;
@@ -783,6 +891,7 @@ function DicePanel({
   return (
     <div className="space-y-4 p-4">
       <p className="text-[11px] font-semibold uppercase tracking-widest text-muted">Zar · d20 + stat ≥ eşik</p>
+      {rollMuted && <p className="rounded-md border border-danger/40 bg-danger/10 px-3 py-2 text-xs text-danger">GM seni zar atmada susturdu.</p>}
       {choices.length === 0 && !isGM && <p className="text-sm text-muted">Zar atmak için onaylanmış bir karakterin olmalı.</p>}
       {(choices.length > 0 || isGM) && (
         <>
@@ -884,7 +993,7 @@ function DicePanel({
             variant="primary"
             size="lg"
             className="w-full"
-            disabled={busy || (!ch && !isGM)}
+            disabled={busy || rollMuted || (!ch && !isGM)}
             onClick={() =>
               doEmit("roll", {
                 campaignId,
@@ -903,10 +1012,10 @@ function DicePanel({
           </Button>
           {ch && (
             <div className="grid grid-cols-2 gap-2">
-              <Button disabled={busy || !deathSaveEnabled || !ch.deathSave.available} onClick={() => doEmit("death", { campaignId, characterId: ch.id })} title={!deathSaveEnabled ? "Kapalı" : undefined}>
+              <Button disabled={busy || rollMuted || !deathSaveEnabled || !ch.deathSave.available} onClick={() => doEmit("death", { campaignId, characterId: ch.id })} title={!deathSaveEnabled ? "Kapalı" : undefined}>
                 Death Save (d6)
               </Button>
-              <Button disabled={busy || !threshold} onClick={() => doEmit("pervitin", { campaignId, characterId: ch.id, threshold: threshold ?? "orta" })} title="d20 + Sanita − Corruption/3 ≥ eşik">
+              <Button disabled={busy || rollMuted || !threshold} onClick={() => doEmit("pervitin", { campaignId, characterId: ch.id, threshold: threshold ?? "orta" })} title="d20 + Sanita − Corruption/3 ≥ eşik">
                 Pervitin zarı
               </Button>
             </div>
@@ -1068,6 +1177,7 @@ function QuickFull({ c, data }: { c: FullChar; data: RulesData }) {
           ))}
         </div>
       </div>
+      {c.corruption > 0 && <CorruptionEffects value={c.corruption} />}
       {owned.length > 0 && (
         <div>
           <p className="kicker mb-2">Yetenekler</p>

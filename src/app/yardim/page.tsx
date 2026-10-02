@@ -212,6 +212,8 @@ export default async function HelpPage() {
                 <strong>Fısıltılar:</strong> GM ile özel konuşma; GM her oyuncuyla ayrı bir konuşma görür.
               </li>
               <li>Kendi mesajını silebilirsin (mesajın üstüne gelince çıkan çöp kutusu). GM her mesajı silebilir.</li>
+              <li>GM bir oyuncuyu sohbette ya da zar atmada susturabilir. Sohbette susturulan oyuncu yine de GM&apos;e fısıldayabilir.</li>
+              <li>Kampanyada karakterin yoksa odaya girince sana karakter oluşturmak isteyip istemediğin sorulur.</li>
               <li>Partideki bir karakterin portresine ya da adına tıklayınca karakteri odadan çıkmadan görürsün.</li>
               <li>GM &quot;zar iste&quot; dediğinde akışın altında bir düğme çıkar; tek tıkla doğru zarı atarsın.</li>
               <li>Odadan başka bir sayfaya geçersen sağ alttaki &quot;Oyun odasına dön&quot; düğmesiyle geri dönersin.</li>
@@ -251,6 +253,7 @@ export default async function HelpPage() {
               </li>
               <li>
                 <strong>Oyun odasında:</strong> gizli zar atabilir, oyunculardan zar isteyebilir, parti kartlarından Corruption ve Inspiration&apos;ı hızlıca değiştirebilirsin.
+                &quot;Masada&quot; listesindeki simgelerle bir oyuncuyu sohbette ya da zar atmada susturabilirsin.
               </li>
               <li>
                 <strong>Kurallar:</strong> Obsidian&apos;daki kuralları güncelledikten sonra <code className="rounded bg-surface2 px-1">npm run sync</code> çalıştırıp push etmen yeterli.
@@ -264,6 +267,7 @@ export default async function HelpPage() {
                 ["Şifremi unuttum.", "GM'ine haber ver; site yöneticisi hesabını sıfırlayabilir."],
                 ["Karakterim reddedildi, ne yapmalıyım?", "Karakter sayfasındaki GM notunu oku ve kampanya sayfasından yeni bir karakter oluştur."],
                 ["Bir yeteneği yanlışlıkla aldım.", "GM'ine söyle; GM düzenle ekranından geri alıp puanını iade edebilir."],
+                ["Karakterimi silmek istiyorum.", "Karakter kağıdında 'Karakteri sil' düğmesine bas ve onay için karakterin adını yaz. Silme geri alınamaz."],
                 ["Oyun odası 'Bağlanıyor…' yazıyor.", "Sayfayı yenile. Devam ederse oturumun kapanmış olabilir; yeniden giriş yap."],
               ].map(([q, a]) => (
                 <div key={q}>

@@ -169,6 +169,17 @@ async function revalidate(s: S): Promise<boolean> {
   return true;
 }
 
+/** GM susturmaları: GM'in kendisi asla susturulmaz. */
+async function assertNotMuted(s: S, cid: string, isGM: boolean, kind: "chat" | "roll") {
+  if (isGM) return;
+  const m = await db.query.campaignMembers.findFirst({
+    where: and(eq(campaignMembers.campaignId, cid), eq(campaignMembers.userId, s.data.user.id)),
+    columns: { chatMuted: true, rollMuted: true },
+  });
+  if (kind === "chat" && m?.chatMuted) fail("GM seni sohbette susturdu.");
+  if (kind === "roll" && m?.rollMuted) fail("GM seni zar atmada susturdu.");
+}
+
 function joined(s: S, cid: string) {
   const isGM = s.data.campaigns.get(cid);
   if (isGM === undefined) fail("Önce odaya katıl.");
@@ -267,6 +278,8 @@ export function attachRealtime(io: Server) {
         schemas.chat,
         async function chat(s, p) {
           const isGM = joined(s, p.campaignId);
+          // Susturulan oyuncu yine de GM'e fısıldayabilir.
+          if (p.channel !== "WHISPER") await assertNotMuted(s, p.campaignId, isGM, "chat");
           const uid = s.data.user.id;
           let characterId: string | null = null;
           let charName: string | null = null;
@@ -317,6 +330,7 @@ export function attachRealtime(io: Server) {
 
       roll: guard(schemas.roll, async function roll(s, p) {
         const isGM = joined(s, p.campaignId);
+        await assertNotMuted(s, p.campaignId, isGM, "roll");
         const data = rulesData();
         const th = p.threshold ? thresholdByKey(p.threshold) : null;
         const d20 = randomInt(1, 21);
@@ -362,6 +376,7 @@ export function attachRealtime(io: Server) {
 
       reroll: guard(schemas.reroll, async function reroll(s, p) {
         const isGM = joined(s, p.campaignId);
+        await assertNotMuted(s, p.campaignId, isGM, "roll");
         const orig = await db.query.rolls.findFirst({ where: and(eq(rolls.id, p.rollId), eq(rolls.campaignId, p.campaignId)) });
         if (!orig || !orig.characterId || orig.kind === "death" || orig.kind === "pervitin") fail("Bu zar yeniden atılamaz.");
         if (orig!.rerolled) fail("Bu zar zaten yeniden atıldı.");
@@ -439,6 +454,7 @@ export function attachRealtime(io: Server) {
 
       death: guard(schemas.death, async function death(s, p) {
         const isGM = joined(s, p.campaignId);
+        await assertNotMuted(s, p.campaignId, isGM, "roll");
         const camp = await db.query.campaigns.findFirst({ where: eq(campaigns.id, p.campaignId) });
         if (!camp!.deathSaveEnabled) fail("Bu kampanyada Death Save kapalı.");
         const c = await loadChar(p.campaignId, p.characterId);
@@ -483,6 +499,7 @@ export function attachRealtime(io: Server) {
 
       pervitin: guard(schemas.pervitin, async function pervitin(s, p) {
         const isGM = joined(s, p.campaignId);
+        await assertNotMuted(s, p.campaignId, isGM, "roll");
         const c = await loadChar(p.campaignId, p.characterId);
         if (!isGM && (c.userId !== s.data.user.id || c.status !== "ACTIVE")) fail("Bu karakter senin değil.");
         const th = thresholdByKey(p.threshold)!;
