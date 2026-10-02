@@ -54,7 +54,7 @@ chmod -R g+rX,g-w,o-rwx "$REL"
 chmod -R g+rwX .next/cache
 
 echo "==> Giriş sayfası"
-rsync -a --delete deploy/landing/ /var/www/umbracaelis/
+rsync -a --delete --chmod=D755,F644 deploy/landing/ /var/www/umbracaelis/
 
 echo "==> Yayına al"
 ln -sfn "$REL" "$BASE/current.new" && mv -Tf "$BASE/current.new" "$BASE/current"

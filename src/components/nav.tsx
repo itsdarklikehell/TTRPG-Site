@@ -1,13 +1,12 @@
 import Link from "next/link";
+import { SunLogo } from "./logo";
 import type { SessionUser } from "@/lib/auth/session";
 import { LogoutButton, MobileMenu } from "./nav-client";
 
 export function Brand() {
   return (
     <Link href="/panel" className="flex items-center gap-2.5">
-      <span className="text-2xl leading-none" aria-hidden>
-        ☀️
-      </span>
+      <SunLogo className="h-8 w-8 text-accent" />
       <span className="leading-tight">
         <span className="block font-serif text-[15px] font-semibold tracking-[0.06em] text-ink">SCHWARZESONNE</span>
         <span className="block text-[10px] uppercase tracking-[0.22em] text-accent">Umbra Caelis</span>

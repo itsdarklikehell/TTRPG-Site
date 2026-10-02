@@ -1,4 +1,5 @@
 import { and, desc, eq, inArray, or } from "drizzle-orm";
+import { SunLogo } from "@/components/logo";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { db } from "@/db";
@@ -60,7 +61,7 @@ export default async function Panel() {
                           // eslint-disable-next-line @next/next/no-img-element
                           <img src={`/schwarzesonne${ci.emblem}`} alt="" className="h-12 w-12 shrink-0 rounded-md object-contain" />
                         ) : (
-                          <div className="grid h-12 w-12 shrink-0 place-items-center rounded-md bg-surface2 text-xl">☀️</div>
+                          <div className="grid h-12 w-12 shrink-0 place-items-center rounded-md bg-surface2 text-accent"><SunLogo className="h-7 w-7" /></div>
                         )}
                         <div className="min-w-0">
                           <Link href={`/kampanya/${c.id}`} className="font-serif text-lg leading-tight text-ink hover:text-accent">

@@ -363,7 +363,15 @@ server {
     location = /kurallar { return 301 /schwarzesonne/kurallar; }
     location ^~ /kurallar/ { return 301 /schwarzesonne/kurallar; }
 
-    location = /schwarzesonne { return 301 /schwarzesonne/; }
+    # Uygulamanın kök adresi (Next.js kendisi /giris veya /panel'e yönlendirir)
+    location = /schwarzesonne {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$remote_addr;
+        proxy_set_header X-Forwarded-Proto https;
+    }
 
     # Canlı oyun odası (WebSocket)
     location ^~ /schwarzesonne/socket.io/ {

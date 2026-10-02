@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SunLogo } from "@/components/logo";
 import { redirect } from "next/navigation";
 import { currentUser } from "@/lib/auth/session";
 
@@ -16,11 +17,9 @@ export default async function AuthLayout({ children }: { children: React.ReactNo
       />
       <div className="relative w-full max-w-sm">
         <div className="mb-8 text-center">
-          <div className="text-5xl" aria-hidden>
-            ☀️
-          </div>
+          <SunLogo className="mx-auto h-16 w-16 text-accent" />
           <h1 className="mt-3 font-serif text-2xl tracking-[0.12em]">SCHWARZESONNE</h1>
-          <p className="mt-1 inline-block bg-accent px-2 py-0.5 text-[11px] font-semibold uppercase tracking-[0.3em] text-onAccent">Campaigns</p>
+          <p lang="en" className="mt-1 inline-block bg-accent px-2 py-0.5 text-[11px] font-semibold uppercase tracking-[0.3em] text-onAccent">Campaigns</p>
         </div>
         {children}
         <p className="mt-6 text-center text-sm text-muted">

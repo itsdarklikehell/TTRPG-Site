@@ -1,5 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
+import { SunLogo } from "@/components/logo";
 import { useState } from "react";
 import { useAction } from "@/components/interactive";
 import { Button, Field, cx } from "@/components/ui";
@@ -58,7 +59,7 @@ export function CampaignForm({ id, initial, presets }: { id?: string; initial?: 
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={`/schwarzesonne${p.emblem}`} alt="" className="h-10 w-10 shrink-0 object-contain" />
               ) : (
-                <span className="text-xl">☀️</span>
+                <SunLogo className="h-10 w-10 shrink-0 text-accent" />
               )}
               <span className="min-w-0">
                 <span className="block text-sm font-medium text-ink">{p.name}</span>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SunLogo } from "@/components/logo";
 import { Html } from "@/components/content/cards";
 import { Badge, PageHeader } from "@/components/ui";
 import { content } from "@/lib/shz/content";
@@ -18,7 +19,7 @@ export default function CampaignsPage() {
               // eslint-disable-next-line @next/next/no-img-element
               <img src={`/schwarzesonne${c.emblem}`} alt="" className="h-16 w-16 shrink-0 object-contain" />
             ) : (
-              <div className="grid h-16 w-16 shrink-0 place-items-center rounded-lg bg-surface2 text-2xl">☀️</div>
+              <div className="grid h-16 w-16 shrink-0 place-items-center rounded-lg bg-surface2 text-accent"><SunLogo className="h-9 w-9" /></div>
             )}
             <div className="min-w-0">
               <h2 className="text-lg">{c.name}</h2>

@@ -132,18 +132,3 @@ export function StatusBadge({ status }: { status: string }) {
   const s = STATUS_LABEL[status] ?? { label: status, tone: "neutral" as Tone };
   return <Badge tone={s.tone}>{s.label}</Badge>;
 }
-
-export function Sun({ className }: { className?: string }) {
-  // Seri logosu: siyah güneş (sonnenrad esinli değil, sade 12 ışınlı güneş).
-  return (
-    <svg viewBox="0 0 32 32" aria-hidden className={className}>
-      <g fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
-        {Array.from({ length: 12 }).map((_, i) => {
-          const a = (i * Math.PI) / 6;
-          return <line key={i} x1={16 + Math.cos(a) * 9.5} y1={16 + Math.sin(a) * 9.5} x2={16 + Math.cos(a) * 14} y2={16 + Math.sin(a) * 14} />;
-        })}
-      </g>
-      <circle cx="16" cy="16" r="6.5" fill="currentColor" />
-    </svg>
-  );
-}
