@@ -218,7 +218,14 @@ export default async function HelpPage() {
                 <strong>Sahne (IC):</strong> karakterinin söyledikleri ve yaptıkları, zarlar ve sistem mesajları. <strong>Masa (OOC):</strong> oyun dışı sohbet.{" "}
                 <strong>Fısıltılar:</strong> GM ile özel konuşma; GM her oyuncuyla ayrı bir konuşma görür.
               </li>
-              <li>Kendi mesajını silebilirsin (mesajın üstüne gelince çıkan çöp kutusu). GM her mesajı silebilir.</li>
+              <li>
+                Kendi mesajını silebilirsin (mesajın üstüne gelince çıkan çöp kutusu). Birden çok mesajı silmek için sekme çubuğundaki <strong>Seç</strong> düğmesine bas, mesajları işaretle
+                ve &quot;Seçilenleri sil&quot;. GM her mesajı ve zarı silebilir.
+              </li>
+              <li>
+                <strong>İzleyiciler</strong> masayı izler: karakter oluşturamaz, sahneye yazamaz ve zar atamaz; Masa sohbetine ve GM&apos;e fısıltıyla yazabilir. Oda başlığında
+                &quot;İzleyici&quot; etiketi görünür.
+              </li>
               <li>GM bir oyuncuyu sohbette ya da zar atmada susturabilir. Sohbette susturulan oyuncu yine de GM&apos;e fısıldayabilir.</li>
               <li>Kampanyada karakterin yoksa odaya girince sana karakter oluşturmak isteyip istemediğin sorulur.</li>
               <li>Partideki bir karakterin portresine ya da adına tıklayınca karakteri odadan çıkmadan görürsün.</li>
@@ -278,7 +285,12 @@ export default async function HelpPage() {
                 uzuv seçmesi ve sonucu gizleme seçenekleri var. Bekleyen istekleri akışın altından iptal edebilirsin.
               </li>
               <li>
-                <strong>Zar geçmişi:</strong> Tek bir zarı kartındaki çöp kutusuyla, tüm geçmişi Sahne sekmesindeki &quot;Zar geçmişi&quot; düğmesiyle silebilirsin.
+                <strong>Geçmişi silme:</strong> &quot;Seç&quot; ile mesaj ve zarları toplu seçip silebilirsin. &quot;Temizle&quot; düğmesi sahne mesajlarını, masa sohbetini, bir oyuncuyla
+                ya da tüm oyuncularla olan fısıltıları, zar geçmişini veya her şeyi tek seferde siler.
+              </li>
+              <li>
+                <strong>İzleyiciler:</strong> Kampanya sayfasındaki &quot;İzleyici kodu&quot; ile hesabı olanlar izleyici olarak katılır; yeni kişiler için Yönetim &gt; Yeni davet&apos;te
+                rolü &quot;İzleyici&quot; seç. Var olan bir üyeyi kampanya sayfasından ya da odadaki göz simgesiyle izleyici/oyuncu yapabilirsin.
               </li>
               <li>
                 <strong>İade ve izinler:</strong> GM düzenle ekranındaki &quot;Puanları iade et&quot; tüm dağıtılmış stat ve yetenek puanlarını oyuncuya geri verir. &quot;Oyuncu perklerini

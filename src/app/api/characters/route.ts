@@ -33,8 +33,9 @@ export const POST = route(
     }),
   },
   async ({ body, user }) => {
-    const { campaign, isGM } = await campaignAccess(body.campaignId, user);
+    const { campaign, isGM, isSpectator } = await campaignAccess(body.campaignId, user);
     if (campaign.status === "ARCHIVED") throw bad("Bu kampanya arşivlenmiş.");
+    if (isSpectator) throw bad("İzleyiciler karakter oluşturamaz.");
     const r = buildCreation(body.creation, campaign.startPerkPoints, rulesData());
     if (!r.ok) throw bad(r.problems[0]);
 

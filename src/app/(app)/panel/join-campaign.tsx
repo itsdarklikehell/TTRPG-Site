@@ -1,13 +1,14 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useAction } from "@/components/interactive";
+import { useAction, useToast } from "@/components/interactive";
 import { Button, Card } from "@/components/ui";
 import { api } from "@/lib/client";
 
 export function JoinCampaign() {
   const router = useRouter();
   const { busy, run } = useAction();
+  const toast = useToast();
   const [code, setCode] = useState("");
   return (
     <Card className="p-5">
@@ -16,8 +17,11 @@ export function JoinCampaign() {
         className="flex gap-2"
         onSubmit={async (e) => {
           e.preventDefault();
-          const r = await run(() => api<{ id: string }>("/api/campaigns/join", { body: { code } }), "Kampanyaya katıldın.");
-          if (r) router.push(`/kampanya/${r.id}`);
+          const r = await run(() => api<{ id: string; role: "PLAYER" | "SPECTATOR" }>("/api/campaigns/join", { body: { code } }));
+          if (r) {
+            toast(r.role === "SPECTATOR" ? "Kampanyaya izleyici olarak katıldın." : "Kampanyaya katıldın.", "ok");
+            router.push(`/kampanya/${r.id}`);
+          }
         }}
       >
         <input value={code} onChange={(e) => setCode(e.target.value)} placeholder="ABCD-EFGH" maxLength={12} className="input font-mono uppercase" />

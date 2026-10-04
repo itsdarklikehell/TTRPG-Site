@@ -13,6 +13,15 @@ export default async function CreateCharacter({ params }: { params: Promise<{ id
   const user = await pageUser();
   const access = await campaignAccess(id, user).catch(() => null);
   if (!access) notFound();
+  if (access.isSpectator)
+    return (
+      <div>
+        <PageHeader kicker={access.campaign.name} title="Karakter oluştur">
+          Bu kampanyaya izleyici olarak katıldın. İzleyiciler karakter oluşturamaz, sahneye yazamaz ve zar atamaz; masayı izleyebilir, Masa (OOC) sohbetine ve GM&apos;e
+          fısıltıyla yazabilir. Oyuncu olmak istersen GM&apos;inden rolünü değiştirmesini iste.
+        </PageHeader>
+      </div>
+    );
   return (
     <div>
       <PageHeader kicker={access.campaign.name} title="Karakter oluştur">

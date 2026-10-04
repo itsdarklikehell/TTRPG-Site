@@ -44,7 +44,7 @@ export const DELETE = route({}, async ({ params, user }) => {
 
 /** GM: oyuncuyu sohbette ve/veya zar atmada susturur ya da susturmayı kaldırır. */
 export const PATCH = route(
-  { body: z.object({ chatMuted: z.boolean().optional(), rollMuted: z.boolean().optional() }), limit: 60 },
+  { body: z.object({ chatMuted: z.boolean().optional(), rollMuted: z.boolean().optional(), role: z.enum(["PLAYER", "SPECTATOR"]).optional() }), limit: 60 },
   async ({ params, body, user }) => {
     await requireCampaignGM(params.id, user);
     const [m] = await db
@@ -57,6 +57,7 @@ export const PATCH = route(
     const parts: string[] = [];
     if (body.chatMuted !== undefined) parts.push(body.chatMuted ? "sohbette susturuldu" : "sohbet susturması kaldırıldı");
     if (body.rollMuted !== undefined) parts.push(body.rollMuted ? "zar atmada susturuldu" : "zar susturması kaldırıldı");
+    if (body.role) parts.push(body.role === "SPECTATOR" ? "izleyici yapıldı" : "oyuncu yapıldı");
     if (parts.length) {
       const [msg] = await db
         .insert(messages)
@@ -64,7 +65,7 @@ export const PATCH = route(
         .returning();
       notifyCampaign(params.id, "message", { ...msg, userName: user.displayName, characterName: null });
     }
-    notifyCampaign(params.id, "mute:changed", { userId: params.userId, chatMuted: m.chatMuted, rollMuted: m.rollMuted });
-    return { ok: true, chatMuted: m.chatMuted, rollMuted: m.rollMuted };
+    notifyCampaign(params.id, "mute:changed", { userId: params.userId, chatMuted: m.chatMuted, rollMuted: m.rollMuted, role: m.role });
+    return { ok: true, chatMuted: m.chatMuted, rollMuted: m.rollMuted, role: m.role };
   },
 );

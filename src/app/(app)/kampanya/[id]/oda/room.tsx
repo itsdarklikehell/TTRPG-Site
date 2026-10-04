@@ -1,5 +1,5 @@
 "use client";
-import { Dices, HeartPulse, MessageCircleOff, Skull, Trash2, UserPlus, UserRound, UserX } from "lucide-react";
+import { CheckSquare, Dices, Eye, HeartPulse, MessageCircleOff, Skull, Square, Trash2, UserPlus, UserRound, UserX } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -65,13 +65,14 @@ interface RollReq {
 }
 type FeedItem = { t: "m"; at: string; m: Msg } | { t: "r"; at: string; r: RollV };
 type Ack = { ok: true; data?: unknown } | { ok: false; error: string };
-type Member = { id: string; displayName: string; chatMuted: boolean; rollMuted: boolean };
+type Member = { id: string; displayName: string; chatMuted: boolean; rollMuted: boolean; role: "PLAYER" | "SPECTATOR" };
 type Emit = (ev: string, p: unknown) => Promise<Ack>;
 
 export function Room({
   campaign,
   me,
   isGM,
+  isSpectator,
   gm,
   members,
   initialChars,
@@ -81,6 +82,7 @@ export function Room({
   campaign: { id: string; name: string; deathSaveEnabled: boolean };
   me: { id: string; displayName: string };
   isGM: boolean;
+  isSpectator: boolean;
   gm: { id: string; displayName: string };
   members: Member[];
   initialChars: Entry[];
@@ -89,7 +91,9 @@ export function Room({
 }) {
   const router = useRouter();
   const [memberList, setMemberList] = useState<Member[]>(members);
-  const myMute = memberList.find((m) => m.id === me.id) ?? { chatMuted: false, rollMuted: false };
+  const myMute = memberList.find((m) => m.id === me.id) ?? { chatMuted: false, rollMuted: false, role: isSpectator ? "SPECTATOR" : "PLAYER" };
+  // İzleyici: sahneye yazamaz, zar atamaz, karakter oluşturamaz (rol değişikliği anında yansır).
+  const spectator = !isGM && myMute.role === "SPECTATOR";
   const [askChar, setAskChar] = useState(false);
   useEffect(() => {
     if (!needsCharacter) return;
@@ -212,8 +216,24 @@ export function Room({
     });
     s.on("roll:deleted", ({ id }: { id: string }) => setRolls((x) => x.filter((r) => r.id !== id)));
     s.on("rolls:cleared", () => setRolls([]));
-    s.on("mute:changed", (p: { userId: string; chatMuted: boolean; rollMuted: boolean }) =>
-      setMemberList((list) => list.map((m) => (m.id === p.userId ? { ...m, chatMuted: p.chatMuted, rollMuted: p.rollMuted } : m))),
+    s.on("mute:changed", (p: { userId: string; chatMuted: boolean; rollMuted: boolean; role?: Member["role"] }) =>
+      setMemberList((list) => list.map((m) => (m.id === p.userId ? { ...m, chatMuted: p.chatMuted, rollMuted: p.rollMuted, role: p.role ?? m.role } : m))),
+    );
+    s.on("feed:deleted", (p: { messageIds: string[]; rollIds: string[] }) => {
+      const mi = new Set(p.messageIds);
+      const ri = new Set(p.rollIds);
+      if (mi.size) setMsgs((x) => x.filter((m) => !mi.has(m.id)));
+      if (ri.size) setRolls((x) => x.filter((r) => !ri.has(r.id)));
+    });
+    s.on("messages:cleared", (p: { scope: "IC" | "OOC" | "WHISPER" | "ALL"; peerId: string | null }) =>
+      setMsgs((x) =>
+        x.filter((m) => {
+          if (p.scope === "ALL") return false;
+          if (p.scope === "IC") return m.channel !== "IC" && m.channel !== "SYSTEM";
+          if (p.scope === "OOC") return m.channel !== "OOC";
+          return !(m.channel === "WHISPER" && (!p.peerId || m.userId === p.peerId || m.recipientId === p.peerId));
+        }),
+      ),
     );
     s.on("members:changed", (p: { removed?: string }) => {
       if (p?.removed) setMemberList((list) => list.filter((m) => m.id !== p.removed));
@@ -249,7 +269,7 @@ export function Room({
     () => [...msgs.map((m) => ({ t: "m" as const, at: m.createdAt, m })), ...rolls.map((r) => ({ t: "r" as const, at: r.createdAt, r }))].sort((a, b) => a.at.localeCompare(b.at)),
     [msgs, rolls],
   );
-  const myChars = chars.filter((e): e is Extract<Entry, { view: "gm" | "owner" }> => e.view !== "public" && (isGM || e.character.userId === me.id) && e.character.status === "ACTIVE");
+  const myChars = spectator ? [] : chars.filter((e): e is Extract<Entry, { view: "gm" | "owner" }> => e.view !== "public" && (isGM || e.character.userId === me.id) && e.character.status === "ACTIVE");
   const ownChar = chars.find((e) => e.character.userId === me.id && e.character.status !== "REJECTED") ?? null;
   const myRequests = isGM ? requests : requests.filter((q) => q.characters.some((c) => myChars.some((m) => m.character.id === c.id)));
 
@@ -273,6 +293,7 @@ export function Room({
       campaignId={campaign.id}
       rollMuted={!isGM && myMute.rollMuted}
       requests={requests}
+      spectator={spectator}
     />
   );
   const feedEl = (
@@ -288,6 +309,7 @@ export function Room({
       requests={myRequests}
       chatMuted={!isGM && myMute.chatMuted}
       rollMuted={!isGM && myMute.rollMuted}
+      spectator={spectator}
       scrollKey={scrollKey}
       rollKey={rollKey}
     />
@@ -303,7 +325,13 @@ export function Room({
           </Link>
         </div>
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+          {spectator && (
+            <span className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-line px-3 text-sm text-muted" title="İzleyici: sahneye yazamaz, zar atamazsın">
+              <Eye className="h-4 w-4" /> İzleyici
+            </span>
+          )}
           {!isGM &&
+            !spectator &&
             (ownChar ? (
               <Link
                 href={`/karakter/${ownChar.character.id}`}
@@ -441,8 +469,8 @@ function Party({
   const [kick, setKick] = useState<Member | null>(null);
   const setMute = async (u: Member, body: { chatMuted?: boolean; rollMuted?: boolean }) => {
     try {
-      const r = await api<{ chatMuted: boolean; rollMuted: boolean }>(`/api/campaigns/${campaign.id}/members/${u.id}`, { method: "PATCH", body });
-      onMuted({ ...u, chatMuted: r.chatMuted, rollMuted: r.rollMuted });
+      const r = await api<{ chatMuted: boolean; rollMuted: boolean; role: Member["role"] }>(`/api/campaigns/${campaign.id}/members/${u.id}`, { method: "PATCH", body });
+      onMuted({ ...u, chatMuted: r.chatMuted, rollMuted: r.rollMuted, role: r.role });
     } catch (e) {
       toast((e as Error).message, "error");
     }
@@ -538,7 +566,10 @@ function Party({
           {members.map((u) => (
             <li key={u.id} className="flex items-center gap-2">
               <span className={cx("h-1.5 w-1.5 shrink-0 rounded-full", online.includes(u.id) ? "bg-ok" : "bg-line")} />
-              <span className={cx("min-w-0 flex-1 truncate", online.includes(u.id) ? "text-ink" : "text-muted")}>{u.displayName}</span>
+              <span className={cx("min-w-0 flex-1 truncate", online.includes(u.id) ? "text-ink" : "text-muted")}>
+                {u.displayName}
+                {u.role === "SPECTATOR" && <span className="ml-1.5 text-[10px] font-semibold uppercase tracking-wider text-muted">izleyici</span>}
+              </span>
               {isGM ? (
                 <span className="flex shrink-0 gap-1">
                   <MuteBtn active={u.chatMuted} title={u.chatMuted ? "Sohbet susturmasını kaldır" : "Sohbette sustur"} onClick={() => setMute(u, { chatMuted: !u.chatMuted })}>
@@ -546,6 +577,23 @@ function Party({
                   </MuteBtn>
                   <MuteBtn active={u.rollMuted} title={u.rollMuted ? "Zar susturmasını kaldır" : "Zar atmada sustur"} onClick={() => setMute(u, { rollMuted: !u.rollMuted })}>
                     <Dices className="h-3.5 w-3.5" />
+                  </MuteBtn>
+                  <MuteBtn
+                    active={u.role === "SPECTATOR"}
+                    title={u.role === "SPECTATOR" ? "Oyuncu yap" : "İzleyici yap"}
+                    onClick={async () => {
+                      try {
+                        const r = await api<{ chatMuted: boolean; rollMuted: boolean; role: Member["role"] }>(`/api/campaigns/${campaign.id}/members/${u.id}`, {
+                          method: "PATCH",
+                          body: { role: u.role === "SPECTATOR" ? "PLAYER" : "SPECTATOR" },
+                        });
+                        onMuted({ ...u, ...r });
+                      } catch (e) {
+                        toast((e as Error).message, "error");
+                      }
+                    }}
+                  >
+                    <Eye className="h-3.5 w-3.5" />
                   </MuteBtn>
                   <MuteBtn active={false} title="Oyundan at" onClick={() => setKick(u)}>
                     <UserX className="h-3.5 w-3.5" />
@@ -650,6 +698,7 @@ function Feed({
   requests,
   chatMuted,
   rollMuted,
+  spectator,
   scrollKey,
   rollKey,
 }: {
@@ -664,6 +713,7 @@ function Feed({
   requests: RollReq[];
   chatMuted: boolean;
   rollMuted: boolean;
+  spectator: boolean;
   scrollKey: number;
   rollKey: number;
 }) {
@@ -677,6 +727,22 @@ function Feed({
   const [seen, setSeen] = useState<Record<string, number>>({});
   const [confirmReroll, setConfirmReroll] = useState<RollV | null>(null);
   const [clearOpen, setClearOpen] = useState(false);
+  // Çoklu seçim: anahtar "m:<id>" ya da "r:<id>"
+  const [selecting, setSelecting] = useState(false);
+  const [sel, setSel] = useState<Set<string>>(new Set());
+  const keyOfItem = (it: FeedItem) => (it.t === "m" ? `m:${it.m.id}` : `r:${it.r.id}`);
+  const canSelect = (it: FeedItem) => (isGM ? true : it.t === "m" && it.m.userId === me && it.m.channel !== "SYSTEM");
+  const toggleSel = (k: string) =>
+    setSel((x) => {
+      const n = new Set(x);
+      if (n.has(k)) n.delete(k);
+      else n.add(k);
+      return n;
+    });
+  const stopSelecting = () => {
+    setSelecting(false);
+    setSel(new Set());
+  };
   // Sahnede oyuncu ilk aktif karakteriyle konuşur; GM anlatıcıdır.
   const speaker = isGM ? null : (myChars[0] ?? null);
 
@@ -716,6 +782,7 @@ function Feed({
   }, [view.length]);
   useEffect(() => {
     end.current?.scrollIntoView({ block: "end" });
+    setSel(new Set());
   }, [tab, peer]);
   // Zar atıldığında sahneye geç ve en alta in; mobilde akışa dönünce yalnızca en alta in.
   useEffect(() => {
@@ -751,6 +818,15 @@ function Feed({
     const r = await emit("delete", { campaignId, messageId: id });
     if (!r.ok) toast(r.error, "error");
   };
+  const removeSelected = async () => {
+    const messageIds = [...sel].filter((k) => k.startsWith("m:")).map((k) => k.slice(2));
+    const rollIds = [...sel].filter((k) => k.startsWith("r:")).map((k) => k.slice(2));
+    const r = await emit("deleteMany", { campaignId, messageIds, rollIds });
+    if (!r.ok) return toast(r.error, "error");
+    const d = r.data as { messages: number; rolls: number };
+    toast(`${d.messages} mesaj${d.rolls ? `, ${d.rolls} zar` : ""} silindi.`, "ok");
+    stopSelecting();
+  };
   const removeRoll = async (id: string) => {
     const r = await emit("deleteRoll", { campaignId, rollId: id });
     if (!r.ok) toast(r.error, "error");
@@ -778,11 +854,21 @@ function Feed({
         {tabBtn("ic", "Sahne", unread("ic"))}
         {tabBtn("ooc", "Masa", unread("ooc"))}
         {tabBtn("fisilti", "Fısıltılar", whisperUnread)}
-        {isGM && tab === "ic" && (
-          <button type="button" onClick={() => setClearOpen(true)} className="ml-auto flex shrink-0 items-center gap-1 rounded-md px-2 py-1 text-xs text-muted hover:text-danger" title="Zar geçmişini temizle">
-            <Trash2 className="h-3.5 w-3.5" /> <span className="hidden sm:inline">Zar geçmişi</span>
+        <span className="ml-auto flex shrink-0 items-center gap-1">
+          <button
+            type="button"
+            onClick={() => (selecting ? stopSelecting() : setSelecting(true))}
+            className={cx("flex items-center gap-1 rounded-md px-2 py-1 text-xs", selecting ? "bg-accent/15 text-ink" : "text-muted hover:text-ink")}
+            title={isGM ? "Birden çok mesaj ve zar seçip sil" : "Kendi mesajlarından birkaçını seçip sil"}
+          >
+            <CheckSquare className="h-3.5 w-3.5" /> <span className="hidden sm:inline">{selecting ? "Seçimi bitir" : "Seç"}</span>
           </button>
-        )}
+          {isGM && (
+            <button type="button" onClick={() => setClearOpen(true)} className="flex items-center gap-1 rounded-md px-2 py-1 text-xs text-muted hover:text-danger" title="Sohbet veya zar geçmişini temizle">
+              <Trash2 className="h-3.5 w-3.5" /> <span className="hidden sm:inline">Temizle</span>
+            </button>
+          )}
+        </span>
       </div>
       {tab === "fisilti" && isGM && (
         <div className="flex shrink-0 gap-1.5 overflow-x-auto border-b border-line px-3 py-2 sm:px-5">
@@ -817,7 +903,9 @@ function Feed({
                   : "GM ile özel konuşma. Bunu yalnızca sen ve GM görürsünüz."}
           </p>
         )}
-        {view.map((it) =>
+        {view.map((it) => {
+          const k = keyOfItem(it);
+          const body =
           it.t === "m" ? (
             <MessageRow key={`m${it.m.id}`} m={it.m} me={me} nameOf={nameOf} canDelete={isGM || it.m.userId === me} onDelete={() => remove(it.m.id)} />
           ) : (
@@ -829,11 +917,56 @@ function Feed({
               canReroll={!it.r.rerolled && !!it.r.characterId && it.r.kind !== "death" && it.r.kind !== "pervitin" && (isGM || (charOf(it.r.characterId)?.inspiration ?? 0) > 0)}
               onReroll={() => setConfirmReroll(it.r)}
             />
-          ),
-        )}
+          );
+          if (!selecting) return <div key={k}>{body}</div>;
+          const ok = canSelect(it);
+          const on = sel.has(k);
+          return (
+            <div key={k} className={cx("flex items-start gap-2 rounded-lg", on && "bg-accent/[0.08] ring-1 ring-accent/40")}>
+              <button
+                type="button"
+                disabled={!ok}
+                onClick={() => toggleSel(k)}
+                className={cx("mt-2 shrink-0 rounded p-0.5", ok ? "text-accent hover:bg-accent/15" : "invisible")}
+                aria-label={on ? "Seçimi kaldır" : "Seç"}
+                aria-pressed={on}
+              >
+                {on ? <CheckSquare className="h-4 w-4" /> : <Square className="h-4 w-4" />}
+              </button>
+              <div className="min-w-0 flex-1" onClick={() => ok && toggleSel(k)}>
+                {body}
+              </div>
+            </div>
+          );
+        })}
         <div ref={end} />
       </div>
-      {requests.length > 0 && <RequestBar requests={requests} isGM={isGM} myChars={myChars} emit={emit} campaignId={campaignId} rollMuted={rollMuted} />}
+      {selecting && (
+        <div className="flex shrink-0 flex-wrap items-center gap-2 border-t border-accent/40 bg-accent/[0.06] px-3 py-2 text-sm sm:px-6">
+          <span className="text-ink">{sel.size} öğe seçildi</span>
+          <button
+            type="button"
+            className="text-xs text-muted hover:text-ink"
+            onClick={() => setSel(new Set(view.filter(canSelect).map(keyOfItem)))}
+          >
+            Görünenlerin tümünü seç
+          </button>
+          {sel.size > 0 && (
+            <button type="button" className="text-xs text-muted hover:text-ink" onClick={() => setSel(new Set())}>
+              Temizle
+            </button>
+          )}
+          <span className="ml-auto flex gap-2">
+            <Button size="sm" onClick={stopSelecting}>
+              Vazgeç
+            </Button>
+            <Button size="sm" variant="danger" disabled={!sel.size} onClick={removeSelected}>
+              <Trash2 className="h-3.5 w-3.5" /> Seçilenleri sil
+            </Button>
+          </span>
+        </div>
+      )}
+      {requests.length > 0 && !selecting && <RequestBar requests={requests} isGM={isGM} myChars={myChars} emit={emit} campaignId={campaignId} rollMuted={rollMuted} />}
       <form
         className="border-t border-line px-3 py-3 sm:px-6"
         onSubmit={(e) => {
@@ -841,7 +974,11 @@ function Feed({
           send();
         }}
       >
-        {tab === "ic" && !isGM && !speaker && <p className="mb-2 text-xs text-muted">Sahnede konuşmak için onaylanmış bir karakterin olmalı. Masa ve Fısıltılar herkese açık.</p>}
+        {tab === "ic" && !isGM && !speaker && (
+          <p className="mb-2 text-xs text-muted">
+            {spectator ? "İzleyicisin: sahneye yazamazsın. Masa sohbetine ya da GM'e fısıltıyla yazabilirsin." : "Sahnede konuşmak için onaylanmış bir karakterin olmalı. Masa ve Fısıltılar herkese açık."}
+          </p>
+        )}
         {chatMuted && tab !== "fisilti" && (
           <p className="mb-2 rounded-md border border-danger/40 bg-danger/10 px-3 py-1.5 text-xs text-danger">GM seni sohbette susturdu. Yine de GM&apos;e fısıldayabilirsin.</p>
         )}
@@ -863,7 +1000,9 @@ function Feed({
                   ? "Anlatıcı olarak yaz…"
                   : speaker
                     ? `${speaker.name} ne söylüyor / yapıyor?`
-                    : "Karakterin yok"
+                    : spectator
+                      ? "İzleyiciler sahneye yazamaz"
+                      : "Karakterin yok"
                 : tab === "ooc"
                   ? "Masaya bir not… (herkes görür)"
                   : isGM
@@ -906,23 +1045,71 @@ function Feed({
           </div>
         )}
       </Modal>
-      <Modal open={clearOpen} onClose={() => setClearOpen(false)} title="Zar geçmişini temizle">
-        <p className="text-sm text-ink/90">Bu kampanyadaki tüm zar kayıtları kalıcı olarak silinir. Mesajlar ve karakterler etkilenmez. Tek bir zarı silmek için zar kartındaki çöp kutusunu kullan.</p>
-        <div className="mt-4 flex justify-end gap-2">
-          <Button onClick={() => setClearOpen(false)}>Vazgeç</Button>
+      <ClearModal open={clearOpen} onClose={() => setClearOpen(false)} emit={emit} campaignId={campaignId} tab={tab} peer={peer} peerName={nameOf(peer)} />
+    </div>
+  );
+}
+
+type ClearChoice = "IC" | "OOC" | "WHISPER_PEER" | "WHISPER" | "ROLLS" | "ALL";
+function ClearModal({ open, onClose, emit, campaignId, tab, peer, peerName }: { open: boolean; onClose: () => void; emit: Emit; campaignId: string; tab: ChatTab; peer: string; peerName: string }) {
+  const toast = useToast();
+  const [choice, setChoice] = useState<ClearChoice>("IC");
+  const [busy, setBusy] = useState(false);
+  useEffect(() => {
+    if (open) setChoice(tab === "ic" ? "IC" : tab === "ooc" ? "OOC" : "WHISPER_PEER");
+  }, [open, tab]);
+  const opts: [ClearChoice, string, string][] = [
+    ["IC", "Sahne mesajları", "Karakter konuşmaları ve sistem mesajları. Zarlar kalır."],
+    ["OOC", "Masa sohbeti", "Oyun dışı sohbetin tamamı."],
+    ["WHISPER_PEER", `${peerName} ile fısıltılar`, "Yalnızca bu oyuncuyla olan özel konuşma."],
+    ["WHISPER", "Tüm fısıltılar", "Bütün oyuncularla olan özel konuşmalar."],
+    ["ROLLS", "Zar geçmişi", "Tüm zar kayıtları. Mesajlar kalır."],
+    ["ALL", "Her şey", "Bütün mesajlar, fısıltılar ve zarlar."],
+  ];
+  return (
+    <Modal open={open} onClose={onClose} title="Geçmişi temizle">
+      <div className="space-y-2">
+        {opts
+          .filter(([k]) => k !== "WHISPER_PEER" || !!peer)
+          .map(([k, label, hint]) => (
+            <label key={k} className={cx("flex cursor-pointer items-start gap-3 rounded-lg border p-3 text-sm", choice === k ? "border-danger/60 bg-danger/[0.07]" : "border-line")}>
+              <input type="radio" name="clear" checked={choice === k} onChange={() => setChoice(k)} className="mt-0.5 accent-[rgb(224,87,75)]" />
+              <span>
+                <span className="block font-medium text-ink">{label}</span>
+                <span className="text-xs text-muted">{hint}</span>
+              </span>
+            </label>
+          ))}
+        <p className="pt-1 text-xs text-muted">Silinenler geri getirilemez. Tek tek silmek için &quot;Seç&quot; düğmesini kullan.</p>
+        <div className="flex justify-end gap-2 pt-2">
+          <Button onClick={onClose}>Vazgeç</Button>
           <Button
             variant="danger"
+            disabled={busy}
             onClick={async () => {
-              setClearOpen(false);
-              const r = await emit("clearRolls", { campaignId });
-              if (!r.ok) toast(r.error, "error");
+              setBusy(true);
+              const jobs: [string, unknown][] = [];
+              if (choice === "ROLLS" || choice === "ALL") jobs.push(["clearRolls", { campaignId }]);
+              if (choice === "ALL") jobs.push(["clearMessages", { campaignId, scope: "ALL" }]);
+              if (choice === "IC" || choice === "OOC" || choice === "WHISPER") jobs.push(["clearMessages", { campaignId, scope: choice }]);
+              if (choice === "WHISPER_PEER") jobs.push(["clearMessages", { campaignId, scope: "WHISPER", peerId: peer }]);
+              for (const [ev, p] of jobs) {
+                const r = await emit(ev, p);
+                if (!r.ok) {
+                  setBusy(false);
+                  return toast(r.error, "error");
+                }
+              }
+              setBusy(false);
+              toast("Temizlendi.", "ok");
+              onClose();
             }}
           >
-            Tümünü sil
+            Temizle
           </Button>
         </div>
-      </Modal>
-    </div>
+      </div>
+    </Modal>
   );
 }
 
@@ -1271,6 +1458,7 @@ function DicePanel({
   campaignId,
   rollMuted,
   requests,
+  spectator,
 }: {
   myChars: FullChar[];
   allChars: FullChar[];
@@ -1281,6 +1469,7 @@ function DicePanel({
   campaignId: string;
   rollMuted: boolean;
   requests: RollReq[];
+  spectator: boolean;
 }) {
   const toast = useToast();
   const choices = isGM ? allChars : myChars;
@@ -1320,7 +1509,12 @@ function DicePanel({
       {!isGM && requests.some((q) => q.characters.some((c) => myChars.some((m) => m.id === c.id))) && (
         <p className="rounded-md border border-accent/40 bg-accent/10 px-3 py-2 text-xs text-ink">GM senden zar istiyor. Akış sekmesinin altındaki isteği yanıtla.</p>
       )}
-      {choices.length === 0 && !isGM && <p className="text-sm text-muted">Zar atmak için onaylanmış bir karakterin olmalı.</p>}
+      {spectator && (
+        <p className="flex items-start gap-2 rounded-md border border-line bg-surface2/60 px-3 py-2 text-sm text-muted">
+          <Eye className="mt-0.5 h-4 w-4 shrink-0" /> İzleyicisin: zar atamazsın. Atılan zarlar Sahne sekmesinde görünür.
+        </p>
+      )}
+      {choices.length === 0 && !isGM && !spectator && <p className="text-sm text-muted">Zar atmak için onaylanmış bir karakterin olmalı.</p>}
       {(choices.length > 0 || isGM) && (
         <>
           <label className="block">

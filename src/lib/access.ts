@@ -10,14 +10,16 @@ export async function campaignAccess(campaignId: string, user: SessionUser) {
   if (!c) throw notFound("Kampanya bulunamadı.");
   const isGM = c.gmId === user.id;
   let isMember = isGM;
+  let isSpectator = false;
   if (!isGM) {
     const m = await db.query.campaignMembers.findFirst({
       where: and(eq(campaignMembers.campaignId, campaignId), eq(campaignMembers.userId, user.id)),
     });
     isMember = !!m;
+    isSpectator = m?.role === "SPECTATOR";
   }
   if (!isMember) throw notFound("Kampanya bulunamadı.");
-  return { campaign: c, isGM };
+  return { campaign: c, isGM, isSpectator };
 }
 
 export async function requireCampaignGM(campaignId: string, user: SessionUser) {
@@ -31,13 +33,14 @@ export interface CharAccess {
   campaign: Campaign;
   isGM: boolean;
   isOwner: boolean;
+  isSpectator: boolean;
 }
 
 export async function characterAccess(characterId: string, user: SessionUser): Promise<CharAccess> {
   const ch = await db.query.characters.findFirst({ where: eq(characters.id, characterId) });
   if (!ch) throw notFound("Karakter bulunamadı.");
-  const { campaign, isGM } = await campaignAccess(ch.campaignId, user);
-  return { character: ch, campaign, isGM, isOwner: ch.userId === user.id };
+  const { campaign, isGM, isSpectator } = await campaignAccess(ch.campaignId, user);
+  return { character: ch, campaign, isGM, isOwner: ch.userId === user.id, isSpectator };
 }
 
 /** Sahibi veya GM; sahibi için karakterin aktif olması gerekir. */
@@ -45,6 +48,7 @@ export async function characterEditor(characterId: string, user: SessionUser) {
   const a = await characterAccess(characterId, user);
   if (a.isGM) return a;
   if (!a.isOwner) throw forbidden();
+  if (a.isSpectator) throw forbidden("İzleyiciler karakter üzerinde işlem yapamaz.");
   if (a.character.status !== "ACTIVE") throw forbidden("Karakter henüz onaylanmadı veya aktif değil.");
   return a;
 }

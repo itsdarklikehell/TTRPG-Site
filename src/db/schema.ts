@@ -26,6 +26,9 @@ export const roleEnum = pgEnum("role", ["GM", "PLAYER"]);
 export const characterStatusEnum = pgEnum("character_status", ["PENDING", "ACTIVE", "REJECTED", "DEAD", "RETIRED"]);
 export const campaignStatusEnum = pgEnum("campaign_status", ["ACTIVE", "PAUSED", "ARCHIVED"]);
 export const channelEnum = pgEnum("message_channel", ["IC", "OOC", "WHISPER", "SYSTEM"]);
+/** Kampanyadaki üyelik rolü: izleyici karakter oluşturamaz, sahneye yazamaz, zar atamaz. */
+export const memberRoleEnum = pgEnum("member_role", ["PLAYER", "SPECTATOR"]);
+export type MemberRole = (typeof memberRoleEnum.enumValues)[number];
 
 export type Role = (typeof roleEnum.enumValues)[number];
 export type CharacterStatus = (typeof characterStatusEnum.enumValues)[number];
@@ -83,6 +86,8 @@ export const campaigns = pgTable("campaigns", {
     .notNull()
     .references(() => users.id, { onDelete: "restrict" }),
   joinCode: text("join_code").notNull().unique(),
+  /** İzleyici olarak katılma kodu (isteğe bağlı). */
+  spectatorCode: text("spectator_code").unique(),
   startPerkPoints: integer("start_perk_points").notNull().default(0),
   levelCap: integer("level_cap").notNull().default(10),
   deathSaveEnabled: boolean("death_save_enabled").notNull().default(true),
@@ -97,6 +102,8 @@ export const invites = pgTable("invites", {
   note: text("note"),
   role: roleEnum("role").notNull().default("PLAYER"),
   campaignId: text("campaign_id").references(() => campaigns.id, { onDelete: "set null" }),
+  /** Kampanyaya bağlı davette katılım rolü. */
+  memberRole: memberRoleEnum("member_role").notNull().default("PLAYER"),
   createdById: text("created_by_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
@@ -117,6 +124,7 @@ export const campaignMembers = pgTable(
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
     joinedAt: timestamp("joined_at", { withTimezone: true }).notNull().defaultNow(),
+    role: memberRoleEnum("role").notNull().default("PLAYER"),
     /** GM tarafından sohbette susturuldu */
     chatMuted: boolean("chat_muted").notNull().default(false),
     /** GM tarafından zar atmada susturuldu */

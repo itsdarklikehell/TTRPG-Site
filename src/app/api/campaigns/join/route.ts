@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { eq, or } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "@/db";
 import { campaignMembers, campaigns } from "@/db/schema";
@@ -11,11 +11,13 @@ export const POST = route({ body: z.object({ code: z.string().trim().min(4).max(
   if (!hit(`join:${user.id}`, 10, 10 * 60_000)) throw new ApiError(429, "Çok fazla deneme.");
   const n = normalizeCode(body.code);
   const code = `${n.slice(0, 4)}-${n.slice(4, 8)}`;
-  const c = await db.query.campaigns.findFirst({ where: eq(campaigns.joinCode, code) });
+  const c = await db.query.campaigns.findFirst({ where: or(eq(campaigns.joinCode, code), eq(campaigns.spectatorCode, code)) });
   if (!c || c.status === "ARCHIVED") throw bad("Kod geçersiz.");
+  const role = c.spectatorCode === code ? ("SPECTATOR" as const) : ("PLAYER" as const);
   if (c.gmId !== user.id) {
-    await db.insert(campaignMembers).values({ campaignId: c.id, userId: user.id }).onConflictDoNothing();
+    // Zaten üyeyse rolü değişmez (izleyici kodu bir oyuncuyu izleyiciye düşürmez).
+    await db.insert(campaignMembers).values({ campaignId: c.id, userId: user.id, role }).onConflictDoNothing();
     notifyCampaign(c.id, "members:changed", {});
   }
-  return { id: c.id };
+  return { id: c.id, role };
 });

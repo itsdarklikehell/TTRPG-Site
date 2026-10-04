@@ -66,29 +66,86 @@ export function RemoveMember({ campaignId, userId, name }: { campaignId: string;
   );
 }
 
-export function JoinCodeBox({ campaignId, code }: { campaignId: string; code: string }) {
+export function JoinCodeBox({ campaignId, code, spectatorCode }: { campaignId: string; code: string; spectatorCode: string | null }) {
   const router = useRouter();
   const { busy, run } = useAction();
   return (
-    <Card className="p-5">
-      <p className="kicker mb-2">Katılma kodu</p>
-      <p className="font-mono text-2xl tracking-widest text-ink">{code}</p>
-      <p className="mt-2 text-xs text-muted">Hesabı olan oyuncular bu kodla katılır. Yeni oyuncular için Yönetim sayfasından bu kampanyaya bağlı davet kodu üret.</p>
-      <div className="mt-3 flex gap-2">
-        <CopyButton text={code} />
-        <button
-          type="button"
-          disabled={busy}
-          className="rounded-md border border-line px-2 py-1 text-xs text-muted hover:text-ink"
-          onClick={async () => {
-            await run(() => api(`/api/campaigns/${campaignId}/join-code`, { body: {} }), "Yeni kod üretildi. Eski kod artık çalışmaz.");
-            router.refresh();
-          }}
-        >
-          Kodu yenile
-        </button>
+    <Card className="space-y-5 p-5">
+      <div>
+        <p className="kicker mb-2">Oyuncu katılma kodu</p>
+        <p className="font-mono text-2xl tracking-widest text-ink">{code}</p>
+        <p className="mt-2 text-xs text-muted">Hesabı olan oyuncular bu kodla katılır. Yeni oyuncular için Yönetim sayfasından bu kampanyaya bağlı davet kodu üret.</p>
+        <div className="mt-3 flex gap-2">
+          <CopyButton text={code} />
+          <button
+            type="button"
+            disabled={busy}
+            className="rounded-md border border-line px-2 py-1 text-xs text-muted hover:text-ink"
+            onClick={async () => {
+              await run(() => api(`/api/campaigns/${campaignId}/join-code`, { body: {} }), "Yeni kod üretildi. Eski kod artık çalışmaz.");
+              router.refresh();
+            }}
+          >
+            Kodu yenile
+          </button>
+        </div>
+      </div>
+      <div className="border-t border-line pt-4">
+        <p className="kicker mb-2">İzleyici kodu</p>
+        {spectatorCode ? (
+          <p className="font-mono text-2xl tracking-widest text-ink">{spectatorCode}</p>
+        ) : (
+          <p className="text-sm text-muted">Kapalı</p>
+        )}
+        <p className="mt-2 text-xs text-muted">Bu kodla katılanlar masayı izler: karakter oluşturamaz, sahneye yazamaz, zar atamaz. Masa sohbetine ve sana fısıltıyla yazabilirler.</p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {spectatorCode && <CopyButton text={spectatorCode} />}
+          <button
+            type="button"
+            disabled={busy}
+            className="rounded-md border border-line px-2 py-1 text-xs text-muted hover:text-ink"
+            onClick={async () => {
+              await run(() => api(`/api/campaigns/${campaignId}/spectator-code`, { body: {} }), spectatorCode ? "Yeni izleyici kodu üretildi." : "İzleyici kodu açıldı.");
+              router.refresh();
+            }}
+          >
+            {spectatorCode ? "Kodu yenile" : "İzleyici kodu üret"}
+          </button>
+          {spectatorCode && (
+            <button
+              type="button"
+              disabled={busy}
+              className="rounded-md border border-line px-2 py-1 text-xs text-muted hover:text-danger"
+              onClick={async () => {
+                await run(() => api(`/api/campaigns/${campaignId}/spectator-code`, { method: "DELETE" }), "İzleyici kodu kapatıldı.");
+                router.refresh();
+              }}
+            >
+              Kapat
+            </button>
+          )}
+        </div>
       </div>
     </Card>
+  );
+}
+
+export function MemberRoleToggle({ campaignId, userId, role }: { campaignId: string; userId: string; role: "PLAYER" | "SPECTATOR" }) {
+  const router = useRouter();
+  const { busy, run } = useAction();
+  return (
+    <button
+      type="button"
+      disabled={busy}
+      className="text-xs text-muted hover:text-ink"
+      title={role === "SPECTATOR" ? "Oyuncu yap" : "İzleyici yap"}
+      onClick={async () => {
+        await run(() => api(`/api/campaigns/${campaignId}/members/${userId}`, { method: "PATCH", body: { role: role === "SPECTATOR" ? "PLAYER" : "SPECTATOR" } }));
+        router.refresh();
+      }}
+    >
+      {role === "SPECTATOR" ? "Oyuncu yap" : "İzleyici yap"}
+    </button>
   );
 }
 

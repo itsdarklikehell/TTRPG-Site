@@ -51,7 +51,7 @@ export const POST = route(
         .where(and(eq(invites.id, invite.id), isNull(invites.usedById)))
         .returning({ id: invites.id });
       if (!used.length) throw conflict("Bu davet az önce kullanıldı.");
-      if (invite.campaignId) await tx.insert(campaignMembers).values({ campaignId: invite.campaignId, userId: u.id }).onConflictDoNothing();
+      if (invite.campaignId) await tx.insert(campaignMembers).values({ campaignId: invite.campaignId, userId: u.id, role: invite.memberRole }).onConflictDoNothing();
       return u.id;
     });
     await startSession(userId);

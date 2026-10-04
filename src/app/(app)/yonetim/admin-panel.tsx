@@ -10,6 +10,7 @@ interface Invite {
   hint: string;
   note: string | null;
   role: "GM" | "PLAYER";
+  memberRole: "PLAYER" | "SPECTATOR";
   campaignName: string | null;
   usedBy: string | null;
   usedAt: string | null;
@@ -68,7 +69,8 @@ function Invites({ campaigns, isAdmin }: { campaigns: { id: string; name: string
               api<{ code: string }>("/api/invites", {
                 body: {
                   note: String(f.get("note") || "") || undefined,
-                  role: f.get("role"),
+                  role: f.get("role") === "GM" ? "GM" : "PLAYER",
+                  memberRole: f.get("role") === "SPECTATOR" ? "SPECTATOR" : "PLAYER",
                   campaignId: f.get("campaignId") || null,
                   days: Number(f.get("days")),
                 },
@@ -97,6 +99,7 @@ function Invites({ campaigns, isAdmin }: { campaigns: { id: string; name: string
             <Field label="Rol">
               <select name="role" className="input" defaultValue="PLAYER">
                 <option value="PLAYER">Oyuncu</option>
+                <option value="SPECTATOR">İzleyici (kampanya seçilmeli)</option>
                 {isAdmin && <option value="GM">GM</option>}
               </select>
             </Field>
@@ -155,7 +158,7 @@ function Invites({ campaigns, isAdmin }: { campaigns: { id: string; name: string
                     <td className="px-4 py-3">
                       {i.note ?? "—"}
                       <div className="text-xs text-muted">
-                        {i.role === "GM" ? "GM" : "Oyuncu"}
+                        {i.role === "GM" ? "GM" : i.memberRole === "SPECTATOR" ? "İzleyici" : "Oyuncu"}
                         {i.campaignName ? ` · ${i.campaignName}` : ""}
                       </div>
                     </td>

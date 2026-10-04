@@ -14,6 +14,7 @@ export const GET = route({ auth: "gm" }, async ({ user }) => {
       hint: invites.hint,
       note: invites.note,
       role: invites.role,
+      memberRole: invites.memberRole,
       campaignName: campaigns.name,
       usedBy: users.displayName,
       usedAt: invites.usedAt,
@@ -37,12 +38,14 @@ export const POST = route(
     body: z.object({
       note: z.string().trim().max(80).optional(),
       role: z.enum(["PLAYER", "GM"]).default("PLAYER"),
+      memberRole: z.enum(["PLAYER", "SPECTATOR"]).default("PLAYER"),
       campaignId: zId.nullable().optional(),
       days: z.number().int().min(1).max(30).default(7),
     }),
   },
   async ({ body, user }) => {
     if (body.role === "GM" && !user.isAdmin) throw bad("GM daveti yalnızca site yöneticisi tarafından üretilebilir.");
+    if (body.memberRole === "SPECTATOR" && !body.campaignId) throw bad("İzleyici daveti için bir kampanya seç.");
     if (body.campaignId) {
       const c = await db.query.campaigns.findFirst({ where: eq(campaigns.id, body.campaignId) });
       if (!c || c.gmId !== user.id) throw bad("Kampanya bulunamadı.");
@@ -54,6 +57,7 @@ export const POST = route(
       note: body.note || null,
       role: body.role,
       campaignId: body.campaignId ?? null,
+      memberRole: body.memberRole,
       createdById: user.id,
       expiresAt: new Date(Date.now() + body.days * 86_400_000),
     });

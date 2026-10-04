@@ -66,6 +66,8 @@ const schemas = {
   reroll: z.object({ campaignId: zId, rollId: zId }),
   deleteMessage: z.object({ campaignId: zId, messageId: zId }),
   deleteRoll: z.object({ campaignId: zId, rollId: zId }),
+  deleteMany: z.object({ campaignId: zId, messageIds: z.array(zId).max(300).default([]), rollIds: z.array(zId).max(300).default([]) }),
+  clearMessages: z.object({ campaignId: zId, scope: z.enum(["IC", "OOC", "WHISPER", "ALL"]), peerId: zId.nullable().optional() }),
   clearRolls: z.object({ campaignId: zId }),
   request: z.object({
     campaignId: zId,
@@ -229,13 +231,18 @@ async function revalidate(s: S): Promise<boolean> {
 }
 
 /** GM susturmaları: GM'in kendisi asla susturulmaz. */
-async function assertNotMuted(s: S, cid: string, isGM: boolean, kind: "chat" | "roll") {
+/** GM susturmaları ve izleyici kısıtları (her istekte veritabanından okunur, rol değişikliği anında geçerli). */
+async function assertNotMuted(s: S, cid: string, isGM: boolean, kind: "chat" | "ic" | "roll") {
   if (isGM) return;
   const m = await db.query.campaignMembers.findFirst({
     where: and(eq(campaignMembers.campaignId, cid), eq(campaignMembers.userId, s.data.user.id)),
-    columns: { chatMuted: true, rollMuted: true },
+    columns: { chatMuted: true, rollMuted: true, role: true },
   });
-  if (kind === "chat" && m?.chatMuted) fail("GM seni sohbette susturdu.");
+  if (m?.role === "SPECTATOR") {
+    if (kind === "roll") fail("İzleyiciler zar atamaz.");
+    if (kind === "ic") fail("İzleyiciler sahneye yazamaz.");
+  }
+  if ((kind === "chat" || kind === "ic") && m?.chatMuted) fail("GM seni sohbette susturdu.");
   if (kind === "roll" && m?.rollMuted) fail("GM seni zar atmada susturdu.");
 }
 
@@ -392,7 +399,7 @@ export function attachRealtime(io: Server) {
         async function chat(s, p) {
           const isGM = joined(s, p.campaignId);
           // Susturulan oyuncu yine de GM'e fısıldayabilir.
-          if (p.channel !== "WHISPER") await assertNotMuted(s, p.campaignId, isGM, "chat");
+          if (p.channel !== "WHISPER") await assertNotMuted(s, p.campaignId, isGM, p.channel === "IC" ? "ic" : "chat");
           const uid = s.data.user.id;
           let characterId: string | null = null;
           let charName: string | null = null;
@@ -454,6 +461,50 @@ export function attachRealtime(io: Server) {
           io.to(room(p.campaignId)).emit("message:deleted", { id: m!.id });
         },
         { max: 30, ms: 10_000 },
+      ),
+
+      deleteMany: guard(
+        schemas.deleteMany,
+        async function deleteMany(s, p) {
+          const isGM = joined(s, p.campaignId);
+          if (!p.messageIds.length && !p.rollIds.length) return { messages: 0, rolls: 0 };
+          if (!isGM && p.rollIds.length) fail("Zarları yalnızca GM silebilir.");
+          const mWhere = and(
+            eq(messages.campaignId, p.campaignId),
+            inArray(messages.id, p.messageIds.length ? p.messageIds : ["-"]),
+            isGM ? undefined : eq(messages.userId, s.data.user.id),
+          );
+          const dm = p.messageIds.length ? await db.delete(messages).where(mWhere).returning({ id: messages.id }) : [];
+          const dr = p.rollIds.length
+            ? await db
+                .delete(rolls)
+                .where(and(eq(rolls.campaignId, p.campaignId), inArray(rolls.id, p.rollIds)))
+                .returning({ id: rolls.id })
+            : [];
+          if (dm.length || dr.length) io.to(room(p.campaignId)).emit("feed:deleted", { messageIds: dm.map((x) => x.id), rollIds: dr.map((x) => x.id) });
+          return { messages: dm.length, rolls: dr.length };
+        },
+        { max: 10, ms: 10_000 },
+      ),
+
+      clearMessages: guard(
+        schemas.clearMessages,
+        async function clearMessages(s, p) {
+          if (!joined(s, p.campaignId)) fail("Sohbet geçmişini yalnızca GM temizleyebilir.");
+          const scope =
+            p.scope === "ALL"
+              ? undefined
+              : p.scope === "IC"
+                ? inArray(messages.channel, ["IC", "SYSTEM"])
+                : p.scope === "OOC"
+                  ? eq(messages.channel, "OOC")
+                  : and(eq(messages.channel, "WHISPER"), p.peerId ? or(eq(messages.userId, p.peerId), eq(messages.recipientId, p.peerId)) : undefined);
+          await db.delete(messages).where(and(eq(messages.campaignId, p.campaignId), scope));
+          io.to(room(p.campaignId)).emit("messages:cleared", { scope: p.scope, peerId: p.peerId ?? null });
+          const label = { IC: "sahne", OOC: "masa", WHISPER: "fısıltı", ALL: "tüm sohbet" }[p.scope];
+          if (p.scope !== "WHISPER") await systemMessage(io, p.campaignId, s.data.user, `GM ${label} geçmişini temizledi.`);
+        },
+        { max: 5, ms: 10_000 },
       ),
 
       roll: guard(schemas.roll, async function roll(s, p) {
@@ -653,7 +704,17 @@ export function attachRealtime(io: Server) {
           })
           .from(characters)
           .where(and(eq(characters.campaignId, p.campaignId), inArray(characters.id, p.characterIds), eq(characters.status, "ACTIVE")));
-        const chars = rows.filter((c) => p.kind !== "death" || c.deathSave.available).map(({ id, name, userId }) => ({ id, name, userId }));
+        const spect = new Set(
+          (
+            await db
+              .select({ u: campaignMembers.userId })
+              .from(campaignMembers)
+              .where(and(eq(campaignMembers.campaignId, p.campaignId), eq(campaignMembers.role, "SPECTATOR")))
+          ).map((x) => x.u),
+        );
+        const chars = rows
+          .filter((c) => (p.kind !== "death" || c.deathSave.available) && !spect.has(c.userId))
+          .map(({ id, name, userId }) => ({ id, name, userId }));
         if (!chars.length) fail(p.kind === "death" ? "Seçilen karakterlerin Death Save hakkı yok." : "Seçilen karakterler aktif değil.");
         const label = p.label || (p.kind === "death" ? "Death Save" : p.kind === "pervitin" ? "Pervitin zarı" : p.stat ? `${STAT_LABELS[p.stat]} zarı` : "Zar");
         const req: PendingRequest = {

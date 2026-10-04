@@ -29,6 +29,13 @@
       "when": 1790974020430,
       "tag": "0003_perk_edit",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1791113789677,
+      "tag": "0004_spectator",
+      "breakpoints": true
     }
   ]
 }
