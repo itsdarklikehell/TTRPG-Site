@@ -113,6 +113,7 @@ export function Sheet({
               GM düzenle
             </Button>
           )}
+          {(isGM || isOwner) && <ProfileEditor c={c} />}
           {(isGM || isOwner) && <DeleteCharacter id={c.id} name={c.name} campaignId={campaign.id} />}
         </div>
       </header>
@@ -255,8 +256,15 @@ export function Sheet({
               )}
             </Card>
             <AugmentsCard c={c} data={data} />
-            {(c.background || c.appearance) && (
+            {(c.background || c.appearance || isGM || isOwner) && (
               <Card className="space-y-3 p-5">
+                {(isGM || isOwner) && (
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="kicker">Açıklama</p>
+                    <ProfileEditor c={c} small />
+                  </div>
+                )}
+                {!c.background && !c.appearance && <p className="text-sm text-muted">Henüz geçmiş veya görünüş yazılmamış.</p>}
                 {c.background && (
                   <div>
                     <p className="kicker mb-1">Geçmiş</p>
@@ -968,6 +976,62 @@ function SecretNotes({ c, canEdit, act }: { c: Ch; canEdit: boolean; act: (fn: (
 }
 
 // ------------------------------------------------------------------ silme
+function ProfileEditor({ c, small }: { c: Pick<Character, "id" | "name" | "background" | "appearance">; small?: boolean }) {
+  const router = useRouter();
+  const { busy, run } = useAction();
+  const [open, setOpen] = useState(false);
+  const [name, setName] = useState(c.name);
+  const [background, setBackground] = useState(c.background);
+  const [appearance, setAppearance] = useState(c.appearance);
+  const start = () => {
+    setName(c.name);
+    setBackground(c.background);
+    setAppearance(c.appearance);
+    setOpen(true);
+  };
+  const n = name.trim().replace(/\s+/g, " ");
+  const changed = n !== c.name || background.trim() !== c.background || appearance.trim() !== c.appearance;
+  const valid = n.length >= 2 && n.length <= 60;
+  const save = async () => {
+    const body: Record<string, string> = {};
+    if (n !== c.name) body.name = n;
+    if (background.trim() !== c.background) body.background = background;
+    if (appearance.trim() !== c.appearance) body.appearance = appearance;
+    const r = await run(() => api(`/api/characters/${c.id}/profile`, { method: "PATCH", body }), "Profil güncellendi.");
+    if (r !== undefined) {
+      setOpen(false);
+      router.refresh();
+    }
+  };
+  return (
+    <>
+      <Button size={small ? "sm" : undefined} variant="outline" onClick={start}>
+        {small ? "Düzenle" : "İsim / açıklama"}
+      </Button>
+      <Modal open={open} onClose={() => setOpen(false)} title="Karakter profili">
+        <div className="space-y-4">
+          <Field label="İsim">
+            <input className="input" value={name} maxLength={60} onChange={(e) => setName(e.target.value)} autoComplete="off" />
+          </Field>
+          {!valid && <p className="-mt-2 text-xs text-danger">İsim 2–60 karakter olmalı.</p>}
+          <Field label={`Geçmiş (${background.length}/4000)`}>
+            <textarea className="input min-h-40" value={background} maxLength={4000} onChange={(e) => setBackground(e.target.value)} placeholder="Karakterin hikâyesi, kökeni, motivasyonu…" />
+          </Field>
+          <Field label={`Görünüş (${appearance.length}/1000)`}>
+            <textarea className="input min-h-24" value={appearance} maxLength={1000} onChange={(e) => setAppearance(e.target.value)} placeholder="Dış görünüş, kıyafet, ayırt edici izler…" />
+          </Field>
+          <div className="flex justify-end gap-2">
+            <Button onClick={() => setOpen(false)}>Vazgeç</Button>
+            <Button variant="primary" disabled={busy || !changed || !valid} onClick={save}>
+              Kaydet
+            </Button>
+          </div>
+        </div>
+      </Modal>
+    </>
+  );
+}
+
 function DeleteCharacter({ id, name, campaignId }: { id: string; name: string; campaignId: string }) {
   const router = useRouter();
   const { busy, run } = useAction();

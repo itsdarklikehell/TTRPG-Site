@@ -141,6 +141,7 @@ export default async function HelpPage() {
               ]}
             />
             <Tip>Portreni karakter oluşturduktan sonra karakter kağıdında portre alanına tıklayarak ekleyebilirsin (PNG, JPEG veya WebP).</Tip>
+            <Tip>Karakterin adını, geçmişini ve görünüşünü sonradan karakter kağıdındaki "İsim / açıklama" düğmesiyle değiştirebilirsin. GM de oyuncuların karakterlerinde bunu yapabilir; değişiklik karakter kaydına yazılır.</Tip>
           </Section>
 
           <Section id="dikkat" title="Nelere dikkat etmeli?">
