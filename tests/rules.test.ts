@@ -137,3 +137,52 @@ test("İçerik zenginleştirme stat etkilerini işaretler", () => {
   assert.match(h, /class="dice">d20/);
   assert.match(h, /stat-name">Krach/);
 });
+
+// ---- Kriegsversehrt ve başlangıç augment'i
+import { amputationPlan as _amp, kriegsversehrtLimbs as _kl } from "../src/lib/shz/rules";
+
+const KV = (amputation: string[] | null, extra: Partial<Parameters<typeof buildCreation>[0]> = {}) =>
+  buildCreation({ tree: "ubermann", points: {}, perks: ["kriegsversehrt"], startAugment: null, firstAbility: null, amputation, ...extra }, 0, data);
+
+test("Kriegsversehrt: tek uzuv +4, iki uzuv +7; kol → el, bacak → ayak", () => {
+  const one = KV(["l-arm"]);
+  assert.equal(one.budget.gained, 4);
+  assert.equal(one.body["l-arm"].wound, "kopuk");
+  assert.equal(one.body["l-hand"].wound, "kopuk");
+  assert.equal(one.body["r-arm"].wound, "saglam");
+  assert.equal(_kl(one.body), 1);
+  const two = KV(["l-hand", "r-leg"]);
+  assert.equal(two.budget.gained, 7);
+  assert.deepEqual(["l-hand", "r-leg", "r-foot"].map((k) => two.body[k as "l-hand"].wound), ["kopuk", "kopuk", "kopuk"]);
+  assert.equal(two.body["l-arm"].wound, "saglam");
+  assert.equal(_kl(two.body), 2);
+  // tek uzuv: 4 puan → (4+1)/2 = 2 stat puanı; serbest 2 ile toplam 4
+  const full = KV(["r-foot"], { points: { aim: 2, sicht: 2 } });
+  assert.ok(full.ok, full.problems.join());
+});
+
+test("Kriegsversehrt: geçersiz seçimler", () => {
+  assert.ok(KV([]).problems.some((p) => p.includes("seçilmeli")));
+  assert.ok(KV(null).problems.some((p) => p.includes("seçilmeli")));
+  assert.ok(KV(["head"]).problems.length > 0);
+  assert.ok(KV(["upper-torso"]).problems.length > 0);
+  assert.ok(KV(["l-arm", "l-hand"]).problems.some((p) => p.includes("zaten kopuk")));
+  assert.ok(KV(["l-arm", "r-arm", "l-leg"]).problems.some((p) => p.includes("En fazla")));
+  assert.equal(_amp(["l-leg"]).parts.join(","), "l-leg,l-foot");
+  const noPerk = buildCreation({ tree: "ubermann", points: {}, perks: [], startAugment: null, firstAbility: null, amputation: ["l-arm"] }, 0, data);
+  assert.ok(noPerk.problems.some((p) => p.includes("yalnızca Kriegsversehrt")));
+  // eski kayıtlar (işaretsiz): içerikteki puan
+  assert.equal(perkBudget(["kriegsversehrt"], 0, data, { limbs: _kl({}) }).gained, 7);
+});
+
+test("Metallkorp: başlangıç augment'i ve kopuk uzuv etkileşimi", () => {
+  const base = { tree: "metallkorp", points: {}, perks: ["kriegsversehrt"], firstAbility: null };
+  const blocked = buildCreation({ ...base, amputation: ["l-arm"], startAugment: { key: "stahlfinger", part: "l-hand" } }, 0, data);
+  assert.ok(blocked.problems.some((p) => p.includes("kopuk olduğu için")));
+  const prosthesis = buildCreation({ ...base, amputation: ["r-foot"], startAugment: { key: "federfuss", part: "r-foot" } }, 0, data);
+  assert.ok(!prosthesis.problems.some((p) => /augment/i.test(p)), prosthesis.problems.join());
+  assert.equal(prosthesis.body["r-foot"].augment, "federfuss");
+  assert.equal(prosthesis.body["r-foot"].wound, "saglam");
+  const none = buildCreation({ tree: "metallkorp", points: {}, perks: [], firstAbility: null, startAugment: null }, 0, data);
+  assert.ok(none.problems.some((p) => p.includes("augment'i seçilmeli")));
+});

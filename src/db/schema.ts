@@ -139,6 +139,8 @@ export interface BodyPartState {
   bandage: BandageKey;
   augment: string | null;
   note: string;
+  /** Karakter oluşturmada Kriegsversehrt perki ile kopuk başlayan uzuv */
+  lost?: "kriegsversehrt";
 }
 export type Body = Partial<Record<string, BodyPartState>>;
 export interface DeathSave {

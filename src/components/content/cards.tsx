@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { enrichContent } from "@/lib/base";
-import { STAT_LABELS, bodyPartLabel } from "@/lib/shz/constants";
+import { KRIEGSVERSEHRT, STAT_LABELS, bodyPartLabel } from "@/lib/shz/constants";
 import type { Ability, Augment, Perk } from "@/lib/shz/content-types";
 import { Badge, cx } from "../ui";
 import { PerkIcon } from "./icons";
@@ -115,8 +115,11 @@ export function PerkCard({
   disabled,
   exclusiveNames,
   blockedBy,
+  pointsLabel,
 }: {
   perk: Perk;
+  /** Puan rozetini değiştir (ör. uzuv sayısına bağlı Kriegsversehrt) */
+  pointsLabel?: string;
   action?: ReactNode;
   selected?: boolean;
   disabled?: boolean;
@@ -136,7 +139,7 @@ export function PerkCard({
               title={pos ? "Perk puanı harcar" : "Perk puanı kazandırır"}
             >
               {pos ? "−" : "+"}
-              {p.points}
+              {pointsLabel ?? (p.key === KRIEGSVERSEHRT.perk ? Object.values(KRIEGSVERSEHRT.points).join("/") : p.points)}
             </span>
           </div>
           <Html html={p.html} className="mt-1 text-sm text-ink/80" />

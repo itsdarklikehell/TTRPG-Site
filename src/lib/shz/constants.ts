@@ -96,6 +96,13 @@ export function bodyPartLabel(k: string) {
   return BODY_PARTS.find((b) => b.key === k)?.label ?? k;
 }
 
+/** Kriegsversehrt (kopuk uzuv) perki: kaç uzuv seçildiğine göre kazandırdığı perk puanı. */
+export const KRIEGSVERSEHRT = { perk: "kriegsversehrt", points: { 1: 4, 2: 7 } as Record<number, number>, maxLimbs: 2 } as const;
+/** Kopabilecek uzuvlar (baş/boyun ve gövde seçilemez). Kol kopunca el, bacak kopunca ayak da kopar. */
+export const AMPUTABLE_PARTS: BodyPartKey[] = ["l-arm", "r-arm", "l-hand", "r-hand", "l-leg", "r-leg", "l-foot", "r-foot"];
+export const LIMB_CHILD: Partial<Record<BodyPartKey, BodyPartKey>> = { "l-arm": "l-hand", "r-arm": "r-hand", "l-leg": "l-foot", "r-leg": "r-foot" };
+export const LIMB_PARENT: Partial<Record<BodyPartKey, BodyPartKey>> = { "l-hand": "l-arm", "r-hand": "r-arm", "l-foot": "l-leg", "r-foot": "r-leg" };
+
 export const WOUNDS = [
   { key: "saglam", label: "Sağlam", penalty: 0 },
   { key: "cizik", label: "Çizik", penalty: 1 },

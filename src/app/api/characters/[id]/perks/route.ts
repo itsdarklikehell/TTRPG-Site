@@ -6,7 +6,7 @@ import { bad, conflict, forbidden, route } from "@/lib/api";
 import { addLog, characterAccess } from "@/lib/access";
 import { characterChanged } from "@/lib/realtime-bus";
 import { getPerk, rulesData } from "@/lib/shz/content";
-import { perkBudget } from "@/lib/shz/rules";
+import { kriegsversehrtLimbs, perkBudget } from "@/lib/shz/rules";
 
 /**
  * Oyuncunun GM izniyle perklerini yeniden düzenlemesi (tek kullanımlık izin).
@@ -21,8 +21,9 @@ export const POST = route({ body: z.object({ perks: z.array(z.string().max(80)).
   if (next.some((k) => !getPerk(k))) throw bad("Bilinmeyen perk.");
   const data = rulesData();
   const start = a.campaign.startPerkPoints;
-  const before = perkBudget(c.perks, start, data);
-  const after = perkBudget(next, start, data);
+  const opts = { limbs: kriegsversehrtLimbs(c.body) };
+  const before = perkBudget(c.perks, start, data, opts);
+  const after = perkBudget(next, start, data, opts);
   if (after.problems.length) throw bad(after.problems.join(" · "));
   const delta = after.convertible - before.convertible;
   if (delta < 0 && !a.isGM)

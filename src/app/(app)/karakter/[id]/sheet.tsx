@@ -28,7 +28,7 @@ import {
 } from "@/lib/shz/constants";
 import type { RulesData } from "@/lib/shz/content";
 import type { Ability } from "@/lib/shz/content-types";
-import { activeSynergies, canOpenTree, effectiveStats, installedAugments, learnState, normalizeBody, perkBudget, refundPlan, woundPenalty, type CharLike } from "@/lib/shz/rules";
+import { activeSynergies, kriegsversehrtLimbs, perkPoints, canOpenTree, effectiveStats, installedAugments, learnState, normalizeBody, perkBudget, refundPlan, woundPenalty, type CharLike } from "@/lib/shz/rules";
 
 type Ch = Omit<Character, "createdAt" | "updatedAt"> & { createdAt: string; updatedAt: string };
 interface Log {
@@ -250,7 +250,8 @@ export function Sheet({
                 <div className="space-y-2">
                   {c.perks.map((k) => {
                     const p = data.perks.find((x) => x.key === k);
-                    return p ? <PerkCard key={k} perk={p} /> : null;
+                    const limbs = k === "kriegsversehrt" ? kriegsversehrtLimbs(c.body) : 0;
+                    return p ? <PerkCard key={k} perk={p} pointsLabel={limbs ? `${perkPoints(p, { limbs })} · ${limbs} uzuv` : undefined} /> : null;
                   })}
                 </div>
               )}
@@ -300,8 +301,8 @@ export function Sheet({
         </Card>
       )}
 
-      {isGM && <GMEditor key={`${c.updatedAt}:${gmOpen}`} open={gmOpen} onClose={() => setGmOpen(false)} c={c} data={data} act={act} />}
-      {(isGM || isOwner) && <PerkEditor key={`${c.updatedAt}:${perkOpen}`} open={perkOpen} onClose={() => setPerkOpen(false)} c={c} data={data} start={campaign.startPerkPoints} isGM={isGM} act={act} />}
+      {isGM && <GMEditor key={`gm:${c.updatedAt}:${gmOpen}`} open={gmOpen} onClose={() => setGmOpen(false)} c={c} data={data} act={act} />}
+      {(isGM || isOwner) && <PerkEditor key={`perk:${c.updatedAt}:${perkOpen}`} open={perkOpen} onClose={() => setPerkOpen(false)} c={c} data={data} start={campaign.startPerkPoints} isGM={isGM} act={act} />}
     </div>
   );
 }
@@ -893,8 +894,9 @@ function RefundModal({ open, onClose, c, data, act }: { open: boolean; onClose: 
 
 function PerkEditor({ open, onClose, c, data, start, isGM, act }: { open: boolean; onClose: () => void; c: Ch; data: RulesData; start: number; isGM: boolean; act: (fn: () => Promise<unknown>, ok?: string) => Promise<void> }) {
   const [perks, setPerks] = useState<string[]>(c.perks);
-  const before = perkBudget(c.perks, start, data);
-  const budget = perkBudget(perks, start, data);
+  const opts = { limbs: kriegsversehrtLimbs(c.body) };
+  const before = perkBudget(c.perks, start, data, opts);
+  const budget = perkBudget(perks, start, data, opts);
   const delta = budget.convertible - before.convertible;
   const changed = JSON.stringify([...perks].sort()) !== JSON.stringify([...c.perks].sort());
   return (

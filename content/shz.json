@@ -1,6 +1,6 @@
 {
- "generatedAt": "2026-10-02T20:46:51.445Z",
- "hash": "390a8fb657b4",
+ "generatedAt": "2026-10-04T17:01:04.000Z",
+ "hash": "aed01155ab66",
  "docs": [
   {
    "key": "temel-kurallar",
@@ -3232,8 +3232,8 @@
    "points": 7,
    "exclusive": [],
    "mods": [],
-   "html": "<p>Savaşta bir uzvunu kaybettin. Oyuna el, kol, ayak veya bacaklarından biri Kopuk olarak başlarsın (beden tablosuna işlenir). Kayıp uzuv bir augment ile değiştirilebilir.</p>",
-   "searchText": "kriegsversehrt savaşta bir uzvunu kaybettin. oyuna el, kol, ayak veya bacaklarından biri kopuk olarak başlarsın (beden tablosuna işlenir). kayıp uzuv bir augment ile değiştirilebilir."
+   "html": "<p>Savaşta uzuv kaybettin. Karakter oluştururken bir ya da iki uzuv seçersin; seçtiğin uzuvlar beden tablosunda Kopuk olarak başlar. Kol seçersen o koldaki el, bacak seçersen o bacaktaki ayak da kopar. Baş, boyun ve gövde seçilemez. Tek uzuv 4, iki uzuv 7 (4 + 3) perk puanı kazandırır. Kayıp uzuv bir augment ile değiştirilebilir.</p>",
+   "searchText": "kriegsversehrt savaşta uzuv kaybettin. karakter oluştururken bir ya da iki uzuv seçersin; seçtiğin uzuvlar beden tablosunda kopuk olarak başlar. kol seçersen o koldaki el, bacak seçersen o bacaktaki ayak da kopar. baş, boyun ve gövde seçilemez. tek uzuv 4, iki uzuv 7 (4 + 3) perk puanı kazandırır. kayıp uzuv bir augment ile değiştirilebilir."
   },
   {
    "key": "zargana",

@@ -2,10 +2,14 @@
 // hem istemcide (önizleme) aynı sonuçları verir. İçerik parametre olarak gelir.
 import {
   ABILITY_LEVEL3_MIN_CHAR_LEVEL,
+  AMPUTABLE_PARTS,
   BODY_PARTS,
   CORRUPTION_LOCK,
   CORRUPTION_MAX,
   INSPIRATION_DEBT_PENALTY,
+  KRIEGSVERSEHRT,
+  LIMB_CHILD,
+  LIMB_PARENT,
   MAX_TREES,
   START_FREE_STATS,
   START_KLANG,
@@ -28,6 +32,7 @@ export interface PartState {
   bandage: BandageKey;
   augment: string | null;
   note: string;
+  lost?: "kriegsversehrt";
 }
 export type BodyState = Partial<Record<string, PartState>>;
 
@@ -204,7 +209,43 @@ export interface PerkBudget {
   problems: string[];
 }
 
-export function perkBudget(keys: string[], start: number, data: Pick<RulesInput, "perks">): PerkBudget {
+/** Kopuk uzuv seçimini doğrular ve etkilenen uzuvları (kol → el, bacak → ayak dahil) döndürür. */
+export function amputationPlan(roots: string[]) {
+  const problems: string[] = [];
+  const uniq = [...new Set(roots)] as BodyPartKey[];
+  if (!uniq.length) problems.push("Kriegsversehrt için kopuk uzuv seçilmeli");
+  if (uniq.length > KRIEGSVERSEHRT.maxLimbs) problems.push(`En fazla ${KRIEGSVERSEHRT.maxLimbs} uzuv seçilebilir`);
+  for (const r of uniq) if (!AMPUTABLE_PARTS.includes(r)) problems.push(`${bodyPartLabel(r)} kopuk seçilemez`);
+  for (const r of uniq) {
+    const parent = LIMB_PARENT[r];
+    if (parent && uniq.includes(parent)) problems.push(`${bodyPartLabel(parent)} seçilince ${bodyPartLabel(r)} zaten kopuk`);
+  }
+  const parts = new Set<BodyPartKey>();
+  for (const r of uniq) {
+    parts.add(r);
+    const ch = LIMB_CHILD[r];
+    if (ch) parts.add(ch);
+  }
+  return { roots: uniq, parts: [...parts], problems };
+}
+/** Kriegsversehrt ile kopuk başlayan uzuv sayısı (kol + el tek uzuv sayılır). 0: eski kayıt / bilinmiyor. */
+export function kriegsversehrtLimbs(body: BodyState | null | undefined) {
+  let n = 0;
+  for (const k of AMPUTABLE_PARTS) {
+    if (body?.[k]?.lost !== "kriegsversehrt") continue;
+    const parent = LIMB_PARENT[k];
+    if (parent && body?.[parent]?.lost === "kriegsversehrt") continue;
+    n++;
+  }
+  return n;
+}
+/** Perkin puanı; Kriegsversehrt uzuv sayısına göre değişir (bilinmiyorsa içerikteki değer). */
+export function perkPoints(p: Perk, opts?: { limbs?: number }) {
+  if (p.key === KRIEGSVERSEHRT.perk && opts?.limbs) return KRIEGSVERSEHRT.points[Math.min(opts.limbs, KRIEGSVERSEHRT.maxLimbs)] ?? p.points;
+  return p.points;
+}
+
+export function perkBudget(keys: string[], start: number, data: Pick<RulesInput, "perks">, opts?: { limbs?: number }): PerkBudget {
   const problems: string[] = [];
   let spent = 0;
   let gained = 0;
@@ -216,8 +257,8 @@ export function perkBudget(keys: string[], start: number, data: Pick<RulesInput,
       continue;
     }
     picked.push(p);
-    if (p.kind === "positive") spent += p.points;
-    else gained += p.points;
+    if (p.kind === "positive") spent += perkPoints(p, opts);
+    else gained += perkPoints(p, opts);
   }
   for (const p of picked)
     for (const ex of p.exclusive)
@@ -236,6 +277,8 @@ export interface CreationInput {
   perks: string[];
   startAugment?: { key: string; part: string } | null;
   firstAbility?: string | null;
+  /** Kriegsversehrt: kopuk seçilen uzuvlar (1–2). */
+  amputation?: string[] | null;
 }
 
 export interface CreationResult {
@@ -266,17 +309,36 @@ export function buildCreation(input: CreationInput, startPerkPoints: number, dat
     const b = tree.startBonus;
     if (b.kind === "stat") stats[b.stat] += b.amount;
     if (b.kind === "corruption") corruption += b.amount;
-    if (b.kind === "augment") {
-      const a = input.startAugment;
-      const aug = a ? data.augments.find((x) => x.key === a.key) : undefined;
-      if (!a || !aug) problems.push(`${tree.name} için başlangıç ${b.tier} augment'i seçilmeli`);
-      else if (aug.tier !== b.tier) problems.push(`Başlangıç augment'i ${b.tier} olmalı`);
-      else if (!aug.slots.includes(a.part as BodyPartKey)) problems.push(`${aug.name} bu uzva takılamaz`);
-      else body[a.part as BodyPartKey].augment = aug.key;
-    } else if (input.startAugment) problems.push("Bu ağaç başlangıç augment'i vermez");
   }
 
-  const budget = perkBudget(input.perks, startPerkPoints, data);
+  // Kriegsversehrt: seçilen uzuvlar kopuk başlar (kol → el, bacak → ayak da)
+  let limbs = 0;
+  if (input.perks.includes(KRIEGSVERSEHRT.perk)) {
+    const plan = amputationPlan(input.amputation ?? []);
+    problems.push(...plan.problems);
+    if (!plan.problems.length) {
+      limbs = plan.roots.length;
+      for (const k of plan.parts) body[k] = { ...body[k], wound: "kopuk", lost: "kriegsversehrt" };
+    }
+  } else if (input.amputation?.length) problems.push("Kopuk uzuv yalnızca Kriegsversehrt perki ile seçilebilir");
+
+  if (tree && tree.startBonus.kind === "augment") {
+    const b = tree.startBonus;
+    const a = input.startAugment;
+    const aug = a ? data.augments.find((x) => x.key === a.key) : undefined;
+    const part = a?.part as BodyPartKey;
+    const parent = part ? LIMB_PARENT[part] : undefined;
+    if (!a || !aug) problems.push(`${tree.name} için başlangıç ${b.tier} augment'i seçilmeli`);
+    else if (aug.tier !== b.tier) problems.push(`Başlangıç augment'i ${b.tier} olmalı`);
+    else if (!aug.slots.includes(part)) problems.push(`${aug.name} bu uzva takılamaz`);
+    else if (parent && body[parent].wound === "kopuk") problems.push(`${bodyPartLabel(parent)} kopuk olduğu için ${bodyPartLabel(part)} uzvuna augment takılamaz`);
+    else {
+      // Kopuk uzvun yerine takılan augment protez olarak çalışır.
+      body[part] = { ...body[part], augment: aug.key, ...(body[part].wound === "kopuk" ? { wound: "saglam" as const } : {}) };
+    }
+  } else if (input.startAugment) problems.push("Bu ağaç başlangıç augment'i vermez");
+
+  const budget = perkBudget(input.perks, startPerkPoints, data, { limbs });
   problems.push(...budget.problems);
   for (const [k, v] of Object.entries(input.points)) {
     if (!(STAT_KEYS as readonly string[]).includes(k) || !Number.isInteger(v) || (v ?? 0) < 0) {

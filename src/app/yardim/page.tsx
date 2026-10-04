@@ -123,7 +123,17 @@ export default async function HelpPage() {
                   body: (
                     <>
                       Pozitif perkler perk puanı harcar, negatifler kazandırır. Toplam negatife düşemez. Kalan puan (puan + 1) / 2 olarak stat puanına dönüşür. Turuncu etiketli perkler
-                      birlikte alınamaz; seçilen bir perkle çakışanlar kilitlenir.
+                      birlikte alınamaz; seçilen bir perkle çakışanlar kilitlenir. <strong>Kriegsversehrt</strong> seçersen kopuk başlayacak 1 ya da 2 uzuv seçersin (kol seçilirse el,
+                      bacak seçilirse ayak da kopar; baş ve gövde seçilemez). Tek uzuv 4, iki uzuv 7 perk puanı kazandırır.
+                    </>
+                  ),
+                },
+                {
+                  title: "Augment (yalnızca Metallkorp)",
+                  body: (
+                    <>
+                      İlk ağacın Metallkorp ise perklerden sonra ayrı bir Augment adımı açılır: bir T1 augment ve takılacağı uzvu seçersin. Kopuk uzvuna augment takarsan protez olarak çalışır ve uzuv
+                      sağlam sayılır; kopuk bir kolun eline ya da kopuk bir bacağın ayağına augment takılamaz.
                     </>
                   ),
                 },

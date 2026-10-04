@@ -5,7 +5,7 @@ import { characterLogs, characters } from "@/db/schema";
 import { bad, conflict, route, zId } from "@/lib/api";
 import { campaignAccess } from "@/lib/access";
 import { notifyCampaign } from "@/lib/realtime-bus";
-import { AGE_MAX, AGE_MIN, BODY_PART_KEYS, STAT_KEYS } from "@/lib/shz/constants";
+import { AGE_MAX, AGE_MIN, BODY_PART_KEYS, STAT_KEYS, bodyPartLabel } from "@/lib/shz/constants";
 import { getPerk, getTree, rulesData } from "@/lib/shz/content";
 import { buildCreation } from "@/lib/shz/rules";
 
@@ -29,6 +29,7 @@ export const POST = route(
         perks: z.array(z.string().max(80)).max(30),
         startAugment: z.object({ key: z.string().max(80), part: z.enum(BODY_PART_KEYS as [string, ...string[]]) }).nullable(),
         firstAbility: z.string().max(80).nullable(),
+        amputation: z.array(z.enum(BODY_PART_KEYS as [string, ...string[]])).max(4).nullable().optional(),
       }),
     }),
   },
@@ -80,7 +81,7 @@ export const POST = route(
       characterId: c.id,
       actorId: user.id,
       kind: "create",
-      text: `Karakter oluşturuldu: ${tree?.name ?? "?"} ağacı; perkler: ${body.creation.perks.map((k) => getPerk(k)?.name ?? k).join(", ") || "yok"}.`,
+      text: `Karakter oluşturuldu: ${tree?.name ?? "?"} ağacı; perkler: ${body.creation.perks.map((k) => getPerk(k)?.name ?? k).join(", ") || "yok"}${body.creation.amputation?.length && body.creation.perks.includes("kriegsversehrt") ? `; kopuk: ${body.creation.amputation.map(bodyPartLabel).join(", ")}` : ""}.`,
     });
     notifyCampaign(campaign.id, "approvals:changed", {});
     return { id: c.id };
